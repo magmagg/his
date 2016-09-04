@@ -1,0 +1,25 @@
+JNH 1.6
+
+CREATED TABLE
+	laboratory_request
+
+ALTERED:
+	patient
+		date_checkin
+
+
+QUERY:
+	create table laboratory_request
+(
+	lab_id int primary key not null auto_increment,
+    lab_user int not null,
+    lab_patient varchar(30) default null,
+    lab_date_req timestamp,
+    lab_status tinyint not null default 1,
+    lab_patient_checkin date,
+	CONSTRAINT fk_lab_patient_2 FOREIGN KEY (lab_patient) REFERENCES patient (patient_id),
+    constraint fk_user_req2 foreign key (lab_user) references users(user_id)
+)ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+alter table patient
+add column date_checkin date not null

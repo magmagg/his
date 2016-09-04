@@ -1,0 +1,13 @@
+JNH 1.9
+
+ADDED
+	laboratory_specimens
+	laboratory_examination_type
+	examination_category
+	urgency_cat
+	fasting_cat
+	sample_det_lab
+
+	
+
+
