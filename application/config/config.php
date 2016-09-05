@@ -22,6 +22,7 @@ date_default_timezone_set('Asia/Manila');
 | If you need to allow multiple domains, remember that this file is still
 | a PHP script and you can easily do that on your own.
 |
+|
 */
 $config['base_url'] = 'http://localhost/his/';
 
