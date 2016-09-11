@@ -25,6 +25,16 @@
       }
     }
 
+    public function PatientBilling(){
+      $header['title'] = "HIS: Patient Vital signs";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['patient'] = $this->Model_patient->get_single_patient($this->uri->segment(3));
+      $data['patient_billing_rad'] = $this->Model_patient->get_radiology_billing($this->uri->segment(3));
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('patient/patient_billinginfo.php', $data);
+    }
+
     public function VitalsHistory(){
       $header['title'] = "HIS: Patient Vital signs";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
