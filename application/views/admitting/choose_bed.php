@@ -4,7 +4,7 @@
           <header class="panel-heading">
               <b>Direct Room Admission</b>
               <span class="pull-right">
-                  <a href="<?php echo base_url();?>Nurse/ChooseBed"><button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button></a>
+                  <a href="<?php echo base_url();?>Admitting/ChooseBed"><button type="button" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</button></a>
               </span>
           </header>
           <table class="table table-hover p-table">

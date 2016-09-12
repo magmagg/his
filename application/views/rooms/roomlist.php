@@ -48,8 +48,8 @@
                       echo "<td>".$room['occupancy_status_name']."</td>";
                       echo "<td>".$room['maintenance_status_name']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Admin/ViewRoom/".$room['room_id']."' role='button' class='btn btn-info btn-sm'>View</a>";
-                        echo "<a href='".base_url()."Admin/UpdateRoom/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Edit</a>";
+                        echo "<a href='".base_url()."Rooms/ViewRoom/".$room['room_id']."' role='button' class='btn btn-info btn-sm'>View</a>";
+                        echo "<a href='".base_url()."Rooms/UpdateRoom/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Edit</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -73,7 +73,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_room', $attributes);
+                        echo form_open('rooms/insert_room', $attributes);
                       ?>
 
                       <div class="form-group">

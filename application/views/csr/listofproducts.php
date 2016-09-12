@@ -2,7 +2,7 @@
   <section class="wrapper">
     <div class="row">
       <div class="col-sm-3">
-	  
+
           <section class="panel">
               <header class="panel-heading">
 				New Product
@@ -14,7 +14,7 @@
                <div class="adv-table">
 				  <table class="table">
 					<tr>
-					 
+
 					</tr>
 				  </table>
 			  <center>
@@ -26,7 +26,7 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-             
+
               <header class="panel-heading">
                   CSR Product List
 				  <span class="tools pull-right">
@@ -34,7 +34,7 @@
               </header>
 			  <div class="panel-body">
               <div class="adv-table">
-			  
+
               <table id="dynamic-table" class="table table-striped" style="text-align: center;">
 			    <thead>
                 <tr id="tblheader">
@@ -138,4 +138,3 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
-
