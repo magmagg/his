@@ -73,7 +73,9 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('rooms/insert_room', $attributes);
+
+                        echo form_open('Rooms/insert_room', $attributes);
+
                       ?>
 
                       <div class="form-group">
