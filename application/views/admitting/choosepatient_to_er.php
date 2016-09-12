@@ -41,7 +41,7 @@
             <div class="panel-body">
               <?php
                 $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                echo form_open('admin/insert_patient', $attributes);
+                echo form_open('admitting/insert_patient', $attributes);
               ?>
               <div class="form-group">
                   <label  class="col-lg-3 col-sm-3 control-label">Last Name: </label>

@@ -23,7 +23,7 @@
               <table id="patient-info" class="table" style="width: 55%; text-align: left; ">
                 <thead>
                   <tr>
-                    <th>Radiology Exam Name</th>
+                    <th></th>
                     <th>Price</th>
                     <th>Status</th>
                   </tr>
@@ -40,8 +40,14 @@
                       echo "</tr>";
                     }
                     echo "<tr>";
-                      echo "<td colspan='2'><b>Total:</b></td>";
+                      echo "<td></td>";
+                      echo "<td><b>Total:</b></td>";
                       echo "<td>".$total_price."</td>";
+                    echo "</tr>";
+                    echo "<tr>";
+                    echo "<td></td>";
+                      echo "<td></td>";
+                      echo "<td><a href='".base_url."Patient/pushforbilling/' role='button' class='btn btn-info btn-xs'>For Billing</a></td>";
                     echo "</tr>";
                   ?>
                 </tbody>
