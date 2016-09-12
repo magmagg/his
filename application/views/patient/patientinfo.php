@@ -103,7 +103,7 @@ table tr td {border:0}
 
                 <tr>
                   <td colspan="2" style="text-align:left">
-                    <a href="<?=base_url()?>Patient/VitalsHistory/<?=$patient->patient_id?>" role="button" class="btn btn-shadow btn-default"><i class="fa fa-money"></i> Overall Billing</a>
+                    <a href="<?=base_url()?>Patient/PatientBilling/<?=$patient->patient_id?>" role="button" class="btn btn-shadow btn-default"><i class="fa fa-money"></i> Overall Billing</a>
                     <a href="<?=base_url()?>Patient/AdmittingHistory/<?=$patient->patient_id?>" role="button" class="btn btn-shadow btn-primary"><i class="fa fa-archive"></i> Admitting History</a>
                     <a href="<?=base_url()?>Patient/VitalsHistory/<?=$patient->patient_id?>" role="button" class="btn btn-shadow btn-success"><i class="fa fa-h-square"></i> Vital Signs</a>
                     <br>

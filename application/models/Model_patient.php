@@ -88,6 +88,15 @@
       return $query->result_array();
     }
 
+    public function get_radiology_billing($id){
+      $this->db->select('*');
+      $this->db->from('billing_rad_breakdown brb');
+      $this->db->join('radiology_exam re', 'brb.radiology_exam_id = re.exam_id', 'left');
+      $this->db->where(array('brb.patient_id'=>$id, 'brb.status'=>0));
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
     public function get_pharmacy_data($id){
       $this->db->select('*');
       $this->db->from('pharmacy_request pr');
