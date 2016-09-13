@@ -1,6 +1,18 @@
 <?php
   if (!defined('BASEPATH'))exit('No direct script access allowed');
   class Model_user extends CI_Model{
+	function get_users(){
+	  $query = $this->db->query("select * from users a
+                                 join user_type b on a.type_id = b.type_id");
+      return $query->result_array();
+	  
+	}
+	
+	function get_user_type(){
+      $query = $this->db->query("select * from user_type");
+      return $query->result_array();
+    }
+	
     function get_tasks($type_id)
     {
       $this->db->select('*');
@@ -20,6 +32,16 @@
       $this->db->where($where);
       $query = $this->db->get();
       return $query->result_array();
+    }
+	
+	function insert_user($data){
+      $this->db->insert('users', $data);
+      $this->db->select('*');
+      $this->db->from('users');
+      $this->db->order_by("user_id", "desc");
+      $this->db->limit(1);
+      $query = $this->db->get();
+      return $query->row();
     }
 
     function fetch_count_all_patients(){
