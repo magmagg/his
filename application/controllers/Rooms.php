@@ -170,11 +170,25 @@
         $data['roomtypes'] = $this->Model_Rooms->get_roomtype_List();
         $this->load->view('rooms/roomlist_for_reporting.php', $data);
       }else{
-        $data['roomdata'] = $this->Model_Rooms->get_room_data($id);
+        $data['roomdata'] = $this->Model_Rooms->get_room_data_for_reporting($id);
         $data['roomid'] = $id;
         $this->load->view('rooms/viewroom_for_reporting.php', $data);
       }
       //$this->load->view('users/includes/footer.php');
+    }
+
+    function ForCleaning(){
+      $bed_id = $this->uri->segment(3);
+      $data = array('bed_maintenance'=>1);
+      $this->Model_Rooms->update_bed($data, $bed_id);
+      redirect(base_url().'Rooms/ReportBed/'.$this->uri->segment(4));
+    }
+
+    function ForMaintenance(){
+      $bed_id = $this->uri->segment(3);
+      $data = array('bed_maintenance'=>2);
+      $this->Model_Rooms->update_bed($data, $bed_id);
+      redirect(base_url().'Rooms/ReportBed/'.$this->uri->segment(4));
     }
   }
 ?>

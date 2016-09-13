@@ -8,7 +8,7 @@
         $this->load->model('Model_patient');
     }
 
-    public function List($id = null){
+    public function PatientList($id = null){
       $header['title'] = "HIS: Patient List";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
@@ -91,6 +91,15 @@
       $data['pharmacy_data'] = $this->Model_patient->get_pharmacy_data($this->uri->segment(3));
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('patient/pharmacyhistory.php', $data);
+    }
+
+    public function Pushforbilling(){
+      $billing_breakdown_id = $this->input->post('billing_breakdown_id[]');
+      $length = count($billing_breakdown_id);
+      for($i = 0; $i<$length; $i++){
+        $data = array("status"=>1);
+        $this->Model_patient->push_for_billing($billing_breakdown_id[$i], $data);
+      }
     }
 
   }

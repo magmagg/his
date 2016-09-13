@@ -59,7 +59,7 @@
                             echo "<td>".date('F d, Y', strtotime($patient['date_registered']))."</td>";
                             echo "<td>";
                               echo "<div class='btn-group' role='group' aria-label='...'>";
-                                echo "<a href='".base_url()."Patient/List/".$patient['patient_id']."' role='button' class='btn btn-sm btn-info'>View</a>";
+                                echo "<a href='".base_url()."Patient/PatientList/".$patient['patient_id']."' role='button' class='btn btn-sm btn-info'>View</a>";
                               echo "</div>";
                             echo "</td>";
                           echo "</tr>";

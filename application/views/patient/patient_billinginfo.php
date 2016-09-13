@@ -30,6 +30,7 @@
                 </thead>
                 <tbody>
                   <?php
+                    echo form_open(base_url()."Patient/Pushforbilling/");
                     $total_price = 0;
                     foreach($patient_billing_rad as $data){
                       $total_price += $data['radiology_exam_price'];
@@ -38,6 +39,7 @@
                         echo "<td>".$data['radiology_exam_price']."</td>";
                         echo "<td>".$data['status']."</td>";
                       echo "</tr>";
+                      echo "<input type='hidden' name='billing_breakdown_id[]' value='".$data['billing_breakdown_id']."' />";
                     }
                     echo "<tr>";
                       echo "<td></td>";
@@ -47,8 +49,9 @@
                     echo "<tr>";
                     echo "<td></td>";
                       echo "<td></td>";
-                      echo "<td><a href='".base_url."Patient/pushforbilling/' role='button' class='btn btn-info btn-xs'>For Billing</a></td>";
+                      echo "<td><button type='submit' class='btn btn-info btn-xs'>For Billing</button></td>";
                     echo "</tr>";
+                    echo form_close();
                   ?>
                 </tbody>
               </table>

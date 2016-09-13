@@ -39,64 +39,6 @@
           </section>
       </div>
     </div>
-
-    <div class="modal fade modal-dialog-center" id="addnewroom" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content-wrap">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" align="center">Add Room</h4>
-                    </div>
-                    <div class="modal-body">
-                      <?php
-                        $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_room', $attributes);
-                      ?>
-
-                      <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">Room Type </label>
-                          <div class="col-lg-9">
-                              <select class="form-control" name="roomtype">
-                                <?php
-                                  foreach($roomtypes as $type){
-                                    echo "<option value=".$type['room_type_id'].">".$type['room_name']."</option>";
-                                  }
-                                ?>
-                              </select>
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">Room Location </label>
-                          <div class="col-lg-9">
-                              <input type="text" name="roomloc" class="form-control" placeholder="Room Location">
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">Number of Beds </label>
-                          <div class="col-lg-9">
-                              <select class="form-control" name="bednum">
-                                <?php
-                                  for($i = 1; $i<=25; $i++){
-                                    echo "<option value=".$i.">".$i."</option>";
-                                  }
-                                ?>
-                              </select>
-                          </div>
-                      </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                        <input type="submit" value="Submit" class="btn btn-success">
-                    </div>
-                    <?=form_close()?>
-                </div>
-            </div>
-        </div>
-    </div>
   </section>
 </section>
 
