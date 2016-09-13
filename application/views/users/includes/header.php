@@ -29,7 +29,7 @@
 
   </head>
   <body>
-
+	<?php echo $this->session->flashdata('msg'); ?>
     <section id="container" >
         <!--header start-->
         <header class="header white-bg">
