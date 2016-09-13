@@ -16,6 +16,7 @@ class UserManagement extends CI_Controller{
 	  $data['usertypes'] = $this->Model_user->get_user_type();
 	  $this->load->view('users/includes/header', $header);
       $this->load->view('usermanagement/users',$data);
+	  $this->load->view('includes/toastr.php');
   }
   
   function insert_user(){
@@ -29,7 +30,12 @@ class UserManagement extends CI_Controller{
       $this->form_validation->set_rules('mobile_number', 'Phone number', 'required|trim|xss_clean|strip_tags');
 
       if($this->form_validation->run() == FALSE){
-        echo validation_errors();
+		 $validation_errors = validation_errors();
+		 $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Error">
+                    						  <input type="hidden" id="msg" value="'. validation_errors().'">
+                    						  <input type="hidden" id="type" value="error">' );
+		 redirect(base_url().'usermanagement/User');
+      
       }else{
         $data = array("type_id"=>$this->input->post('usertype'),
                       "username"=>$this->input->post('username'),
@@ -44,7 +50,11 @@ class UserManagement extends CI_Controller{
                       "status"=>1,
                       "employment_date"=>date('Y-m-d'),
                     );
-        $doctor_id = $this->Model_user->insert_user($data);
+        $this->Model_user->insert_user($data);
+		 //Set Message for Toastr
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                    						  <input type="hidden" id="msg" value="Successfully Added User">
+                    						  <input type="hidden" id="type" value="success">' );
         redirect(base_url().'usermanagement/User');
       }
   }
