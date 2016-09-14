@@ -4,7 +4,7 @@
       <div class="col-sm-12">
           <section class="panel">
                <header style="font-weight:300" class="panel-heading">
-					Bed List
+					<b>Bed List</b><br><small>Please choose bed</small>
 				 <span class="tools pull-right">
 				 </span>
 			  </header>
@@ -15,6 +15,7 @@
                 <tr id="tblheader">
                     <th>Location</th>
                     <th>Bed ID</th>
+                    <th>Occupancy</th>
                     <th>Maintenance</th>
                     <th>Action</th>
                 </tr>
@@ -25,19 +26,26 @@
                     echo "<tr>";
                       echo "<td>".$room['room_location']."</td>";
                       echo "<td>".$room['bed_id']."</td>";
-                      echo "<td>";
-                      if($room['bed_maintenance'] == 0){
-                        echo "AVAILABLE";
-                      }else if($room['bed_maintenance'] == 1){
-                        echo "FOR CLEANING";
+                      if($room['bed_patient'] == NULL){
+                        echo "<td><span class='label label-success'>AVAILABLE</span></td>";
+                        if($room['bed_maintenance'] == 0){
+                          echo "<td><span class='label label-success'>AVAILABLE</span></td>";
+                          echo "<td>";
+                            echo "<a href='".base_url()."Rooms/ForCleaning/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Cleaning</a> ";
+                            echo "<a href='".base_url()."Rooms/ForMaintenance/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Maintenance</a>";
+                          echo "</td>";
+                        }else if($room['bed_maintenance'] == 1){
+                          echo "<td><span class='label label-info'>FOR CLEANING</span></td>";
+                          echo "<td><a href='".base_url()."Rooms/ForMaintenance/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Maintenance</a></td>";
+                        }else{
+                          echo "<td><span class='label label-danger'>FOR MAINTENANCE</span></td>";
+                          echo "<td></td>";
+                        }
                       }else{
-                        echo "FOR MAINTENANCE";
+                        echo "<td><span class='label label-danger'>OCCUPIED</span></td>";
+                        echo "<td></td>";
+                        echo "<td></td>";
                       }
-                      echo "</td>";
-                      echo "<td>";
-                        echo "<a href='".base_url()."Rooms/ForCleaning/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Cleaning</a>";
-                        echo "<a href='".base_url()."Rooms/ForMaintenance/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Maintenance</a>";
-                      echo "</td>";
                     echo "</tr>";
                   }
                 ?>

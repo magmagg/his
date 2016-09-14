@@ -33,8 +33,7 @@
                       echo "<td>".$bed['first_name']." ".$bed['middle_name']." ".$bed['last_name']."</td>";
                       echo "<td>OCCUPIED</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Admitting/DischargePatient/".$bed['patient_id']."/".$bed['bed_id']."' role='button' class='btn btn-success btn-xs'>DISCHARGE</a>'";
-                        echo "<a href='".base_url()."Patient/List/".$bed['patient_id']."' role='button' class='btn btn-info btn-xs'>PATIENT INFO</a>'";
+                        echo "<a href='".base_url()."Patient/PatientList/".$bed['patient_id']."' role='button' class='btn btn-info btn-xs'>PATIENT INFO</a>'";
                         echo "<a href='#' role='button' class='btn btn-warning btn-xs'>GO TO PHARMACY</a>'";
                         echo "<a href='".base_url()."Admitting/TransferRoom/".$bed['patient_id']."/' role='button' class='btn btn-danger btn-xs'>TRANSFER ROOM</a>'";
                       echo "</td>";

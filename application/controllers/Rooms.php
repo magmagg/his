@@ -170,7 +170,7 @@
         $data['roomtypes'] = $this->Model_Rooms->get_roomtype_List();
         $this->load->view('rooms/roomlist_for_reporting.php', $data);
       }else{
-        $data['roomdata'] = $this->Model_Rooms->get_room_data_for_reporting($id);
+        $data['roomdata'] = $this->Model_Rooms->get_room_data($id);
         $data['roomid'] = $id;
         $this->load->view('rooms/viewroom_for_reporting.php', $data);
       }

@@ -49,16 +49,6 @@ class Model_Rooms extends CI_Model{
     return $query->result_array();
   }
 
-  function get_room_data_for_reporting($id){
-    $this->db->select('*');
-    $this->db->from('beds a');
-    $this->db->join('rooms b', 'b.room_id=a.bed_roomid','left');
-    $this->db->join('patient c', 'a.bed_patient=c.patient_id','left');
-    $this->db->where(array('a.bed_roomid'=>$id, 'a.bed_patient'=>NULL));
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
   function insertroomtype($data){
     $this->db->insert('room_type', $data);
   }

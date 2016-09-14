@@ -4,7 +4,7 @@
       <div class="col-sm-12">
           <section class="panel">
                <header style="font-weight:300" class="panel-heading">
-					Room List
+					            <b>Room List</b><br><small>Please choose room</small>
 				 <span class="tools pull-right">
 				 </span>
 			  </header>
@@ -27,7 +27,7 @@
                       echo "<td>".$room['room_name']."</td>";
                       echo "<td>".$room['room_location']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Rooms/ReportBed/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Confirm</a>";
+                        echo "<a href='".base_url()."Rooms/ReportBed/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>SELECT</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
