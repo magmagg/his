@@ -176,5 +176,19 @@
       }
       //$this->load->view('users/includes/footer.php');
     }
+
+    function ForCleaning(){
+      $bed_id = $this->uri->segment(3);
+      $data = array('bed_maintenance'=>1);
+      $this->Model_Rooms->update_bed($data, $bed_id);
+      redirect(base_url().'Rooms/ReportBed/'.$this->uri->segment(4));
+    }
+
+    function ForMaintenance(){
+      $bed_id = $this->uri->segment(3);
+      $data = array('bed_maintenance'=>2);
+      $this->Model_Rooms->update_bed($data, $bed_id);
+      redirect(base_url().'Rooms/ReportBed/'.$this->uri->segment(4));
+    }
   }
 ?>

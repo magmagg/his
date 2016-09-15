@@ -4,7 +4,7 @@
       <div class="col-sm-12">
           <section class="panel">
                <header style="font-weight:300" class="panel-heading">
-					            <b>Room List</b><br><small>Please choose room</small>
+					            <b>List of Reported Bed</b>
 				 <span class="tools pull-right">
 				 </span>
 			  </header>
@@ -13,21 +13,29 @@
               <table class="table table-striped" style="text-align: center;" id="dynamic-table">
 			    <thead>
                 <tr id="tblheader">
-                    <th>#</th>
+                    <th>Bed ID</th>
                     <th>Room Type</th>
                     <th>Room Location</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
 				</thead>
 				<tbody>
                 <?php
-                  foreach($rooms as $room){
+                  foreach($roomlist as $room){
                     echo "<tr>";
-                      echo "<td>".$room['room_id']."</td>";
+                      echo "<td>".$room['bed_id']."</td>";
                       echo "<td>".$room['room_name']."</td>";
                       echo "<td>".$room['room_location']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Rooms/ReportBed/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>SELECT</a>";
+                        if($room['bed_maintenance'] == 1){
+                          echo "<span class='label label-info'>FOR CLEANING</span>";
+                        }else if($room['bed_maintenance'] == 2){
+                          echo "<span class='label label-danger'>FOR MAINTENANCE</span>";
+                        }
+                      echo "</td>";
+                      echo "<td>";
+                        echo "<a href='".base_url()."Housekeeping/UpdateBed/".$room['bed_id']."' role='button' class='btn btn-warning btn-sm'>Mark as Done</a>";
                       echo "</td>";
                     echo "</tr>";
                   }

@@ -105,5 +105,10 @@
       $query = $this->db->get();
       return $query->result_array();
     }
+
+    public function push_for_billing($id, $data){
+      $this->db->where('billing_breakdown_id', $id);
+      $this->db->update('billing_rad_breakdown', $data);
+    }
   }
 ?>
