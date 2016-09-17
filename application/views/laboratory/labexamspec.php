@@ -1,7 +1,7 @@
 <section id="main-content">
   <section class="wrapper">
     <div class="row">
-	
+
       <div class="col-sm-3">
           <section class="panel">
               <header style="font-weight:300" class="panel-heading">
@@ -14,7 +14,7 @@
                <div class="adv-table">
               <table class="table">
                 <tr>
-                  
+
                 </tr>
               </table>
 			  <center>
@@ -26,13 +26,13 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-             
+
               <header class="panel-heading">
                   Laboratory Specimens
               </header>
 			  <div class="panel-body">
                 <div class="adv-table">
-				
+
               <table class="table table-striped" id="dynamic-table">
 			  <thead>
                 <tr id="tblheader">
@@ -50,7 +50,7 @@
                       echo "<td>".$spec['specimen_name']."</td>";
                       echo "<td>".$spec['specimen_description']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Admin/EditSpec/".$spec['specimen_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
+                        echo "<a href='".base_url()."Laboratory/EditSpec/".$spec['specimen_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -74,7 +74,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_labspecimen', $attributes);
+                        echo form_open('Laboratory/insert_labspecimen', $attributes);
                       ?>
 
                       <div class="form-group">
@@ -104,6 +104,8 @@
 </section>
 <!-- js placed at the end of the document so the pages load faster -->
 
+<!-- js placed at the end of the document so the pages load faster -->
+
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 
@@ -116,9 +118,11 @@
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
 
-
 <!--dynamic table initialization -->
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+</body>
 
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+</html>

@@ -9,7 +9,7 @@
         <div class="panel-body">
             <?php
               $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-              echo form_open('admin/update_room/'.$rooms->room_id, $attributes);
+              echo form_open('rooms/update_room/'.$rooms->room_id, $attributes);
             ?>
 
             <div class="form-group">

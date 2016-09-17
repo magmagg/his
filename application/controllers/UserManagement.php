@@ -6,19 +6,19 @@ class UserManagement extends CI_Controller{
     parent::__construct();
       $this->load->model('Model_user');
       $this->load->model('Model_usermanagement');
-	  
+
   }
-  
+
   public function user(){
 	  $data['users'] = $this->Model_user->get_users();
 	  $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
 	  $data['usertypes'] = $this->Model_user->get_user_type();
 	  $this->load->view('users/includes/header', $header);
-      $this->load->view('usermanagement/users',$data);
+    $this->load->view('usermanagement/users',$data);
 	  $this->load->view('includes/toastr.php');
   }
-  
+
   function insert_user(){
 	  $this->form_validation->set_rules('lastname', 'Last Name', 'required|trim|xss_clean|strip_tags');
       $this->form_validation->set_rules('firstname', 'First Name', 'required|trim|xss_clean|strip_tags');
@@ -35,7 +35,7 @@ class UserManagement extends CI_Controller{
                     						  <input type="hidden" id="msg" value="'. validation_errors().'">
                     						  <input type="hidden" id="type" value="error">' );
 		 redirect(base_url().'usermanagement/User');
-      
+
       }else{
         $data = array("type_id"=>$this->input->post('usertype'),
                       "username"=>$this->input->post('username'),

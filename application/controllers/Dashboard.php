@@ -41,10 +41,16 @@
         $this->load->view('users/dashboards/housekeeping_dashboard.php');
       }else if($user_type == "Management"){
         $this->load->view('users/dashboards/management_dashboard.php');
+      }else if($user_type == "Admission"){
+        $this->load->view('users/dashboards/admission_dashboard.php');
+      }else if($user_type == "Management"){
+        $this->load->view('users/dashboards/labchief_dashboard.php');
+      }else if($user_type == "Management"){
+        $this->load->view('users/dashboards/radchief_dashboard.php');
       }else{
         echo "Contact your app support";
       }
-      
+
       $this->load->view('users/includes/footer.php');
     }
 

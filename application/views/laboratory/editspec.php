@@ -8,7 +8,7 @@
       <div class="panel-body">
           <?php
             $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-            echo form_open('admin/update_lab_specimen/'.$spec->specimen_id, $attributes);
+            echo form_open('Laboratory/update_lab_specimen/'.$spec->specimen_id, $attributes);
           ?>
 
 
@@ -38,3 +38,26 @@
     </div>
     </section>
   </section>
+
+  <!-- js placed at the end of the document so the pages load faster -->
+
+  <script src="<?=base_url()?>js/jquery.js"></script>
+  <script src="<?=base_url()?>js/bootstrap.min.js"></script>
+
+  <script class="include" type="text/javascript" src="<?=base_url()?>js/jquery.dcjqaccordion.2.7.js"></script>
+  <script src="<?=base_url()?>js/jquery.scrollTo.min.js"></script>
+  <script src="<?=base_url()?>js/jquery.nicescroll.js" type="text/javascript"></script>
+
+  <!--right slidebar-->
+  <script src="<?=base_url()?>js/slidebars.min.js"></script>
+  <!--common script for all pages-->
+  <script src="<?=base_url()?>js/common-scripts.js"></script>
+
+  <!--dynamic table initialization -->
+  <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
+  <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+  </body>
+
+  <!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+  </html>

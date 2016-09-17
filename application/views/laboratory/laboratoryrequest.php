@@ -13,11 +13,11 @@
                <div class="adv-table">
               <table class="table">
                 <tr>
-                  
+
                 </tr>
               </table>
 			  <center>
-				<a href="<?=base_url()?>Admin/MakeLaboratoryRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> New Request</a>
+				<a href="<?=base_url()?>Laboratory/MakeLaboratoryRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> New Request</a>
 				</center>
 				</div>
 				</div>
@@ -25,7 +25,7 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-            
+
               <header class="panel-heading">
                   Laboratory Requests
 			 <span class="tools pull-right">
@@ -61,7 +61,7 @@
                 echo "<td>Cancelled</td>";
               }
                 echo "<td>";
-                  echo "<a href='".base_url()."Admin/ShowLabReq/".$labreq['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
+                  echo "<a href='".base_url()."Laboratory/ShowLabReq/".$labreq['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
                 echo "</td>";
                 echo "</tr>";
               }
@@ -97,4 +97,7 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+</body>
 
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+</html>

@@ -59,7 +59,7 @@
                       echo "<td>Out of Stock</td>";
                     }
                       echo "<td>";
-                        echo "<a href='".base_url()."Admin/RequestRestock/".$item['csr_id']."' role='button' class='btn btn-info btn-xs'>Request stock</a>";
+                        echo "<a href='".base_url()."CSR/RequestRestock/".$item['csr_id']."' role='button' class='btn btn-info btn-xs'>Request stock</a>";
                       echo"</td>";
                     echo "</tr>";
                 }

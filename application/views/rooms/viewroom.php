@@ -54,7 +54,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/add_bed/'.$roomid, $attributes);
+                        echo form_open('Rooms/add_bed/'.$roomid, $attributes);
                       ?>
                       <div class="form-group">
                           <label  class="col-lg-3 col-sm-3 control-label">Number of Beds: </label>
