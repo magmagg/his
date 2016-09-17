@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12">
           <section class="panel">
-              
+
               <header class="panel-heading">
                 <a href="<?=base_url()?>Admin/AppofReq" role='button' class='btn btn-primary btn-xs'><i class="fa fa-chevron-left"></i></a> Accepted Laboratory Requests
               </header><div class="panel-body">
@@ -29,7 +29,7 @@
                   echo "<td>".$req['lab_patient_checkin']."</td>";
                   echo "<td>".$req['first_name']." ".$req['middle_name']." ".$req['last_name']."</td>";
                   echo "<td>";
-                    echo "<a href='".base_url()."Admin/ShowLabReq/".$req['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
+                    echo "<a href='".base_url()."Laboratory/ShowLabReq/".$req['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
                   echo"</td>";
                   echo "</tr>";
                 }
@@ -44,6 +44,7 @@
     </div>
   </section>
 </section>
+<!-- js placed at the end of the document so the pages load faster -->
 
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
@@ -57,8 +58,11 @@
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
 
-
 <!--dynamic table initialization -->
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+</body>
+
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+</html>

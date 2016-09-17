@@ -3,12 +3,12 @@
     <div class="row">
       <div class="col-sm-3">
           <section class="panel">
-             
+
             <div class="panel-body">
             <div class="adv-table">
                 <table class="table">
                   <tr>
-       
+
                   </tr>
               </table>
 			  <center>
@@ -21,7 +21,7 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-              
+
               <header class="panel-heading">
                Pending Requests
               </header>
@@ -62,9 +62,9 @@
                     echo "<td>On Hold</td>";
                   }
                     echo "<td>";
-                      echo " <a href='".base_url()."Admin/csr_accept_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
-                      echo " <a href='".base_url()."Admin/csr_reject_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
-                      echo " <a href='".base_url()."Admin/csr_hold_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
+                      echo " <a href='".base_url()."CSR/csr_accept_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
+                      echo " <a href='".base_url()."CSR/csr_reject_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
+                      echo " <a href='".base_url()."CSR/csr_hold_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
                     echo "</td>";
                   echo "</tr>";
                 }
@@ -144,4 +144,3 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
-

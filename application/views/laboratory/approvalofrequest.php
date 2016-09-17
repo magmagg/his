@@ -13,12 +13,12 @@
                <div class="adv-table">
               <table class="table">
                 <tr>
-                
+
                   </tr>
               </table>
 			  <center>
-				<a href="<?=base_url()?>Admin/LabAccRequest" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> Accepted Requests</a><br><br>
-				<a href="<?=base_url()?>Admin/LabRejRequest" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-plus-circle"></i> Rejected Requests</a>
+				<a href="<?=base_url()?>Laboratory/LabAccRequest" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> Accepted Requests</a><br><br>
+				<a href="<?=base_url()?>Laboratory/LabRejRequest" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-plus-circle"></i> Rejected Requests</a>
 				</center>
 				</div>
 				</div>
@@ -26,7 +26,7 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-              
+
               <header class="panel-heading">
                   Pending Laboratory Requests
               </header>
@@ -55,9 +55,9 @@
                 echo"<td>".$labreq['first_name']." ".$labreq['last_name']."</td>";
                 echo "<td>For Approval</td>";
                 echo "<td>";
-                  echo "<a href='".base_url()."Admin/ShowLabReq/".$labreq['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
-                  echo " <a href='".base_url()."Admin/ApproveLabReq/".$labreq['lab_id']."' role='button' class='btn btn-success btn-xs'>Approve</a>";
-                  echo " <a href='".base_url()."Admin/CancelLabReq/".$labreq['lab_id']."' role='button' class='btn btn-danger btn-xs'>Reject</a>";
+                  echo "<a href='".base_url()."Laboratory/ShowLabReq/".$labreq['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
+                  echo " <a href='".base_url()."Laboratory/ApproveLabReq/".$labreq['lab_id']."' role='button' class='btn btn-success btn-xs'>Approve</a>";
+                  echo " <a href='".base_url()."Laboratory/CancelLabReq/".$labreq['lab_id']."' role='button' class='btn btn-danger btn-xs'>Reject</a>";
                 echo "</td>";
                 echo "</tr>";
               }
@@ -75,6 +75,8 @@
 </section>
 <!-- js placed at the end of the document so the pages load faster -->
 
+<!-- js placed at the end of the document so the pages load faster -->
+
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 
@@ -87,9 +89,11 @@
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
 
-
-
 <!--dynamic table initialization -->
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+</body>
+
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+</html>

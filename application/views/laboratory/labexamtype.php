@@ -11,10 +11,10 @@
             </header>
 			<div class="panel-body">
             <div class="adv-table">
-			
+
               <table class="table">
                 <tr>
-                
+
                 </tr>
               </table>
 			  <center>
@@ -26,7 +26,7 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-             
+
               <header class="panel-heading">
                   Laboratory Examination Type
               </header>
@@ -52,7 +52,7 @@
                       echo "<td>".$etype['exam_cat_name'];
                       echo "<td>".$etype['lab_exam_type_description']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Admin/EditExamType/".$etype['lab_exam_type_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
+                        echo "<a href='".base_url()."Laboratory/EditExamType/".$etype['lab_exam_type_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -76,7 +76,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_examtype', $attributes);
+                        echo form_open('Laboratory/insert_examtype', $attributes);
                       ?>
 
                       <div class="form-group">
@@ -139,9 +139,11 @@
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
 
-
-
 <!--dynamic table initialization -->
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+</body>
+
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+</html>

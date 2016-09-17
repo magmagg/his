@@ -8,67 +8,55 @@
       $this->load->model('Model_user');
     }
 
-    function index(){
-      $header['tasks'] = $this->Model_Laboratory->get_tasks($this->session->userdata('type_id'));
-      $header['permissions'] = $this->Model_Laboratory->get_permissions($this->session->userdata('type_id'));
-      $this->load->view('users/includes/header.php',$header);
-      $this->load->view('laboratory/index.php');
-      $this->load->view('users/includes/footer.php');
-    }
-
     function LaboratoryRequests(){
       $header['title'] = "HIS: Laboratory Requests";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-    $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_list();
-    $this->load->view('users/includes/header.php',$header);
-    $this->load->view('laboratory/laboratoryrequest.php',$data);
-    $this->load->view('users/includes/footer.php');
+      $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_list();
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('laboratory/laboratoryrequest.php',$data);
     }
 
-        function ShowLabReq($id){
-          $header['title'] = "HIS: Laboratory: Show Laboratory Request";
-          $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-          $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-          $data['requestno'] = $id;
-          $data['laboratorytopatient'] = $this->Model_Laboratory->get_laboratorytopatient_data($id);
-          $data['laboratorytouser'] =  $this->Model_Laboratory->get_laboratorytouser_data($id);
-          $data['laboratorytolabrequest'] = $this->Model_Laboratory->get_laboratorytorequest_data($id);
-          $data['laboratorytospecimen'] = $this->Model_Laboratory->get_laboratorytospecimen_data($id);
-          $data['laboratorytoremarks'] = $this->Model_Laboratory->get_laboratorytoremarks_data($id);
-          $this->load->view('users/includes/header.php',$header);
-          $this->load->view('laboratory/showlaboratoryrequest.php',$data);
-          //$this->load->view('includes/footer.php');
-        }
+    function ShowLabReq($id){
+      $header['title'] = "HIS: Laboratory: Show Laboratory Request";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['requestno'] = $id;
+      $data['laboratorytopatient'] = $this->Model_Laboratory->get_laboratorytopatient_data($id);
+      $data['laboratorytouser'] =  $this->Model_Laboratory->get_laboratorytouser_data($id);
+      $data['laboratorytolabrequest'] = $this->Model_Laboratory->get_laboratorytorequest_data($id);
+      $data['laboratorytospecimen'] = $this->Model_Laboratory->get_laboratorytospecimen_data($id);
+      $data['laboratorytoremarks'] = $this->Model_Laboratory->get_laboratorytoremarks_data($id);
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('laboratory/showlaboratoryrequest.php',$data);
+    }
 
 
-        function MakeLaboratoryRequests(){
-          $header['title'] = "HIS: Laboratory: Create Laboratory Request";
-          $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-          $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-    $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
-    $this->load->view('users/includes/header.php',$header);
-    $this->load->view('laboratory/makelaboratoryrequest.php',$data);
-    $this->load->view('users/includes/footer.php');
+    function MakeLaboratoryRequests(){
+      $header['title'] = "HIS: Laboratory: Create Laboratory Request";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('laboratory/makelaboratoryrequest.php',$data);
     }
 
     function MakeLaboratoryRequests2(){
       $header['title'] = "HIS: Laboratory: Create Laboratory Request";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-    $patient = $this->input->post('patient');
-    if($patient==""){
-    redirect(base_url()."Laboratory/MakeLaboratoryRequests");
-    }else{
-    $data['labexamtype'] = $this->Model_Laboratory->get_all_examtype();
-    $data['urgencycat'] = $this->Model_Laboratory->get_all_urgencycategory();
-    $data['fastingcat'] = $this->Model_Laboratory->get_all_fastingcategory();
-    $data['patient'] = $this->Model_Laboratory->get_single_patient($patient);
-    $data['specimen'] = $this->Model_Laboratory->get_all_labspec();
-    $this->load->view('users/includes/header.php',$header);
-    $this->load->view('laboratory/makelaboratoryrequest2.php',$data);
-    //$this->load->view('includes/footer.php');
-    }
+      $patient = $this->input->post('patient');
+      if($patient==""){
+        redirect(base_url()."Laboratory/MakeLaboratoryRequests");
+      }else{
+        $data['labexamtype'] = $this->Model_Laboratory->get_all_examtype();
+        $data['urgencycat'] = $this->Model_Laboratory->get_all_urgencycategory();
+        $data['fastingcat'] = $this->Model_Laboratory->get_all_fastingcategory();
+        $data['patient'] = $this->Model_Laboratory->get_single_patient($patient);
+        $data['specimen'] = $this->Model_Laboratory->get_all_labspec();
+        $this->load->view('users/includes/header.php',$header);
+        $this->load->view('laboratory/makelaboratoryrequest2.php',$data);
+      }
     }
 
     function AppofReq(){
@@ -78,7 +66,6 @@
       $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_list();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/approvalofrequest.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function ApproveLabReq($id)
@@ -96,7 +83,6 @@
       $data['acceptedreq'] = $this->Model_Laboratory->get_accepted_labreq();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labaccrequest.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function CancelLabReq($id)
@@ -114,7 +100,6 @@
       $data['rejectedreq'] = $this->Model_Laboratory->get_rejected_labreq();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labrejrequest.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function LabExamCateg(){
@@ -124,7 +109,6 @@
       $data['examcateg'] = $this->Model_Laboratory->get_all_examcateg();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labexamcateg.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function EditExamCateg($id){
@@ -134,7 +118,6 @@
       $data['examcateg'] = $this->Model_Laboratory->get_examcateg($id);
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/editexamcateg.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function LabExamType(){
@@ -145,7 +128,6 @@
       $data['examcateg'] = $this->Model_Laboratory->get_all_examcateg();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labexamtype.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function EditExamType($id){
@@ -156,7 +138,6 @@
       $data['examcateg'] = $this->Model_Laboratory->get_all_examcateg();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/editexamtype.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function LabExamSpec(){
@@ -166,7 +147,6 @@
       $data['labspec'] = $this->Model_Laboratory->get_all_labspec();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labexamspec.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
     function EditSpec($id){
@@ -176,7 +156,6 @@
       $data['spec'] = $this->Model_Laboratory->get_specific_specimen($id);
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/editspec.php',$data);
-      $this->load->view('users/includes/footer.php');
     }
 
      function insert_patient_thrulaboratory(){

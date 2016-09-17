@@ -11,10 +11,10 @@
             </header>
 			<div class="panel-body">
                <div class="adv-table">
-			   
+
               <table class="table">
                 <tr>
-                 
+
                 </tr>
               </table>
 			  <center>
@@ -26,7 +26,7 @@
       </div>
       <div class="col-sm-9">
           <section class="panel">
-              
+
               <header class="panel-heading">
                  Laboratory Exam Category
 			 <span class="tools pull-right">
@@ -51,7 +51,7 @@
                       echo "<td>".$categ['exam_cat_name']."</td>";
                       echo "<td>".$categ['exam_cat_desc']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Admin/EditExamCateg/".$categ['exam_cat_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
+                        echo "<a href='".base_url()."Laboratory/EditExamCateg/".$categ['exam_cat_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -75,7 +75,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_category', $attributes);
+                        echo form_open('Laboratory/insert_category', $attributes);
                       ?>
 
                       <div class="form-group">
@@ -121,5 +121,7 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+</body>
 
-
+<!-- Mirrored from thevectorlab.net/flatlab/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 16 May 2016 02:05:28 GMT -->
+</html>

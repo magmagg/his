@@ -11,13 +11,13 @@
 
     function PendingRequests()
     {
-       $header['title'] = "HIS: CSR Pending Requests";
-       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-        $data['nursetocsr'] = $this->Model_Csr->get_nurse_requests();
-        $this->load->view("users/users/includes/header.php",$header);
-        $this->load->view('csr/pendingrequest.php',$data);
-        $this->load->view("users/users/includes/footer.php");
+      $header['title'] = "HIS: CSR Pending Requests";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['nursetocsr'] = $this->Model_Csr->get_nurse_requests();
+      $this->load->view("users/users/includes/header.php",$header);
+      $this->load->view('csr/pendingrequest.php',$data);
+      $this->load->view("users/users/includes/footer.php");
     }
 
     function AcceptedRequests()
@@ -146,4 +146,5 @@
       $this->Model_Csr->hold_request($id,$datareq);
       redirect("PendingRequests");
     }
+  }
 ?>

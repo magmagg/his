@@ -44,7 +44,7 @@
                       echo "<td>".$roomtype['room_description']."</td>";
                       echo "<td>".$roomtype['room_price']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Admin/UpdateRoomType/".$roomtype['room_type_id']."' role='button' class='btn btn-sm btn-warning'>Edit</a>";
+                        echo "<a href='".base_url()."Rooms/UpdateRoomType/".$roomtype['room_type_id']."' role='button' class='btn btn-sm btn-warning'>Edit</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -68,7 +68,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_roomtype', $attributes);
+                        echo form_open('Rooms/insert_roomtype', $attributes);
                       ?>
 
                       <div class="form-group">

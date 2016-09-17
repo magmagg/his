@@ -35,7 +35,7 @@
 
                     <h4 style="font-weight:100" class="modal-title">Import CSV</h4>
                     <hr>
-                    <?php echo form_open_multipart('Admin/add_item_inventory_import');?>
+                    <?php echo form_open_multipart('Pharmacy/add_item_inventory_import');?>
                     <div class="form-group">
                         <label for="exampleInputFile">File input</label>
                         <input type="file" name="userfile" onchange="ValidateSingleInput(this);">

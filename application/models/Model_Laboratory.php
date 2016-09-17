@@ -2,7 +2,23 @@
   if (!defined('BASEPATH'))exit('No direct script access allowed');
   class Model_Laboratory extends CI_Model{
 
-    /*TESTINGS*/
+
+    function get_patient_list(){
+      $this->db->select('*');
+      $this->db->from('patient');
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
+    function get_single_patient($id){
+      $this->db->select('*');
+      $this->db->from('patient');
+      $this->db->where('patient_id', $id);
+      $query = $this->db->get();
+      return $query->row();
+    }
+    
+    /*TESTING S*/
     function get_tasks($type_id)
     {
       $this->db->select('*');
