@@ -7,26 +7,22 @@ class Pharmacy extends CI_Controller{
   {
     parent::__construct();
     $this->load->model('Model_pharmacy');
+    $this->load->model('Model_user');
   }
   /*=========================================================================================================================*/
 
-  function index()
-  {
-    $this->landing();
-  }
 
-  function landing()
-  {
-    $this->load->view('pharmacy/header');
-    $this->load->view('pharmacy/footer.php');
-  }
 
 
   function pharmacy_inventory()
   {
+
+    $header['title'] = "HIS: Pharmacy Inventory";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
     $data['inventorycount'] = $this->Model_pharmacy->count_pharmacy_inventory();
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/add_item_modal');
     $this->load->view('pharmacy/delete_item_modal');
     $this->load->view('pharmacy/update_item_modal');
@@ -104,9 +100,12 @@ class Pharmacy extends CI_Controller{
 
   function pharmacy_request()
   {
+    $header['title'] = "HIS: Pharmacy Inventory";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
     $data['patient'] = $this->Model_pharmacy->get_all_patients();
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/pharmacy_request',$data);
     $this->load->view('pharmacy/pharmacy_request_modal');
   }
