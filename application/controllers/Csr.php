@@ -44,9 +44,9 @@
       $header['title'] = "HIS: CSR Product List";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-        $data['csrinventory'] = $this->Model_Csr->get_csr_inventory();
-        $this->load->view("users/includes/header.php",$header);
-        $this->load->view('csr/listofproducts.php',$data);
+      $data['csrinventory'] = $this->Model_Csr->get_csr_inventory();
+      $this->load->view("users/includes/header.php",$header);
+      $this->load->view('csr/listofproducts.php',$data);
     }
 
     function RequestRestock($id)
@@ -69,6 +69,34 @@
       $data['hold']     = $this->Model_Csr->get_hold_request();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('csr/requesthistory.php',$data);
+    }
+
+    function RequestItem(){
+      $header['title'] = "HIS: CSR Request Item";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['csrinventory'] = $this->Model_Csr->get_csr_inventory();
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('csr/requestitem.php', $data);
+    }
+
+    function insert_csr_item_request(){
+      $data = array(
+                  "nurse_id"=>$this->session->userdata('user_id'),
+                  "csr_item_id"=>$this->input->post('item'),
+                  "item_quant"=>$this->input->post('quantity')
+                  );
+      $this->Model_Csr->insert_csr_item_request($data);
+      redirect(base_url().'Csr/RequestItem');
+    }
+
+    function ViewRequest(){
+      $header['title'] = "HIS: CSR Requests";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['csr_request'] = $this->Model_Csr->get_request_by_user($this->session->userdata('user_id'));
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('csr/csr_list_of_requests.php', $data);
     }
 
     function add_newproduct(){
@@ -120,7 +148,6 @@
       //CSR INVENTORY
       $this->Model_Csr->setstock($csrid,$datainv);
       redirect("Csr/PendingRequests");
-
     }
 
     function csr_reject_request($id)
@@ -140,5 +167,7 @@
       $this->Model_Csr->hold_request($id,$datareq);
       redirect("Csr/PendingRequests");
     }
+
+
   }
 ?>

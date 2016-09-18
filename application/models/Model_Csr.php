@@ -180,5 +180,19 @@
       $this->db->where('csr_req_id',$id);
       $this->db->update('csr_request',$datareq);
     }
+
+    function insert_csr_item_request($data){
+      $this->db->insert('csr_request', $data);
+    }
+
+    function get_request_by_user($id){
+      $this->db->select('*');
+      $this->db->from('csr_request a');
+      $this->db->join('users b', 'a.nurse_id=b.user_id','left');
+      $this->db->join('csr_inventory c', 'a.csr_item_id=c.csr_id', 'left');
+      $this->db->where('a.nurse_id', $id);
+      $query = $this->db->get();
+      return $query->result_array();
+    }
   }
 ?>
