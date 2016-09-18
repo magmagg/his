@@ -83,7 +83,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/add_newproduct', $attributes);
+                        echo form_open('Csr/add_newproduct', $attributes);
                       ?>
 
                       <div class="form-group">

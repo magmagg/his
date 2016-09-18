@@ -12,8 +12,8 @@
                   </tr>
               </table>
 			  <center>
-			  <a href="#" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a><br><br>
-			  <a href="#" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-eye"></i> Rejected Requests</a>
+			  <a href="<?=base_url()?>CSR/AcceptedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a><br><br>
+			  <a href="<?=base_url()?>CSR/RejectedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-eye"></i> Rejected Requests</a>
 			  </center>
 			  </div>
 			  </div>
@@ -39,36 +39,40 @@
                 </tr>
 				</thead>
 				<tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Sharon Cuneta</td>
-                  <td>Cotton</td>
-                  <td>6</td>
-                  <td>For Approval</td>
-                  <td>View Request/Accept/Reject/Hold</td>
-                </tr>
+          <?php
+          foreach($nursetocsr as $request)
+          {
+            if($request['csr_status']==0){
+            echo "<tr>";
+              echo "<td>".$request['csr_req_id']."</td>";
+              echo "<td>".$request['nurse_id']."</td>";
+              echo "<td>".$request['csr_item_id']."</td>";
+              echo "<td>".$request['item_quant']."</td>";
+              echo "<td>For Approval</td>";
+              echo "<td>";
+                echo " <a href='".base_url()."Csr/csr_accept_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
+                echo " <a href='".base_url()."Csr/csr_reject_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
+                echo " <a href='".base_url()."Csr/csr_hold_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
+              echo "</td>";
+            echo "</tr>";
+          }  elseif($request['csr_status']==3){
+              echo "<tr>";
+              echo "<td>".$request['csr_req_id']."</td>";
+              echo "<td>".$request['nurse_id']."</td>";
+              echo "<td>".$request['csr_item_id']."</td>";
+              echo "<td>".$request['item_quant']."</td>";
+              echo "<td>On Hold</td>";
+                echo "<td>";
+                  echo " <a href='".base_url()."Csr/csr_accept_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
+                  echo " <a href='".base_url()."Csr/csr_reject_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
+                  echo " <a href='".base_url()."Csr/csr_hold_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
+                echo "</td>";
+             echo "</tr>";
+          }
+        }
+          ?>
 				</tbody>
-                <?php
-                foreach($nursetocsr as $request)
-                {
-                  echo "<tr>";
-                    echo "<td>".$request['csr_req_id']."</td>";
-                    echo "<td>".$request['nurse_id']."</td>";
-                    echo "<td>".$request['csr_item_id']."</td>";
-                    echo "<td>".$request['item_quant']."</td>";
-                    if($request['csr_status']==0){
-                    echo "<td>For Approval</td>";
-                  } elseif($request['csr_status']==2){
-                    echo "<td>On Hold</td>";
-                  }
-                    echo "<td>";
-                      echo " <a href='".base_url()."CSR/csr_accept_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
-                      echo " <a href='".base_url()."CSR/csr_reject_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
-                      echo " <a href='".base_url()."CSR/csr_hold_request/".$item['csr_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
-                    echo "</td>";
-                  echo "</tr>";
-                }
-                ?>
+
               </table>
 			  </div>
 				</div>
@@ -87,7 +91,7 @@
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('admin/insert_room', $attributes);
+                        echo form_open('csr/add_newproduct', $attributes);
                       ?>
 
                       <div class="form-group">
