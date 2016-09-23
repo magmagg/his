@@ -24,6 +24,7 @@ public function myschedule(){
   $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
   $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
   $this->load->view('users/includes/header', $header);
+  $this->load->view('appointment/mysched');
 }
 
 
