@@ -107,6 +107,4 @@ class Model_pharmacy extends CI_Model
     $this->db->where('item_id',$item_id);
     $this->db->update('pharmacy_inventory');
   }
-
-
 }

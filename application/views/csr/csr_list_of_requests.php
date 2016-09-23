@@ -34,8 +34,10 @@
                                 echo "<span class='label label-info'>PENDING</span>";
                               }elseif($item['csr_status'] == 1){
                                 echo "<span class='label label-success'>APPROVED</span>";
-                              }else{
+                              }else if($item['csr_status'] == 2){
                                 echo "<span class='label label-danger'>REJECTED</span>";
+                              }else if($item['csr_status'] == 3){
+                                echo "<span class='label label-warning'>RELEASED</span>";
                               }
                             echo "</td>";
                           echo "</tr>";

@@ -52,7 +52,7 @@
               echo "<td>";
                 echo " <a href='".base_url()."Csr/csr_accept_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
                 echo " <a href='".base_url()."Csr/csr_reject_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
-                echo " <a href='".base_url()."Csr/csr_hold_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
+                
               echo "</td>";
             echo "</tr>";
           }  elseif($request['csr_status']==3){
@@ -65,7 +65,7 @@
                 echo "<td>";
                   echo " <a href='".base_url()."Csr/csr_accept_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
                   echo " <a href='".base_url()."Csr/csr_reject_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
-                  echo " <a href='".base_url()."Csr/csr_hold_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Hold Request</a>";
+                  
                 echo "</td>";
              echo "</tr>";
           }
@@ -78,53 +78,6 @@
 				</div>
           </section>
       </div>
-    </div>
-
-    <div class="modal fade modal-dialog-center" id="requestproduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content-wrap">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" align="center">Request a Product</h4>
-                    </div>
-                    <div class="modal-body">
-                      <?php
-                        $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('csr/add_newproduct', $attributes);
-                      ?>
-
-                      <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">Item: </label>
-                          <div class="col-lg-9">
-                              <select class="form-control" name="itemreq">
-                                <option value="1">Cotton</option>
-                              </select>
-                          </div>
-                      </div>
-
-                      <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">Quantity: </label>
-                          <div class="col-lg-9">
-                              <select class="form-control" name="itemquant">
-                                <?php
-                                  for($i = 1; $i<=300; $i++){
-                                    echo "<option value=".$i.">".$i."</option>";
-                                  }
-                                ?>
-                              </select>
-                          </div>
-                      </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
-                        <input type="submit" value="Submit" class="btn btn-warning">
-                    </div>
-                    <?=form_close()?>
-                </div>
-            </div>
-        </div>
     </div>
   </section>
 </section>
