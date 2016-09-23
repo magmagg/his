@@ -24,7 +24,7 @@
       $header['title'] = "HIS: CSR Accepted Requests";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $data['nursetocsr'] = $this->Model_Csr->get_nurse_acceptedrequests();
+      $data['accepted_requests'] = $this->Model_Csr->get_nurse_acceptedrequests();
       $this->load->view("users/includes/header.php",$header);
       $this->load->view("csr/acceptedrequest.php",$data);
     }
@@ -38,6 +38,10 @@
       $this->load->view("users/includes/header.php",$header);
       $this->load->view("csr/rejectedrequest.php",$data);
     }
+
+    /*function ReleasedRequests(){
+
+    }*/
 
     function ListofProducts()
     {
@@ -134,12 +138,22 @@
 
     function csr_accept_request($id)
     {
+      
+      $datareq = array('csr_status' =>1,
+                       'date_altered_status'=>date('Y-m-d H:i:s'));
+      //CSR REQUEST
+      $this->Model_Csr->accept_request($id,$datareq);
+      redirect("Csr/PendingRequests");
+    }
+
+    function release_csr_item($id)
+    {
       //1
       $request_quantity = $this->Model_Csr->get_request_quant($id);
       $csrid = $this->Model_Csr->get_csrid($id);
       $stock_quantity = $this->Model_Csr->get_stock_quant($csrid);
       $stock_sum = $stock_quantity - $request_quantity;
-      $datareq = array('csr_status' =>1,
+      $datareq = array('csr_status' =>3,
                        'date_altered_status'=>date('Y-m-d H:i:s'));
       $datainv = array('item_stock' => $stock_sum);
 
