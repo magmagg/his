@@ -11,93 +11,6 @@ class Pharmacy extends CI_Controller{
   }
   /*=========================================================================================================================*/
 
-
-
-
-  function pharmacy_inventory()
-  {
-
-    $header['title'] = "HIS: Pharmacy Inventory";
-    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-    $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
-    $data['inventorycount'] = $this->Model_pharmacy->count_pharmacy_inventory();
-    $this->load->view('users/includes/header.php',$header);
-    $this->load->view('pharmacy/add_item_modal');
-    $this->load->view('pharmacy/delete_item_modal');
-    $this->load->view('pharmacy/update_item_modal');
-    $this->load->view('pharmacy/inventory',$data);
-  }
-
-  function update_item_inventory()
-  {
-    $id = $this->input->post('itemid');
-
-    $data = array('item_name'=>$this->input->post('name'),
-                  'item_description'=>$this->input->post('description'),
-                  'item_quantity'=>$this->input->post('quantity'),
-                  'item_price'=>$this->input->post('price'));
-
-    $this->Model_pharmacy->update_item_inventory($id,$data);
-    redirect(base_url()."Pharmacy/pharmacy_inventory");
-  }
-
-  function delete_item_inventory()
-  {
-    $id = $this->uri->segment(3);
-    $this->Model_pharmacy->delete_item_inventory($id);
-    redirect(base_url()."Pharmacy/pharmacy_inventory");
-  }
-
-  function add_item_inventory()
-  {
-    $data = array('item_name'=>$this->input->post('name'),
-                  'item_description'=>$this->input->post('description'),
-                  'item_quantity'=>$this->input->post('quantity'),
-                  'item_price'=>$this->input->post('price'));
-
-    $this->Model_pharmacy->add_item_inventory($data);
-    redirect(base_url()."Pharmacy/pharmacy_inventory");
-  }
-
-  function add_item_inventory_import()
-  {
-    $data['error'] = '';    //initialize image upload error array to empty
-        $config['upload_path'] = './csv/';
-        $config['allowed_types'] = 'csv';
-        $config['max_size'] = '1000';
-        $this->load->library('upload', $config);
-        $this->upload->initialize($config);
-        // If upload failed, display error
-        if (!$this->upload->do_upload())
-        {
-            redirect('Pharmacy/pharmacy_inventory');
-        }
-        else
-        {
-            $file_data = $this->upload->data();
-            $file_path =  './csv/'.$file_data['file_name'];
-            if ($this->csvimport->get_array($file_path))
-            {
-                $csv_array = $this->csvimport->get_array($file_path);
-                foreach ($csv_array as $row)
-                {
-                    $insert_data = array(
-                        'item_name'=>$row['Name'],
-                        'item_description'=>$row['Description'],
-                        'item_quantity'=>$row['Quantity'],
-                        'item_price'=>$row['Price']
-                    );
-                    $this->Model_pharmacy->add_item_inventory_import($insert_data);
-                }
-                //$this->session->set_flashdata('csv', '<div class="alert alert-success text-center">Users imported successfully!</div>');
-                redirect(base_url().'Pharmacy/pharmacy_inventory');
-            } else
-            $this->session->set_flashdata('error', "Error occured");
-        redirect('Pharmacy/pharmacy_inventory');
-            }
-  }
-
   function pharmacy_request()
   {
     $header['title'] = "HIS: Pharmacy Inventory";
@@ -149,21 +62,6 @@ class Pharmacy extends CI_Controller{
       $this->Model_pharmacy->insert_pharmacy_request($data);
     }
 
-    $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
-
-    foreach($data['items'] as $d)
-    {
-      foreach($itemid as $key => $i)
-      {
-        if($d->item_id == $i)
-        {
-          $newquantity = $d->item_quantity - $quantity[$key];
-          $data = array('item_quantity'=>$newquantity);
-          $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
-        }
-      }
-    }
-
     redirect('Pharmacy/pharmacy_request');
   }
 
@@ -204,6 +102,7 @@ class Pharmacy extends CI_Controller{
     }
 
     $this->load->view('pharmacy/header');
+    $this->load->view('pharmacy/release_request_modal');
     $this->load->view('pharmacy/process_pharmacy_request',$data);
   }
 
@@ -212,6 +111,38 @@ class Pharmacy extends CI_Controller{
     $postid = $this->uri->segment(3);
     $data = array('phar_stat'=>1);
     $this->Model_pharmacy->process_pharmacy_request_model($postid,$data);
+    redirect('Pharmacy/process_pharmacy_request');
+  }
+
+  function release_pharmacy_request()
+  {
+    $auditid = $this->uri->segment(3);
+    $data['details'] = $this->Model_pharmacy->get_specific_request($auditid);
+    $itemid = array();
+    $quantity = array();
+    foreach($data['details'] as $d)
+    {
+      $itemid[] = $d->phar_item;
+      $quantity[] = $d->quant_requested;
+    }
+
+      $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+
+      foreach($data['items'] as $d)
+      {
+        foreach($itemid as $key => $i)
+        {
+          if($d->item_id == $i)
+          {
+            $newquantity = $d->item_quantity - $quantity[$key];
+            $data = array('item_quantity'=>$newquantity);
+            $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
+          }
+        }
+      }
+
+    $data = array('phar_stat'=>2);
+    $this->Model_pharmacy->process_pharmacy_request_model($auditid,$data);
     redirect('Pharmacy/process_pharmacy_request');
   }
 
