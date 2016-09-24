@@ -73,7 +73,7 @@
                                                                                                data-updatingdescription="<?php echo $i->item_description?>"
                                                                                                data-updatingquantity="<?php echo $i->item_quantity?>"
                                                                                                data-updatingprice="<?php echo $i->item_price?>">Edit</a>
-                                <a href="#" class="btn btn-danger" data-href="<?php echo base_url();?>Pharmacy/delete_item_inventory/<?php echo $i->item_id?>" data-toggle="modal" data-target="#confirm-delete">Delete</a></td>
+                                <a href="#" class="btn btn-danger" data-href="<?php echo base_url();?>Purchasing/delete_item_inventory/<?php echo $i->item_id?>" data-toggle="modal" data-target="#confirm-delete">Delete</a></td>
                                 <?php
                           echo "</div>";
                           echo "</td>";

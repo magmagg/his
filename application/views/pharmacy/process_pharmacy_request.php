@@ -23,39 +23,35 @@
                               </thead>
                               <tbody>
 
-                              <?php
-                              $count = 1;
-                              foreach($table_details as $t)
-                              {
-                                echo '<tr>';
-                                echo '<td>'.$count.'</td>';
-                                echo '<td>'.$t['price'].'</td>';
-                                echo '<td>'.$t['quantity'].' Medicines'.'</td>';
-                                echo '<td>'.$t['date'].'</td>';
-                                echo '<td>'.$t['requestedby'].'</td>';
-                                echo '<td>'.$t['patient'].'</td>';
-                                if($t['status'] == 0)
-                                {
-                                  echo '<td><span class="label label-info label-mini">Due</span></td>';
-                                }
-                                else if ($t['status'] == 1)
-                                {
-                                  echo '<td><span class="label label-success label-mini">OK</span></td>';
-                                }
-                                else
-                                {
-                                    echo '<td><span class="label label-danger label-mini">Rejected</span></td>';
-                                }
-                                echo '<td>';
-                                ?>
-                                  <a href="<?php echo base_url();?>pharmacy/view_one_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a>
-                                  <?php
-                                echo '</td>';
-                                $count++;
+                              <?php $count = 1; ?>
+                              <?php foreach($table_details as $t): ?>
 
-                              }
-                              ?>
+                              <tr>
+                                <td><?=$count?></td>
+                                <td><?=$t['price']?></td>
+                                <td><?=$t['quantity']?></td>
+                                <td><?=$t['date']?></td>
+                                <td><?=$t['requestedby']?></td>
+                                <td><?=$t['patient']?></td>
 
+                              <?php if($t['status'] == 0):?>
+                              <td><span class="label label-info label-mini">Due</span></td>
+                              <?php elseif($t['status'] == 1):?>
+                              <td><span class="label label-danger label-mini">For releasing</span></td>
+                              <?php elseif($t['status'] == 2):?>
+                              <td><span class="label label-success label-mini">Released</span></td>
+                              <?php else: ?>
+                              <td><span class="label label-danger label-mini">Rejected</span></td>
+                              <?php endif;?>
+
+                              <?php if($t['status'] == 1):?>
+                              <td><button class="btn btn-success btn" data-href="<?php echo base_url();?>pharmacy/release_pharmacy_request/<?php echo $t['unique_id']?>" data-toggle="modal" data-target="#confirm-release">Release</button></td>
+                              <?php else: ?>
+                              <td><a href="<?php echo base_url();?>pharmacy/view_one_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a></td>
+                              <?php endif;?>
+
+                              <?php $count++; ?>
+                              <?php endforeach;?>
 
                               </tbody>
                           </table>
@@ -88,18 +84,13 @@
 <script src="<?=base_url()?>js/slidebars.min.js"></script>
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
-
 <script type="text/javascript">
-$('#confirm-accept').on('show.bs.modal', function(e) {
-$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-});
+    $('#confirm-release').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+        
+    });
 </script>
 
-<script type="text/javascript">
-$('#confirm-reject').on('show.bs.modal', function(e) {
-$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-});
-</script>
 
 
 </body>
