@@ -43,7 +43,7 @@
                   <?php
                     foreach($users as $user){
                       echo "<tr>";
-                        echo "<td>DCTR-".$user['user_id']."</td>";
+                        echo "<td>".$user['user_id']."</td>";
                         echo "<td>";
                           if($user['gender'] == 'M'){
                             echo "Mr. ";
@@ -65,8 +65,7 @@
                                      data-name='". $user['name'] ."'
                                      data-birthdate='". $user['birthdate'] ."'
                                      data-mobilenumber='". $user['contact_number'] ."'
-                                     onclick='updateuser(this)' role='button' class='btn btn-warning btn-sm'>Edit</a>";
-                            echo "<a href='".base_url()."Admin/DeactivateNurse/".$user  ['user_id']."' role='button' class='btn btn-danger btn-sm'>Deactivate</a>";
+                                     onclick='updateuser(this)' role='button' class='btn btn-warning btn-sm'>Update Schedule</a>";
                           echo "</div>";
                         echo "</td>";
                       echo "</tr>";
@@ -95,18 +94,24 @@
                         echo form_open('usermanagement/insert_user', $attributes);
                       ?>
 
+
+
                       <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">User Role </label>
-                          <div class="col-lg-9">
-                              <select class="form-control" name="usertype">
-                                <?php
-                                  foreach($usertypes as $type){
-                                    echo "<option value=".$type['type_id'].">".$type['name']."</option>";
-                                  }
-                                ?>
-                              </select>
-                          </div>
-                      </div>
+                         <label  class="col-lg-3 col-sm-3 control-label">User Role </label>
+                         <div class="col-lg-9" id="usertype">
+                             <select class="form-control" name="usertype" id="usertype" onChange="doctorspecialization(this);">
+                               <?php
+                                 foreach($usertypes as $type){
+                                   echo "<option value=".$type['type_id'].">".$type['name']."</option>";
+                                 }
+                               ?>
+                             </select>
+                         </div>
+                     </div>
+
+                     <div class="form-group" id="specialization">
+
+                     </div>
 
                       <div class="form-group">
                           <label  class="col-lg-3 col-sm-3 control-label">Last Name: </label>
@@ -208,6 +213,7 @@
                               </select>
                           </div>
                       </div>
+
                       <input type="hidden" name="userid" id="updateuserid">
 
                       <div class="form-group">
@@ -291,6 +297,7 @@
   }
 </script>
 
+
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 
@@ -307,3 +314,14 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+
+
+<script>
+    function doctorspecialization(e) {
+        if (e.value == "2") {
+            var html = $("<label  class='col-lg-3 col-sm-3 control-label'>Specialization</label><div class='col-lg-9'><select class='form-control' name='specialization'>\<?php foreach($specializations as $type){echo '<option value='.$type['spec_id'].'>'.$type['spec_name'].'</option>';}?></select></div>");
+            $("#specialization").append(html);
+            $("div.usertype select").val("2");
+        }
+    }
+</script>
