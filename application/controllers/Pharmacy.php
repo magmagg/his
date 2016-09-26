@@ -17,7 +17,6 @@ class Pharmacy extends CI_Controller{
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
-    $data['patient'] = $this->Model_pharmacy->get_all_patients();
     $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/pharmacy_request',$data);
     $this->load->view('pharmacy/pharmacy_request_modal');

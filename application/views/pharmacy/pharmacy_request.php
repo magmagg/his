@@ -5,24 +5,11 @@
             <section class="panel">
               <header class="panel-heading" style="background-color: #000;"></header>
               <header class="panel-heading">
-                  <center><h4>PHARMACY REQUEST<h4></center>
+                  <center><h4>Restock medicine<h4></center>
               </header>
 
-                <form role="form" id="formfield" action="<?php echo base_url();?>Pharmacy/pharmacy_request_submit" method="post">
+                <form role="form" id="formfield" action="<?php echo base_url();?>Pharmacy/pharmacy_restock_request" method="post">
                 <input type="button" name="btn" value="Submit request" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" />
-
-                <center>
-                <div class="form-group" style="width:50%">
-                <label for="sel1">For patient:</label>
-                <select class="form-control" name="patientid">
-                  <?php foreach($patient as $p)
-                  {
-                    echo '<option value="'.$p->patient_id.'">'.$p->patient_id.' '.$p->last_name.' '.$p->first_name.' '.$p->middle_name.'</option>';
-                  }
-                  ?>
-                </select>
-              </div>
-            </center>
 
               <table class="table table-striped">
                   <thead>
