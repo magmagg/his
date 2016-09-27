@@ -107,4 +107,20 @@ class Model_pharmacy extends CI_Model
     $this->db->where('item_id',$item_id);
     $this->db->update('pharmacy_inventory');
   }
+
+  //=======================//DRUGS REQUEST//
+  function get_drug_inventory()
+  {
+    $this->db->select('*');
+    $this->db->from('drugs');
+    $this->db->where('status','1');
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function update_drug_quantity($id,$data)
+  {
+    $this->db->where('drug_code',$id);
+    $this->db->update('drugs',$data);
+  }
 }

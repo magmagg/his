@@ -45,9 +45,9 @@
                               <?php endif;?>
 
                               <?php if($t['status'] == 1):?>
-                              <td><button class="btn btn-success btn" data-href="<?php echo base_url();?>pharmacy/release_pharmacy_request/<?php echo $t['unique_id']?>" data-toggle="modal" data-target="#confirm-release">Release</button></td>
+                              <td><button class="btn btn-success btn" data-href="<?php echo base_url();?>pharmacy/drug_release_pharmacy_request/<?php echo $t['unique_id']?>" data-toggle="modal" data-target="#confirm-release">Release</button></td>
                               <?php else: ?>
-                              <td><a href="<?php echo base_url();?>pharmacy/view_one_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a></td>
+                              <td><a href="<?php echo base_url();?>pharmacy/drug_view_one_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a></td>
                               <?php endif;?>
 
                               <?php $count++; ?>
