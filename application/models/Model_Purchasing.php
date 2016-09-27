@@ -118,6 +118,7 @@
       return $query->result();
     }
 
+
     function count_pharmacy_inventory()
     {
       $this->db->select('*');
@@ -147,6 +148,59 @@
     {
       $this->db->insert('pharmacy_inventory',$data);
     }
+
+    //=======================DRUGS===============================//
+
+      function get_drug_inventory()
+      {
+        $this->db->select('*');
+        $this->db->from('drugs');
+        $this->db->where('status','1');
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function count_drug_inventory()
+      {
+        $this->db->select('*');
+        $this->db->from('drugs');
+        $this->db->where('status','1');
+        $query = $this->db->get();
+        return $query->num_rows();
+      }
+
+      function update_drug_inventory($id, $data)
+      {
+        $this->db->where('drug_code', $id);
+        $this->db->update('drugs', $data);
+      }
+
+      function delete_drug_inventory($id)
+      {
+        $this->db->where('drug_code',$id);
+        $this->db->delete('drugs');
+      }
+
+      function add_drug_inventory($data)
+      {
+        $this->db->insert('drugs',$data);
+      }
+
+      //=======================DRUGS ACTIVATE=========================//
+      function get_all_drug_inventory()
+      {
+        $this->db->select('*');
+        $this->db->from('drugs');
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function process_drug($id,$data)
+      {
+        $this->db->where('drug_code',$id);
+        $this->db->update('drugs', $data);
+      }
+
 
   }
 ?>

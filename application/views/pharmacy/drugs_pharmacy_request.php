@@ -5,12 +5,11 @@
             <section class="panel">
               <header class="panel-heading" style="background-color: #000;"></header>
               <header class="panel-heading">
-                  <center><h4>Pharmacy Request<h4></center>
+                  <center><h4>Restock medicine<h4></center>
               </header>
 
-                <form role="form" id="formfield" action="<?php echo base_url();?>Pharmacy/pharmacy_request_submit" method="post">
+                <form role="form" id="formfield" action="<?php echo base_url();?>Pharmacy/drug_pharmacy_request_submit" method="post">
                 <input type="button" name="btn" value="Submit request" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-success" />
-
                 <center>
                   <div class="form-group" style="width:50%">
                   <label for="sel1">Select list:</label>
@@ -34,18 +33,17 @@
                   </thead>
                   <tbody align="center">
                     <?php
-                    $count = 0;
+                    $count = 1;
                       foreach($items as $i)
                       {
-                        $selectquantity = $i->item_quantity;
-                        echo '<input type="hidden" name="itemid[]" value="'.$i->item_id.'">';
-                        echo '<input type="hidden" name="price[]" value="'.$i->item_price.'">';
+                        echo '<input type="hidden" name="itemid[]" value="'.$i->drug_code.'">';
+                        echo '<input type="hidden" name="price[]" value="'.$i->drug_price.'">';
                         echo '<tr>';
                         echo '<td>'.$count.'</td>';
-                        echo '<td>'.$i->item_name.'</td>';
-                        echo '<td>'.$i->item_description.'</td>';
-                        echo '<td>'.$i->item_quantity.'</td>';
-                        echo '<td>'.$i->item_price.'</td>';
+                        echo '<td>'.$i->drug_name.'</td>';
+                        echo '<td>'.$i->packaging_desc.'</td>';
+                        echo '<td>'.$i->drug_quantity.'</td>';
+                        echo '<td>'.$i->drug_price.'</td>';
                         echo '<td>';
                         echo '<input type="number" name="quantity[]" style="width:100%" class="form-control" value="0">';
                         echo '</td>';
