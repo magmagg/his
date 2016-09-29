@@ -3,37 +3,7 @@
 <section id="main-content">
   <section class="wrapper">
     <div class="row">
-        <div class="col-sm-3">
-
-            <section class="panel">
-			<header style="font-weight:300" class="panel-heading">
-                 New Item
-             <span class="tools pull-right">
-
-             </span>
-            </header>
-               <div class="panel-body">
-               <div class="adv-table">
-
-                <table  class="table">
-                    <tr>
-                      <td>Overall items: </td>
-                      <td><?php echo $inventorycount?></td>
-                    </tr>
-                    <tr>
-                      <td>Overall Stock: </td>
-                      <td >1</td>
-                    </tr>
-
-                </table>
-				<center>
-				<a href="#addModal" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> Add Item</a>
-				</center>
-				</div>
-				</div>
-            </section>
-        </div>
-        <div class="col-sm-9">
+        <div class="col-sm-12">
             <section class="panel">
 			<header style="font-weight:300" class="panel-heading">
                  Inventory List
@@ -61,20 +31,19 @@
                         {
                           echo '<tr>';
                           echo '<td>'.$count.'</td>';
-                          echo '<td>'.$i->item_name.'</td>';
-                          echo '<td>'.$i->item_description.'</td>';
-                          echo '<td>'.$i->item_quantity.'</td>';
-                          echo '<td>'.$i->item_price.'</td>';
+                          echo '<td>'.$i->drug_name.'</td>';
+                          echo '<td>'.$i->packaging_desc.'</td>';
+                          echo '<td>'.$i->drug_quantity.'</td>';
+                          echo '<td>'.$i->drug_price.'</td>';
                           echo '<td>';
                           echo "<div class='btn-group' role='group' aria-label='...'>";
-                                ?>
-                                <a href="#myModal" class="btn btn-warning" data-toggle="modal" data-updatingid="<?php echo $i->item_id ?>"
-                                                                                               data-updatingname="<?php echo $i->item_name?>"
-                                                                                               data-updatingdescription="<?php echo $i->item_description?>"
-                                                                                               data-updatingquantity="<?php echo $i->item_quantity?>"
-                                                                                               data-updatingprice="<?php echo $i->item_price?>">Edit</a>
-                                <a href="#" class="btn btn-danger" data-href="<?php echo base_url();?>Pharmacy/delete_item_inventory/<?php echo $i->item_id?>" data-toggle="modal" data-target="#confirm-delete">Delete</a></td>
-                                <?php
+                        ?>
+                        <?php if($i->status == 1): ?>
+                                <a href="#" class="btn btn-danger" data-href="<?php echo base_url();?>Purchasing/deactivate_drug/<?php echo $i->drug_code?>" data-toggle="modal" data-target="#confirm-deactivate">Deactivate</a></td>
+                        <?php else: ?>
+                          <a href="#" class="btn btn-success" data-href="<?php echo base_url();?>Purchasing/activate_drug/<?php echo $i->drug_code?>" data-toggle="modal" data-target="#confirm-activate">Activate</a></td>
+                        <?php endif;?>
+                        <?php
                           echo "</div>";
                           echo "</td>";
                           echo "</tr>";
@@ -132,37 +101,17 @@ $('#myModal').on('show.bs.modal', function(e)
 
 
     <script>
-$('#confirm-delete').on('show.bs.modal', function(e) {
+$('#confirm-deactivate').on('show.bs.modal', function(e) {
     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 });
   </script>
 
-
-<script>
-var _validFileExtensions = [".csv"];
-function ValidateSingleInput(oInput) {
-    if (oInput.type == "file") {
-        var sFileName = oInput.value;
-         if (sFileName.length > 0) {
-            var blnValid = false;
-            for (var j = 0; j < _validFileExtensions.length; j++) {
-                var sCurExtension = _validFileExtensions[j];
-                if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
-                    blnValid = true;
-                    break;
-                }
-            }
-
-            if (!blnValid) {
-                alert("Sorry, CSV files only");
-                oInput.value = "";
-                return false;
-            }
-        }
-    }
-    return true;
-}
+  <script>
+$('#confirm-activate').on('show.bs.modal', function(e) {
+  $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+});
 </script>
+
 
 <!--dynamic table initialization -->
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>

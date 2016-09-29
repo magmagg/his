@@ -108,6 +108,7 @@ class Model_pharmacy extends CI_Model
     $this->db->update('pharmacy_inventory');
   }
 
+<<<<<<< HEAD
   function get_request_by_user($id){
     $this->db->select('*');
     $this->db->select('p.first_name as P_first_name, p.middle_name as P_middle_name, p.last_name as P_last_name');
@@ -118,5 +119,21 @@ class Model_pharmacy extends CI_Model
     $this->db->where('pa.phar_user_id', $id);
     $query = $this->db->get();
     return $query->result_array();
+=======
+  //=======================//DRUGS REQUEST//
+  function get_drug_inventory()
+  {
+    $this->db->select('*');
+    $this->db->from('drugs');
+    $this->db->where('status','1');
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function update_drug_quantity($id,$data)
+  {
+    $this->db->where('drug_code',$id);
+    $this->db->update('drugs',$data);
+>>>>>>> e3583d34c79d37dc2cbbcf3a7714af36d6e617e3
   }
 }

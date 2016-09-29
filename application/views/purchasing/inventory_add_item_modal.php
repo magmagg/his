@@ -8,7 +8,7 @@
             <div class="modal-body">
                 <div class="row">
                   <div class="col-lg-7">
-                  <?php echo form_open('Pharmacy/add_item_inventory'); ?>
+                  <?php echo form_open('Purchasing/add_item_inventory'); ?>
                     <h4 style="font-weight:100" class="modal-title">Input Item Details</h4>
                     <hr>
                       <div class="form-group">
@@ -35,7 +35,7 @@
 
                     <h4 style="font-weight:100" class="modal-title">Import CSV</h4>
                     <hr>
-                    <?php echo form_open_multipart('Pharmacy/add_item_inventory_import');?>
+                    <?php echo form_open_multipart('Purchasing/add_item_inventory_import');?>
                     <div class="form-group">
                         <label for="exampleInputFile">File input</label>
                         <input type="file" name="userfile" onchange="ValidateSingleInput(this);">

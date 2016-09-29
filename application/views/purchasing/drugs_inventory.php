@@ -61,19 +61,19 @@
                         {
                           echo '<tr>';
                           echo '<td>'.$count.'</td>';
-                          echo '<td>'.$i->item_name.'</td>';
-                          echo '<td>'.$i->item_description.'</td>';
-                          echo '<td>'.$i->item_quantity.'</td>';
-                          echo '<td>'.$i->item_price.'</td>';
+                          echo '<td>'.$i->drug_name.'</td>';
+                          echo '<td>'.$i->packaging_desc.'</td>';
+                          echo '<td>'.$i->drug_quantity.'</td>';
+                          echo '<td>'.$i->drug_price.'</td>';
                           echo '<td>';
                           echo "<div class='btn-group' role='group' aria-label='...'>";
                                 ?>
-                                <a href="#myModal" class="btn btn-warning" data-toggle="modal" data-updatingid="<?php echo $i->item_id ?>"
-                                                                                               data-updatingname="<?php echo $i->item_name?>"
-                                                                                               data-updatingdescription="<?php echo $i->item_description?>"
-                                                                                               data-updatingquantity="<?php echo $i->item_quantity?>"
-                                                                                               data-updatingprice="<?php echo $i->item_price?>">Edit</a>
-                                <a href="#" class="btn btn-danger" data-href="<?php echo base_url();?>Purchasing/delete_item_inventory/<?php echo $i->item_id?>" data-toggle="modal" data-target="#confirm-delete">Delete</a></td>
+                                <a href="#myModal" class="btn btn-warning" data-toggle="modal" data-updatingid="<?php echo $i->drug_code ?>"
+                                                                                               data-updatingname="<?php echo $i->drug_name?>"
+                                                                                               data-updatingdescription="<?php echo $i->packaging_desc?>"
+                                                                                               data-updatingquantity="<?php echo $i->drug_quantity?>"
+                                                                                               data-updatingprice="<?php echo $i->drug_price?>">Edit</a>
+                                <a href="#" class="btn btn-danger" data-href="<?php echo base_url();?>Purchasing/delete_drug_inventory/<?php echo $i->drug_code?>" data-toggle="modal" data-target="#confirm-delete">Delete</a></td>
                                 <?php
                           echo "</div>";
                           echo "</td>";

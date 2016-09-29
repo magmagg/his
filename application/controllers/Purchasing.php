@@ -166,7 +166,6 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
       function pharmacy_inventory()
       {
-
         $header['title'] = "HIS: Inventory";
         $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
         $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
@@ -256,6 +255,143 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
                 $this->session->set_flashdata('error', "Error occured");
             redirect('Purchasing/pharmacy_inventory');
                 }
+      }
+
+      //==================DRUUGS===========================//
+      function drug_inventory()
+      {
+        $header['title'] = "HIS: Inventory";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $data['items'] = $this->Model_Purchasing->get_drug_inventory();
+        $data['inventorycount'] = $this->Model_Purchasing->count_drug_inventory();
+        $this->load->view('users/includes/header.php',$header);
+        $this->load->view('purchasing/drugs_add_item_modal');
+        $this->load->view('purchasing/drugs_delete_item_modal');
+        $this->load->view('purchasing/drugs_update_item_modal');
+        $this->load->view('purchasing/drugs_inventory',$data);
+      }
+
+      function update_drug_inventory()
+      {
+        $id = $this->input->post('itemid');
+
+        $data = array('drug_name'=>$this->input->post('name'),
+                      'packaging_desc'=>$this->input->post('description'),
+                      'drug_quantity'=>$this->input->post('quantity'),
+                      'drug_price'=>$this->input->post('price'));
+
+        $this->Model_Purchasing->update_drug_inventory($id,$data);
+        redirect(base_url()."Purchasing/drug_inventory");
+      }
+
+      function delete_drug_inventory()
+      {
+        $id = $this->uri->segment(3);
+        $this->Model_Purchasing->delete_drug_inventory($id);
+        redirect(base_url()."Purchasing/drug_inventory");
+      }
+
+      function add_drug_inventory()
+      {
+        $data = array('drug_code'=>$this->input->post('drug_code'),
+                      'drug_name'=>$this->input->post('drug_name'),
+                      'generic_code'=>$this->input->post('generic_code'),
+                      'generic_name'=>$this->input->post('generic_name'),
+                      'strength_code'=>$this->input->post('strength_code'),
+                      'strength_desc'=>$this->input->post('strength_desc'),
+                      'form_code'=>$this->input->post('form_code'),
+                      'form_desc'=>$this->input->post('form_desc'),
+                      'packaging_code'=>$this->input->post('packaging_code'),
+                      'packaging_desc'=>$this->input->post('packaging_desc'),
+                      'brand_code'=>$this->input->post('brand_code'),
+                      'brand_name'=>$this->input->post('brand_name'),
+                      'manufacturer_name'=>$this->input->post('manufacturer_name'),
+                      'status'=>1,
+                      'drug_price'=>$this->input->post('drug_price'),
+                      'drug_quantity'=>$this->input->post('drug_quantity'));
+
+        $this->Model_Purchasing->add_drug_inventory($data);
+        redirect(base_url()."Purchasing/drugs_inventory");
+      }
+
+      function add_drug_import()
+      {
+        $data['error'] = '';    //initialize image upload error array to empty
+            $config['upload_path'] = './csv/';
+            $config['allowed_types'] = 'csv';
+            $config['max_size'] = '1000';
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            // If upload failed, display error
+            if (!$this->upload->do_upload())
+            {
+                redirect('Purchasing/drug_inventory');
+            }
+            else
+            {
+                $file_data = $this->upload->data();
+                $file_path =  './csv/'.$file_data['file_name'];
+                if ($this->csvimport->get_array($file_path))
+                {
+                    $csv_array = $this->csvimport->get_array($file_path);
+                    foreach ($csv_array as $row)
+                    {
+                        $insert_data = array(
+                          'drug_code'=>$row['drug_code'],
+                          'drug_name'=>$row['drug_name'],
+                          'generic_code'=>$row['generic_code'],
+                          'generic_name'=>$row['generic_name'],
+                          'strength_code'=>$row['strength_code'],
+                          'strength_desc'=>$row['strength_desc'],
+                          'form_code'=>$row['form_code'],
+                          'form_desc'=>$row['form_desc'],
+                          'packaging_code'=>$row['packaging_code'],
+                          'packaging_desc'=>$row['packaging_desc'],
+                          'brand_code'=>$row['brand_code'],
+                          'brand_name'=>$row['brand_name'],
+                          'manufacturer_name'=>$row['manufacturer_name'],
+                          'status'=>$row['status'],
+                          'drug_price'=>$row['drug_price'],
+                          'drug_quantity'=>$row['drug_quantity']
+                        );
+                        $this->Model_Purchasing->add_drug_inventory($insert_data);
+                    }
+                    //$this->session->set_flashdata('csv', '<div class="alert alert-success text-center">Users imported successfully!</div>');
+                    redirect(base_url().'Purchasing/drug_inventory');
+                } else
+                $this->session->set_flashdata('error', "Error occured");
+            redirect('Purchasing/drug_inventory');
+                }
+      }
+
+      //==============================DRUGS ACTIVATE=====================================//
+      function all_drug_inventory()
+      {
+        $header['title'] = "HIS: Inventory";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $data['items'] = $this->Model_Purchasing->get_all_drug_inventory();
+        $this->load->view('users/includes/header.php',$header);
+        $this->load->view('purchasing/all_activate_drug_modal');
+        $this->load->view('purchasing/all_deactivate_drug_modal');
+        $this->load->view('purchasing/all_drugs_inventory',$data);
+      }
+
+      function deactivate_drug()
+      {
+        $id = $this->uri->segment(3);
+        $data = array('status'=>0);
+        $this->Model_Purchasing->process_drug($id,$data);
+        redirect(base_url()."Purchasing/all_drug_inventory");
+      }
+
+      function activate_drug()
+      {
+        $id = $this->uri->segment(3);
+        $data = array('status'=>1);
+        $this->Model_Purchasing->process_drug($id,$data);
+        redirect(base_url()."Purchasing/all_drug_inventory");
       }
   }
 ?>
