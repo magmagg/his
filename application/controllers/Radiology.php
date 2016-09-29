@@ -15,6 +15,7 @@
       $data['radiology_requests'] = $this->Model_radiology->get_radiology_request($this->session->userdata('user_id'));
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('radiology/radiology_requests.php', $data);
+      $this->load->view('includes/toastr.php');
     }
 
     function MakeRadiologyRequest(){
@@ -34,6 +35,7 @@
       $data['radiology_exams'] = $this->Model_radiology->get_radiology_exams();
       $this->load->view('users/includes/header.php', $header);
       $this->load->view('radiology/maintenance.php', $data);
+      $this->load->view('includes/toastr.php');
     }
 
     function InactiveExams(){
@@ -43,7 +45,7 @@
       $data['radiology_exams'] = $this->Model_radiology->get_inactive_radiology_exams();
       $this->load->view('users/includes/header.php', $header);
       $this->load->view('radiology/inactive_exams.php', $data);
-      //$this->load->view('radiology/includes/footer.php');
+      $this->load->view('includes/toastr.php');
     }
 
     function RadiologyRequests(){
@@ -55,7 +57,6 @@
       $data['total_pending_request'] = $this->Model_radiology->count_pending_radiology_request();
       $this->load->view('users/includes/header.php', $header);
       $this->load->view('radiology/radiology_requests.php', $data);
-      //$this->load->view('radiology/includes/footer.php');
     }
 
     function PendingRadiologyRequests(){
@@ -67,24 +68,33 @@
       $data['total_pending_request'] = $this->Model_radiology->count_pending_radiology_request();
       $this->load->view('users/includes/header.php', $header);
       $this->load->view('radiology/pending_requests.php', $data);
-      //$this->load->view('radiology/includes/footer.php');
+      $this->load->view('includes/toastr.php');
     }
 
     function approve_request($trans_id){
       $data = array('request_status'=>1);
       $this->Model_radiology->approve_request($trans_id, $data);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Approved radiology request">
+                                <input type="hidden" id="type" value="success">' );
       redirect(base_url().'Radiology/PendingRadiologyRequests');
     }
 
     function DeactivateExam($id){
       $data = array('exam_status'=>0);
       $this->Model_radiology->deactivate($id, $data);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Deactivated radiology exam">
+                                <input type="hidden" id="type" value="success">' );
       redirect(base_url()."Radiology/Maintenance", "refresh");
     }
 
     function ActivateExam($id){
       $data = array('exam_status'=>1);
       $this->Model_radiology->activate($id, $data);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Activated radiology exam">
+                                <input type="hidden" id="type" value="success">' );
       redirect(base_url()."Radiology/InactiveExams", "refresh");
     }
 
@@ -103,6 +113,9 @@
                       'exam_status'=>1
                      );
         $this->Model_radiology->insert_radiology_exam($data);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                    						  <input type="hidden" id="msg" value="Added new radiology exam">
+                    						  <input type="hidden" id="type" value="success">' );
         redirect(base_url()."Radiology/Maintenance", "refresh");
       }
     }
@@ -123,14 +136,18 @@
                         'user_id_fk'=>$this->session->userdata('user_id'),
                         'req_notes'=>$this->input->post('note')
                        );
-          $request_id = $this->Model_radiology->insert_request($data_radiology_request);
+          $request = $this->Model_radiology->insert_request($data_radiology_request);
           $data_radiology_pat = array(
-                                      'rad_reqid'=>$request_id->request_id,
+                                      'rad_reqid'=>$request->request_id,
                                       'pat_id'=>$this->input->post('patient'),
                                       'request_status'=>0
                                      );
           $this->Model_radiology->insert_radiology_pat($data_radiology_pat);
         }
+        $name = $request->first_name." ".$request->middle_name." ".$request->last_name;
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                    						  <input type="hidden" id="msg" value="Successfully requested radiology exam for '.$name.'">
+                    						  <input type="hidden" id="type" value="success">' );
         redirect(base_url()."Radiology/ViewRequest");
       }
     }

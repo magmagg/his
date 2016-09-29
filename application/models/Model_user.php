@@ -78,5 +78,10 @@
       return $query->result_array();
     }
 
+    function update_doctor_schedule($data, $id){
+      $this->db->where('user_id', $id);
+      $this->db->update('doctor_information', $data);
+    }
+
   }
 ?>

@@ -78,7 +78,6 @@
 
                       <input type="hidden" name="userid" id="userid">
 
-
                       <div class="form-group">
                           <label  class="col-lg-3 col-sm-3 control-label">Name: </label>
                           <div class="col-lg-9">
@@ -94,7 +93,7 @@
                       </div>
 
                       <div class="form-group">
-                          <label  class="col-lg-3 col-sm-3 control-label">Start Time: </label>
+                          <label  class="col-lg-3 col-sm-3 control-label">End Time: </label>
                           <div class="col-lg-9">
                               <input type="time" id="updateendtime" name="updateendtime" class="form-control">
                           </div>

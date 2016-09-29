@@ -15,27 +15,29 @@
                     <tr>
                         <th>REQUEST ID</th>
                         <th>NAME</th>
-                        <th>ITEM NAME</th>
+                        <th>MEDICINE</th>
                         <th>QUANTITY</th>
+                        <th>PATIENT</th>
                         <th>STATUS</th>
                     </tr>
                     </thead>
                     <tbody>
                       <?php
-                        foreach($csr_request as $item){
+                        foreach($pharmacy_request as $item){
                           echo "<tr>";
-                            echo "<td>".$item['csr_req_id']."</td>";
+                            echo "<td>".$item['phar_aud_id']."</td>";
                             echo "<td>".$item['first_name']." ".$item['middle_name']." ".$item['last_name']." "."</td>";
                             echo "<td>".$item['item_name']."</td>";
-                            echo "<td>".$item['item_quant']."</td>";
+                            echo "<td>".$item['quant_requested']."</td>";
+                            echo "<td>".$item['P_first_name']." ".$item['P_middle_name']." ".$item['P_last_name']." "."</td>";
                             echo "<td>";
-                              if($item['csr_status'] == 0){
+                              if($item['phar_stat'] == 0){
                                 echo "<span class='label label-info'>PENDING</span>";
-                              }elseif($item['csr_status'] == 1){
+                              }elseif($item['phar_stat'] == 1){
                                 echo "<span class='label label-success'>APPROVED</span>";
-                              }else if($item['csr_status'] == 2){
+                              }else if($item['phar_stat'] == 2){
                                 echo "<span class='label label-danger'>REJECTED</span>";
-                              }else if($item['csr_status'] == 3){
+                              }else if($item['phar_stat'] == 3){
                                 echo "<span class='label label-warning'>RELEASED</span>";
                               }
                             echo "</td>";

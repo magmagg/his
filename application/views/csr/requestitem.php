@@ -73,32 +73,29 @@
               ?>
               <div id="items">
                 <div class="form-group">
-                  <?php
-                    foreach($csrinventory as $item):
-                  ?>
                   <div class="col-lg-9">
-                    <select class="form-control" name="item">
+                    <select class="form-control" name="item" onchange="quantity(this)">
                       <?php
-                        if($item['item_stock'] != 0){
+                        foreach($csrinventory as $item){
                           echo "<option value='".$item['csr_id']."'>".$item['item_name']."</option>";
                         }
                       ?>
                     </select>
                   </div>
+
                   <div class="col-lg-3">
-                    <select class="form-control" name="quantity">
-                    <?php
-                      for($i=1;$i<=$item['item_stock'];$i++){
-                        echo "<option value='".$i."'>".$i."</option>";
-                      }
-                    ?>
+                    <select class="form-control" name="quantity" id="quantity">
+                      <?php
+                        for($i = 1; $i <= 20; $i++){
+                          echo "<option value='".$i."'>".$i."</option>";
+                        }
+                      ?>
                     </select>
                   </div>
-                  <?php
-                    endforeach;
-                  ?>
                 </div>
-                <input type="submit" class="btn btn-success" value="REQUEST">
+              </div>
+              <input type="submit" class="btn btn-success" value="REQUEST">
+              </div>
                 <?=form_close()?>
               </div>
             </div>
@@ -127,3 +124,9 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+
+<script>
+  function quantity(e){
+
+  }
+</script>

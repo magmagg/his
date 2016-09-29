@@ -43,10 +43,12 @@
         $this->load->view('users/dashboards/management_dashboard.php');
       }else if($user_type == "Admission"){
         $this->load->view('users/dashboards/admission_dashboard.php');
-      }else if($user_type == "Management"){
-        $this->load->view('users/dashboards/labchief_dashboard.php');
+      }else if($user_type == "Laboratory Chief"){
+        //$this->load->view('users/dashboards/labchief_dashboard.php');
       }else if($user_type == "Management"){
         $this->load->view('users/dashboards/radchief_dashboard.php');
+      }elseif($user_type == "Purchasing"){
+        $this->load->view('users/dashboards/purchasing_dashboard.php');
       }else{
         echo "Contact your app support";
       }

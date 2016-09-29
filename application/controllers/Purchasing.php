@@ -17,7 +17,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $data['csrinventory'] = $this->Model_Purchasing->get_csr_inventory();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('purchasing/csrinventory.php',$data);
-      //$this->load->view('users/includes/footer.php');
+      $this->load->view('includes/toastr.php');
     }
 
     function CSRRequests()
@@ -28,7 +28,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $data['csrrequests'] = $this->Model_Purchasing->get_csr_requests();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('purchasing/csrrequests.php',$data);
-      //$this->load->view('users/includes/footer.php');
+      $this->load->view('includes/toastr.php');
     }
 
     function PendingCSR(){
@@ -86,6 +86,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $newstat = array('pur_stat'=>1,
                        'date_altered_status'=>date('Y-m-d H:i:s'));
       $this->Model_Purchasing->change_pur_status($id,$newstat);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Approved CSR item request">
+                                <input type="hidden" id="type" value="success">' );
         redirect("Purchasing/CSRRequests");
       } else {
         //RESTOCK
@@ -99,24 +102,35 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $newstat = array('pur_stat'=>1,
                        'date_altered_status'=>date('Y-m-d H:i:s'));
       $this->Model_Purchasing->change_pur_status($id,$newstat);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Approved CSR item request">
+                                <input type="hidden" id="type" value="success">' );
         redirect("Purchasing/CSRRequests");
       }
     }
+
     function reject_csr($id)
     {
       //Reject = 2
       $newstat = array('pur_stat'=>2,
                        'date_altered_status'=>date('Y-m-d H:i:s'));
       $this->Model_Purchasing->change_pur_status($id,$newstat);
-        redirect("Purchasing/CSRRequests");
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Rejected">
+                                <input type="hidden" id="msg" value="Rejected CSR request">
+                                <input type="hidden" id="type" value="error">' );
+      redirect("Purchasing/CSRRequests");
     }
+
     function hold_csr($id)
     {
       //Hold = 3
       $newstat = array('pur_stat'=>3,
                        'date_altered_status'=>date('Y-m-d H:i:s'));
       $this->Model_Purchasing->change_pur_status($id,$newstat);
-        redirect("Purchasing/CSRRequests");
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="On Process">
+                                <input type="hidden" id="msg" value="CSR request on process">
+                                <input type="hidden" id="type" value="warning">' );
+      redirect("Purchasing/CSRRequests");
     }
 
     function add_newproduct(){
@@ -131,6 +145,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
                       'item_desc'=>$this->input->post('item_desc'),
                       'item_name'=>$this->input->post('item_name'));
        $this->Model_Purchasing->insertproduct($data);
+       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                 <input type="hidden" id="msg" value="Added new CSR item">
+                                 <input type="hidden" id="type" value="success">' );
        redirect("Purchasing/CSRInventory");
       }
     }
@@ -139,6 +156,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $new_quantity = $this->input->post('item_stock') + $this->input->post('item_quant');
       $data = array('item_stock'=>$new_quantity);
       $this->Model_Purchasing->update_csr_stock($data, $this->input->post('item_id'));
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Updated CSR stock">
+                                <input type="hidden" id="type" value="success">' );
       redirect(base_url().'Purchasing/CSRInventory');
     }
 
@@ -157,6 +177,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         $this->load->view('purchasing/inventory_delete_item_modal');
         $this->load->view('purchasing/inventory_update_item_modal');
         $this->load->view('purchasing/inventory',$data);
+        $this->load->view('includes/toastr.php');
       }
 
       function update_item_inventory()
@@ -169,6 +190,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
                       'item_price'=>$this->input->post('price'));
 
         $this->Model_Purchasing->update_item_inventory($id,$data);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Rejected">
+                                  <input type="hidden" id="msg" value="Updated pharmacy inventory">
+                                  <input type="hidden" id="type" value="error">' );
         redirect(base_url()."Purchasing/pharmacy_inventory");
       }
 
@@ -187,6 +211,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
                       'item_price'=>$this->input->post('price'));
 
         $this->Model_Purchasing->add_item_inventory($data);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Rejected">
+                                  <input type="hidden" id="msg" value="Added new medicine">
+                                  <input type="hidden" id="type" value="error">' );
         redirect(base_url()."Purchasing/pharmacy_inventory");
       }
 
@@ -221,6 +248,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
                         $this->Model_Purchasing->add_item_inventory_import($insert_data);
                     }
                     //$this->session->set_flashdata('csv', '<div class="alert alert-success text-center">Users imported successfully!</div>');
+                    $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Rejected">
+                                              <input type="hidden" id="msg" value="Added new medicine">
+                                              <input type="hidden" id="type" value="error">' );
                     redirect(base_url().'Purchasing/pharmacy_inventory');
                 } else
                 $this->session->set_flashdata('error', "Error occured");
