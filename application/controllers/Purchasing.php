@@ -393,7 +393,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         $this->Model_Purchasing->process_drug($id,$data);
         redirect(base_url()."Purchasing/all_drug_inventory");
       }
-            
+
       //=========================RESTOCK MEDICINE PROCESS====================//
       function restock_medicine_view_all()
       {

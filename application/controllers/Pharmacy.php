@@ -417,7 +417,7 @@ class Pharmacy extends CI_Controller{
   }
 
   //=====================RESTOCK MEDICINE DRUGS========================//
-  function drugs_restock_medicine()
+  function drug_restock_medicine()
   {
     $header['title'] = "HIS: Pharmacy Inventory";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
