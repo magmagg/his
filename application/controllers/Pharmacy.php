@@ -361,6 +361,7 @@ class Pharmacy extends CI_Controller{
 
   }
 
+  //==========================VIEW REqueSTS=========================//
   function ViewRequest(){
     $header['title'] = "HIS: Pharmacy Requests";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
@@ -370,4 +371,92 @@ class Pharmacy extends CI_Controller{
     $this->load->view('pharmacy/view_pharmacy_request.php', $data);
   }
 
+
+  //=========================Restock MEDICINE=====================//
+  function restock_medicine()
+  {
+    $header['title'] = "HIS: Pharmacy Inventory";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('pharmacy/restock_medicine',$data);
+    $this->load->view('pharmacy/pharmacy_request_modal');
+  }
+
+  function restock_medicine_submit()
+  {
+    $quantity = $this->input->post('quantity');
+    $itemid = $this->input->post('itemid');
+    $userid = $this->session->userdata('user_id');
+    $unique_id = bin2hex(mcrypt_create_iv(5, MCRYPT_DEV_URANDOM));
+
+
+    foreach($quantity as $key => $q)
+    {
+      if($q == 0)
+      {
+        unset($quantity[$key]);
+        unset($itemid[$key]);
+      }
+    }
+    $quantity = array_values($quantity);
+    $itemid = array_values($itemid);
+
+    foreach($itemid as $key => $i)
+    {
+      $data = array('phar_item'=>$i,
+                    'phar_user_id'=>$userid,
+                    'quant_requested'=>$quantity[$key],
+                    'phar_stat'=>0,
+                    'unique_id'=>$unique_id);
+      $this->Model_pharmacy->insert_restock_medicine($data);
+    }
+
+    redirect('Pharmacy/restock_medicine');
+  }
+
+  //=====================RESTOCK MEDICINE DRUGS========================//
+  function drug_restock_medicine()
+  {
+    $header['title'] = "HIS: Pharmacy Inventory";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['items'] = $this->Model_pharmacy->get_drug_inventory();
+    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('pharmacy/drugs_restock_medicine',$data);
+    $this->load->view('pharmacy/pharmacy_request_modal');
+  }
+
+  function drug_restock_medicine_submit()
+  {
+    $quantity = $this->input->post('quantity');
+    $itemid = $this->input->post('itemid');
+    $userid = $this->session->userdata('user_id');
+    $unique_id = bin2hex(mcrypt_create_iv(5, MCRYPT_DEV_URANDOM));
+
+
+    foreach($quantity as $key => $q)
+    {
+      if($q == 0)
+      {
+        unset($quantity[$key]);
+        unset($itemid[$key]);
+      }
+    }
+    $quantity = array_values($quantity);
+    $itemid = array_values($itemid);
+
+    foreach($itemid as $key => $i)
+    {
+      $data = array('phar_item'=>$i,
+                    'phar_user_id'=>$userid,
+                    'quant_requested'=>$quantity[$key],
+                    'phar_stat'=>0,
+                    'unique_id'=>$unique_id);
+      $this->Model_pharmacy->insert_restock_medicine($data);
+    }
+
+    redirect('Pharmacy/restock_medicine');
+  }
 }

@@ -135,4 +135,13 @@ class Model_pharmacy extends CI_Model
     $query = $this->db->get();
     return $query->result_array();
   }
+
+  //=============================RESTOCK MEDICINE=========================//
+  function insert_restock_medicine($data)
+  {
+    $this->db->insert('pharmacy_restock',$data);
+  }
+
+
+
 }
