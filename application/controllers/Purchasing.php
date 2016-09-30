@@ -393,5 +393,109 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         $this->Model_Purchasing->process_drug($id,$data);
         redirect(base_url()."Purchasing/all_drug_inventory");
       }
+            
+      //=========================RESTOCK MEDICINE PROCESS====================//
+      function restock_medicine_view_all()
+      {
+        $data['requests'] = $this->Model_pharmacy->get_pharmacy_requests();
+        //$data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+        //$data['patient'] = $this->Model_pharmacy->get_all_patients();
+
+        $data['unique_ids'] = $this->Model_pharmacy->get_unique_ids();
+        $data['table_details'] = array();
+        foreach($data['unique_ids'] as $d)
+        {
+          $data['new_details'] = $this->Model_pharmacy->get_specific_request($d->unique_id);
+          $totalprice = 0;
+          $quantity = 0;
+          $patient;
+          $requestedby;
+          $date;
+          $status;
+          foreach($data['new_details'] as $nd)
+          {
+            $totalprice += $nd->total_price;
+            $quantity   += $nd->quant_requested;
+            $patient     = $nd->phar_patient;
+            $requestedby = $nd->phar_user_id;
+            $date        = $nd->date_req;
+            $status    = $nd->phar_stat;
+
+          }
+          $data['table_details'][$d->unique_id] = array('price'=>$totalprice,
+                                                        'date'=>$date,
+                                                        'quantity'=>$quantity,
+                                                        'requestedby'=>$requestedby,
+                                                        'patient'=>$patient,
+                                                        'status'=>$status,
+                                                        'unique_id'=>$d->unique_id);
+        }
+
+        $this->load->view('pharmacy/header');
+        $this->load->view('pharmacy/release_request_modal');
+        $this->load->view('pharmacy/process_pharmacy_request',$data);
+      }
+
+      function accept_restock_request()
+      {
+        $postid = $this->uri->segment(3);
+        $data = array('phar_stat'=>1);
+        $this->Model_pharmacy->process_pharmacy_request_model($postid,$data);
+        redirect('Pharmacy/process_pharmacy_request');
+      }
+
+      function release_restock_request()
+      {
+        $auditid = $this->uri->segment(3);
+        $data['details'] = $this->Model_pharmacy->get_specific_request($auditid);
+        $itemid = array();
+        $quantity = array();
+        foreach($data['details'] as $d)
+        {
+          $itemid[] = $d->phar_item;
+          $quantity[] = $d->quant_requested;
+        }
+
+          $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+
+          foreach($data['items'] as $d)
+          {
+            foreach($itemid as $key => $i)
+            {
+              if($d->item_id == $i)
+              {
+                $newquantity = $d->item_quantity - $quantity[$key];
+                $data = array('item_quantity'=>$newquantity);
+                $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
+              }
+            }
+          }
+
+        $data = array('phar_stat'=>2);
+        $this->Model_pharmacy->process_pharmacy_request_model($auditid,$data);
+        redirect('Pharmacy/process_pharmacy_request');
+      }
+
+      function reject_restock_request()
+      {
+        $postid = $this->uri->segment(3);
+        $data = array('phar_stat'=>3);
+        $this->Model_pharmacy->process_pharmacy_request_model($postid,$data);
+        redirect('Pharmacy/process_pharmacy_request');
+      }
+
+      function view_one_restock_request()
+      {
+        $id = $this->uri->segment('3');
+
+        $data['details'] = $this->Model_pharmacy->get_specific_request($id);
+        $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+        $data['id'] = $id;
+        $this->load->view('pharmacy/header');
+        $this->load->view('pharmacy/accept_pharmacy_request_modal');
+        $this->load->view('pharmacy/reject_pharmacy_request_modal');
+        $this->load->view('pharmacy/view_one_request',$data);
+      }
+
   }
 ?>
