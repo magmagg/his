@@ -326,5 +326,4 @@ class Pharmacy extends CI_Controller{
     redirect('Pharmacy/drug_process_pharmacy_request');
   }
 
-
 }

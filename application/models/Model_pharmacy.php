@@ -123,4 +123,10 @@ class Model_pharmacy extends CI_Model
     $this->db->where('drug_code',$id);
     $this->db->update('drugs',$data);
   }
+
+  //=============================RESTOCK MEDICINE=========================//
+  function insert_restock_medicine($data)
+  {
+    $this->db->insert('pharmacy_restock',$data);
+  }
 }
