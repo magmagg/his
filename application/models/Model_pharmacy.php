@@ -123,4 +123,16 @@ class Model_pharmacy extends CI_Model
     $this->db->where('drug_code',$id);
     $this->db->update('drugs',$data);
   }
+
+  function get_request_by_user($id){
+    $this->db->select('*');
+    $this->db->select('p.first_name as P_first_name, p.middle_name as P_middle_name, p.last_name as P_last_name');
+    $this->db->from('pharmacy_audit pa');
+    $this->db->join('patient p', 'pa.phar_patient = p.patient_id', 'left');
+    $this->db->join('users u', 'pa.phar_user_id = u.user_id', 'left');
+    $this->db->join('pharmacy_inventory pi', 'pi.item_id = pa.phar_item', 'left');
+    $this->db->where('pa.phar_user_id', $id);
+    $query = $this->db->get();
+    return $query->result_array();
+  }
 }

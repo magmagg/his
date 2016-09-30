@@ -29,7 +29,7 @@
                       if($room['bed_patient'] == NULL){
                         echo "<td><span class='label label-success'>AVAILABLE</span></td>";
                         if($room['bed_maintenance'] == 0){
-                          echo "<td><span class='label label-success'>AVAILABLE</span></td>";
+                          echo "<td></td>";
                           echo "<td>";
                             echo "<a href='".base_url()."Rooms/ForCleaning/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Cleaning</a> ";
                             echo "<a href='".base_url()."Rooms/ForMaintenance/".$room['bed_id']."/".$room['room_id']."' role='button' class='btn btn-warning btn-sm'>Maintenance</a>";

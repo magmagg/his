@@ -118,5 +118,10 @@ class UserManagement extends CI_Controller{
       }
   }
 
+  function update_doctor_schedule(){
+    $data = array('start_time'=>$this->input->post('updatestarttime'), 'end_time'=>$this->input->post('updateendtime'));
+    $this->Model_user->update_doctor_schedule($data, $this->input->post('userid '));
+    redirect(base_url().'UserManagement/DoctorSchedule');
+  }
 
 }

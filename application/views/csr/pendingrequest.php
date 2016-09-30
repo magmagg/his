@@ -12,8 +12,9 @@
                   </tr>
               </table>
 			  <center>
-			  <a href="<?=base_url()?>CSR/AcceptedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a><br><br>
-			  <a href="<?=base_url()?>CSR/RejectedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-eye"></i> Rejected Requests</a>
+			  <a href="<?=base_url()?>CSR/AcceptedRequests" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a><br><br>
+        <a href="<?=base_url()?>CSR/RejectedRequests" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-eye"></i> Rejected Requests</a><br><br>
+			  <a href="<?=base_url()?>CSR/ReleasedRequests" role="button" class="btn btn-sm btn-round btn-warning"><i class="fa fa-eye"></i> Released Requests</a>
 			  </center>
 			  </div>
 			  </div>
@@ -40,9 +41,8 @@
 				</thead>
 				<tbody>
           <?php
-          foreach($nursetocsr as $request)
+          foreach($pending_requests as $request)
           {
-            if($request['csr_status']==0){
             echo "<tr>";
               echo "<td>".$request['csr_req_id']."</td>";
               echo "<td>".$request['nurse_id']."</td>";
@@ -52,23 +52,8 @@
               echo "<td>";
                 echo " <a href='".base_url()."Csr/csr_accept_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
                 echo " <a href='".base_url()."Csr/csr_reject_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
-                
               echo "</td>";
             echo "</tr>";
-          }  elseif($request['csr_status']==3){
-              echo "<tr>";
-              echo "<td>".$request['csr_req_id']."</td>";
-              echo "<td>".$request['nurse_id']."</td>";
-              echo "<td>".$request['csr_item_id']."</td>";
-              echo "<td>".$request['item_quant']."</td>";
-              echo "<td>On Hold</td>";
-                echo "<td>";
-                  echo " <a href='".base_url()."Csr/csr_accept_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Accept Request</a>";
-                  echo " <a href='".base_url()."Csr/csr_reject_request/".$request['csr_req_id']."' role='button' class='btn btn-default btn-xs'>Reject Request</a>";
-                  
-                echo "</td>";
-             echo "</tr>";
-          }
         }
           ?>
 				</tbody>

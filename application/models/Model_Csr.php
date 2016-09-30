@@ -62,6 +62,7 @@
       $this->db->from('csr_request a');
       $this->db->join('users b', 'a.nurse_id=b.user_id','left');
       $this->db->join('csr_inventory c', 'a.csr_item_id=c.csr_id', 'left');
+      $this->db->where('a.csr_status', 0);
       $query = $this->db->get();
       return $query->result_array();
     }
@@ -84,6 +85,17 @@
       $this->db->join('users b', 'a.nurse_id=b.user_id','left');
       $this->db->join('csr_inventory c', 'a.csr_item_id=c.csr_id', 'left');
       $this->db->where('csr_status',2);
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
+    function get_nurse_releasedrequests()
+    {
+      $this->db->select('*');
+      $this->db->from('csr_request a');
+      $this->db->join('users b', 'a.nurse_id=b.user_id','left');
+      $this->db->join('csr_inventory c', 'a.csr_item_id=c.csr_id', 'left');
+      $this->db->where('csr_status',3);
       $query = $this->db->get();
       return $query->result_array();
     }
