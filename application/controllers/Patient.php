@@ -42,6 +42,7 @@
       $data['vitalsign_data'] = $this->Model_patient->get_vital_sign($this->uri->segment(3));
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('patient/vitalshistory.php', $data);
+      $this->load->view('includes/toastr.php');
     }
 
     public function recordvitalsign(){
@@ -54,6 +55,9 @@
                     'user_id'=>$this->session->userdata('user_id')
                    );
       $sql = $this->Model_patient->recordvitalsign($data);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Successfully recorded vitals">
+                                <input type="hidden" id="type" value="success">');
       redirect(base_url().'Patient/VitalsHistory/'.$this->uri->segment(3));
     }
 

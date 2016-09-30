@@ -57,6 +57,7 @@ class Admitting extends CI_Controller{
       $data['beds'] = $this->Model_admitting->get_admitted_patient($id);
       $this->load->view('admitting/viewadmittedpatient.php', $data);
     }
+    $this->load->view('includes/toastr.php');
   }
 
   public function ChoosePatient(){
@@ -90,6 +91,10 @@ class Admitting extends CI_Controller{
                                       );
 
     $sql = $this->Model_admitting->admit_patient($data_bedstable, $data_admission_schedule, $data_admitting_resident, $data_update_patient_status, $bed_id, $patient);
+    $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                              <input type="hidden" id="msg" value="Patient has been admitted.">
+                              <input type="hidden" id="type" value="success">' );
+
     redirect(base_url().'Admitting/AdmittedPatients/1', 'refresh');
   }
 

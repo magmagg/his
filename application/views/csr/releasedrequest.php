@@ -12,9 +12,9 @@
                   </tr>
               </table>
         <center>
+        <a href="<?=base_url()?>CSR/AcceptedRequests" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a><br><br>
         <a href="<?=base_url()?>CSR/PendingRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-info"><i class="fa fa-eye"></i> Pending Requests</a><br><br>
-        <a href="<?=base_url()?>CSR/RejectedRequests" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-eye"></i> Rejected Requests</a><br><br>
-			  <a href="<?=base_url()?>CSR/ReleasedRequests" role="button" class="btn btn-sm btn-round btn-warning"><i class="fa fa-eye"></i> Released Requests</a>
+        <a href="<?=base_url()?>CSR/RejectedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-danger"><i class="fa fa-eye"></i> Rejected Requests</a>
         </center>
         </div>
         </div>
@@ -36,20 +36,18 @@
                     <th>Item Name</th>
                     <th>Quantity</th>
                     <th>Status</th>
-                    <th>Action</th>
                 </tr>
         </thead>
         <tbody>
           <?php
-            foreach($accepted_requests as $request)
+            foreach($released_requests as $request)
             {
               echo "<tr>";
                 echo "<td>".$request['csr_req_id']."</td>";
                 echo "<td>".$request['first_name']." ".$request['middle_name']." ".$request['last_name']."</td>";
                 echo "<td>".$request['item_name']."</td>";
                 echo "<td>".$request['item_quant']."</td>";
-                echo "<td><span class='label label-success'>APPROVED FOR RELEASING</span></td>";
-                echo "<td><a href='".base_url()."Csr/release_csr_item/".$request['csr_req_id']."' role='button' class='btn btn-info btn-xs'>RELEASED</a></td>";
+                echo "<td><span class='label label-success'>RELEASED</span></td>";
               echo "</tr>";
             }
           ?>

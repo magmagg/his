@@ -13,7 +13,8 @@
               </table>
         <center>
         <a href="<?=base_url()?>CSR/PendingRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-info"><i class="fa fa-eye"></i> Pending Requests</a><br><br>
-        <a href="<?=base_url()?>CSR/AcceptedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a>
+        <a href="<?=base_url()?>CSR/AcceptedRequests" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-eye"></i> Accepted Requests</a><br><br>
+        <a href="<?=base_url()?>CSR/ReleasedRequests" role="button" class="btn btn-sm btn-round btn-warning"><i class="fa fa-eye"></i> Released Requests</a>
         </center>
         </div>
         </div>
@@ -39,7 +40,7 @@
         </thead>
         <tbody>
           <?php
-            foreach($nursetocsr as $request)
+            foreach($rejected_requests as $request)
             {
               echo "<tr>";
                     echo "<td>".$request['csr_req_id']."</td>";

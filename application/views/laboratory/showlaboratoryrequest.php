@@ -9,7 +9,7 @@
 	  <div class="row" style="padding-left:10px; padding-right: 10px">
         <div class="col-sm-4">
             <section class="panel">
-             
+
                 <header class="panel-heading">
 					Patient Details
                 </header>
@@ -39,7 +39,7 @@
         </div>
         <div class="col-sm-4">
             <section class="panel">
-                
+
                 <header class="panel-heading">
                     Requester Details
                 </header>
@@ -86,11 +86,11 @@
             </section>
         </div>
 	</div>
-	
+
 	<div class="row" style="padding-left:10px; padding-right: 10px">
         <div class="col-sm-4">
             <section class="panel">
-                
+
                 <header class="panel-heading">
 					Specimen/s Received
                 </header>
@@ -138,7 +138,7 @@
 		</div>
         <div class="col-sm-12">
             <section class="panel">
-               
+
                 <header class="panel-heading">
 					Additional Remarks
                 </header>
@@ -154,7 +154,7 @@
                 </table>
             </section>
         </div>
-		
+
     </div>
   </section>
 </section>

@@ -32,8 +32,9 @@
     function insert_request($data){
       $this->db->insert('radiology_request', $data);
       $this->db->select('*');
-      $this->db->from('radiology_request');
-      $this->db->order_by("request_id", "desc");
+      $this->db->from('radiology_request rr');
+      $this->db->join('patient p', 'rr.patient_id = p.patient_id', 'left');
+      $this->db->order_by("rr.request_id", "desc");
       $this->db->limit(1);
       $query = $this->db->get();
       return $query->row();

@@ -5,7 +5,7 @@
           <section class="panel">
 
               <header class="panel-heading">
-                <a href="<?=base_url()?>Admin/AppofReq" role='button' class='btn btn-primary btn-xs'><i class="fa fa-chevron-left"></i></a> Accepted Laboratory Requests
+                <a href="<?=base_url()?>Laboratory/AppofReq" role='button' class='btn btn-primary btn-xs'><i class="fa fa-chevron-left"></i></a> Accepted Laboratory Requests
               </header><div class="panel-body">
                 <div class="adv-table">
 

@@ -10,7 +10,6 @@ class Pharmacy extends CI_Controller{
     $this->load->model('Model_user');
   }
   /*=========================================================================================================================*/
-
   function pharmacy_request()
   {
     $header['title'] = "HIS: Pharmacy Inventory";
@@ -176,8 +175,14 @@ class Pharmacy extends CI_Controller{
     $data['items'] = $this->Model_pharmacy->get_drug_inventory();
     $data['patients'] = $this->Model_pharmacy->get_all_patients();
     $this->load->view('users/includes/header.php',$header);
+
+    $this->load->view('pharmacy/pharmacy_request',$data);
+    $this->load->view('pharmacy/pharmacy_request_modal');
+    $this->load->view('includes/toastr.php');
+
     $this->load->view('pharmacy/drugs_pharmacy_request',$data);
     $this->load->view('pharmacy/drugs_pharmacy_request_modal');
+
   }
 
   function drug_pharmacy_request_submit()
@@ -221,7 +226,26 @@ class Pharmacy extends CI_Controller{
       $this->Model_pharmacy->insert_pharmacy_request($data);
     }
 
+    $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+
+    foreach($data['items'] as $d)
+    {
+      foreach($itemid as $key => $i)
+      {
+        if($d->item_id == $i)
+        {
+          $newquantity = $d->item_quantity - $quantity[$key];
+          $data = array('item_quantity'=>$newquantity);
+          $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
+        }
+      }
+    }
+    $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                              <input type="hidden" id="msg" value="Successfully requested medicine">
+                              <input type="hidden" id="type" value="success">');
+    redirect('Pharmacy/pharmacy_request');
     redirect('Pharmacy/drug_pharmacy_request');
+
   }
 
   function drug_process_pharmacy_request()
@@ -296,6 +320,16 @@ class Pharmacy extends CI_Controller{
 
   function drug_release_pharmacy_request()
   {
+
+    $id = $this->uri->segment('3');
+    $data['details'] = $this->Model_pharmacy->get_specific_request($id);
+    $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+    $data['id'] = $id;
+    $this->load->view('pharmacy/header');
+    $this->load->view('pharmacy/accept_pharmacy_request_modal');
+    $this->load->view('pharmacy/reject_pharmacy_request_modal');
+    $this->load->view('pharmacy/view_one_request',$data);
+
     $auditid = $this->uri->segment(3);
     $data['details'] = $this->Model_pharmacy->get_specific_request($auditid);
     $itemid = array();
@@ -324,6 +358,16 @@ class Pharmacy extends CI_Controller{
     $data = array('phar_stat'=>2);
     $this->Model_pharmacy->process_pharmacy_request_model($auditid,$data);
     redirect('Pharmacy/drug_process_pharmacy_request');
+
+  }
+  
+  function ViewRequest(){
+    $header['title'] = "HIS: Pharmacy Requests";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['pharmacy_request'] = $this->Model_pharmacy->get_request_by_user($this->session->userdata('user_id'));
+    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('pharmacy/view_pharmacy_request.php', $data);
   }
 
 }

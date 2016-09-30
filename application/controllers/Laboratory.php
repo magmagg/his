@@ -15,6 +15,7 @@
       $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_list();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/laboratoryrequest.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function ShowLabReq($id){
@@ -66,12 +67,16 @@
       $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_list();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/approvalofrequest.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function ApproveLabReq($id)
     {
           $data = array('lab_status'=>2);
           $this->Model_Laboratory->approvelabreq($id,$data);
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Approved laboratory exam request">
+                                    <input type="hidden" id="type" value="success">' );
           redirect(base_url()."Laboratory/AppofReq");
     }
 
@@ -89,6 +94,9 @@
     {
             $data = array('lab_status'=>3);
             $this->Model_Laboratory->cancellabreq($id,$data);
+            $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Rejected">
+                                      <input type="hidden" id="msg" value="Rejected laboratory exam request">
+                                      <input type="hidden" id="type" value="error">' );
             redirect(base_url()."Laboratory/AppofReq");
     }
 
@@ -109,6 +117,7 @@
       $data['examcateg'] = $this->Model_Laboratory->get_all_examcateg();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labexamcateg.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function EditExamCateg($id){
@@ -118,6 +127,7 @@
       $data['examcateg'] = $this->Model_Laboratory->get_examcateg($id);
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/editexamcateg.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function LabExamType(){
@@ -128,6 +138,7 @@
       $data['examcateg'] = $this->Model_Laboratory->get_all_examcateg();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labexamtype.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function EditExamType($id){
@@ -138,6 +149,7 @@
       $data['examcateg'] = $this->Model_Laboratory->get_all_examcateg();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/editexamtype.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function LabExamSpec(){
@@ -147,6 +159,7 @@
       $data['labspec'] = $this->Model_Laboratory->get_all_labspec();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/labexamspec.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
     function EditSpec($id){
@@ -156,6 +169,7 @@
       $data['spec'] = $this->Model_Laboratory->get_specific_specimen($id);
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/editspec.php',$data);
+      $this->load->view('includes/toastr.php');
     }
 
      function insert_patient_thrulaboratory(){
@@ -212,6 +226,9 @@
          $data = array ('exam_cat_name' => $this->input->post('categname'),
                         'exam_cat_desc' => $this->input->post('categdesc'));
           $insertcategory = $this->Model_Laboratory->insertcategory($data);
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Added new exam category">
+                                    <input type="hidden" id="type" value="success">' );
           redirect(base_url()."Laboratory/LabExamCateg");
        }
      }
@@ -227,6 +244,9 @@
          $data = array ('exam_cat_name' => $this->input->post('catname'),
                         'exam_cat_desc' => $this->input->post('catdesc'));
           $insertcategory = $this->Model_Laboratory->updatecategory($id,$data);
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Updated exam category">
+                                    <input type="hidden" id="type" value="success">' );
           redirect(base_url()."Laboratory/LabExamCateg");
        }
      }
@@ -244,6 +264,9 @@
                         'lab_exam_type_category_id' => $this->input->post('typecateg'),
                         'lab_exam_type_description' => $this->input->post('typedesc'));
           $insertcategory = $this->Model_Laboratory->updateexamtype($id,$data);
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Updated exam type">
+                                    <input type="hidden" id="type" value="success">' );
           redirect(base_url()."Laboratory/LabExamType");
        }
      }
@@ -260,6 +283,9 @@
                        'lab_exam_type_category_id' => $this->input->post('examcateg'),
                        'lab_exam_type_description' => $this->input->post('typedesc'));
         $insertetype = $this->Model_Laboratory->insertexamtype($data);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                  <input type="hidden" id="msg" value="Added new exam type">
+                                  <input type="hidden" id="type" value="success">' );
               redirect(base_url()."Laboratory/LabExamType");
        }
      }
@@ -278,6 +304,9 @@
          $data = array('specimen_name' => $this->input->post('specname'),
                        'specimen_description' => $this->input->post('specdesc'));
          $this->Model_Laboratory->insertspecimen($data);
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="Added new specimen requirement">
+                                   <input type="hidden" id="type" value="success">' );
          redirect(base_url()."Laboratory/LabExamSpec");
        }
      }
@@ -295,6 +324,9 @@
          $data = array('specimen_name' => $this->input->post('specname'),
                        'specimen_description' => $this->input->post('specdesc'));
          $this->Model_Laboratory->updatespecimen($id,$data);
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="Updated specimen requirement">
+                                   <input type="hidden" id="type" value="success">' );
          redirect(base_url()."Laboratory/LabExamSpec");
        }
      }
@@ -330,6 +362,9 @@
                       'lab_id_fk'=>$id,
                       'user_id_fk'=>$_SESSION['user_id']);
             $this->Model_Laboratory->insertrequestremark($data3);
+            $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                        						  <input type="hidden" id="msg" value="Successfully requested laboratory exam">
+                        						  <input type="hidden" id="type" value="success">' );
           redirect(base_url()."Laboratory/LaboratoryRequests");
        }
       }
