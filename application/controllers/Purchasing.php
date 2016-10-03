@@ -397,57 +397,54 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       //=========================RESTOCK MEDICINE PROCESS====================//
       function restock_medicine_view_all()
       {
-        $data['requests'] = $this->Model_pharmacy->get_pharmacy_requests();
-        //$data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
-        //$data['patient'] = $this->Model_pharmacy->get_all_patients();
+        $header['title'] = "HIS: Restock";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $data['requests'] = $this->Model_Purchasing->get_restock_requests();
 
-        $data['unique_ids'] = $this->Model_pharmacy->get_unique_ids();
+        $data['unique_ids'] = $this->Model_Purchasing->get_restock_unique_ids();
         $data['table_details'] = array();
         foreach($data['unique_ids'] as $d)
         {
-          $data['new_details'] = $this->Model_pharmacy->get_specific_request($d->unique_id);
-          $totalprice = 0;
+          $data['new_details'] = $this->Model_Purchasing->get_specific_restock_request($d->unique_id);
           $quantity = 0;
-          $patient;
           $requestedby;
           $date;
           $status;
           foreach($data['new_details'] as $nd)
           {
-            $totalprice += $nd->total_price;
             $quantity   += $nd->quant_requested;
-            $patient     = $nd->phar_patient;
             $requestedby = $nd->phar_user_id;
             $date        = $nd->date_req;
             $status    = $nd->phar_stat;
 
           }
-          $data['table_details'][$d->unique_id] = array('price'=>$totalprice,
+          $data['table_details'][$d->unique_id] = array(
                                                         'date'=>$date,
                                                         'quantity'=>$quantity,
                                                         'requestedby'=>$requestedby,
-                                                        'patient'=>$patient,
+
                                                         'status'=>$status,
                                                         'unique_id'=>$d->unique_id);
         }
 
-        $this->load->view('pharmacy/header');
-        $this->load->view('pharmacy/release_request_modal');
-        $this->load->view('pharmacy/process_pharmacy_request',$data);
+        $this->load->view('users/includes/header',$header);
+        $this->load->view('Purchasing/restock_release_modal');
+        $this->load->view('Purchasing/restock_medicine_view',$data);
       }
 
       function accept_restock_request()
       {
         $postid = $this->uri->segment(3);
         $data = array('phar_stat'=>1);
-        $this->Model_pharmacy->process_pharmacy_request_model($postid,$data);
-        redirect('Pharmacy/process_pharmacy_request');
+        $this->Model_Purchasing->process_restock_request($postid,$data);
+        redirect('Purchasing/restock_medicine_view_all');
       }
 
       function release_restock_request()
       {
         $auditid = $this->uri->segment(3);
-        $data['details'] = $this->Model_pharmacy->get_specific_request($auditid);
+        $data['details'] = $this->Model_Purchasing->get_specific_restock_request($auditid);
         $itemid = array();
         $quantity = array();
         foreach($data['details'] as $d)
@@ -456,7 +453,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
           $quantity[] = $d->quant_requested;
         }
 
-          $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+          $data['items'] = $this->Model_Purchasing->get_pharmacy_inventory();
 
           foreach($data['items'] as $d)
           {
@@ -464,38 +461,145 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
             {
               if($d->item_id == $i)
               {
-                $newquantity = $d->item_quantity - $quantity[$key];
+                $newquantity = $d->item_quantity + $quantity[$key];
                 $data = array('item_quantity'=>$newquantity);
-                $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
+                $this->Model_Purchasing->update_pharmacy_quantity($d->item_id,$data);
               }
             }
           }
 
         $data = array('phar_stat'=>2);
-        $this->Model_pharmacy->process_pharmacy_request_model($auditid,$data);
-        redirect('Pharmacy/process_pharmacy_request');
+        $this->Model_Purchasing->process_restock_request($auditid,$data);
+        redirect('Purchasing/restock_medicine_view_all');
       }
 
       function reject_restock_request()
       {
         $postid = $this->uri->segment(3);
         $data = array('phar_stat'=>3);
-        $this->Model_pharmacy->process_pharmacy_request_model($postid,$data);
-        redirect('Pharmacy/process_pharmacy_request');
+        $this->Model_Purchasing->process_restock_request($postid,$data);
+        redirect('Purchasing/restock_medicine_view_all');
       }
 
       function view_one_restock_request()
       {
+        $header['title'] = "HIS: Restock";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
         $id = $this->uri->segment('3');
 
-        $data['details'] = $this->Model_pharmacy->get_specific_request($id);
-        $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+        $data['details'] = $this->Model_Purchasing->get_specific_restock_request($id);
+        $data['items'] = $this->Model_Purchasing->get_pharmacy_inventory();
+
         $data['id'] = $id;
-        $this->load->view('pharmacy/header');
-        $this->load->view('pharmacy/accept_pharmacy_request_modal');
-        $this->load->view('pharmacy/reject_pharmacy_request_modal');
-        $this->load->view('pharmacy/view_one_request',$data);
+        $this->load->view('users/includes/header',$header);
+        $this->load->view('Purchasing/restock_accept_request_modal');
+        $this->load->view('Purchasing/restock_reject_request_modal');
+        $this->load->view('Purchasing/restock_view_specific_request',$data);
       }
 
+      //=========================RESTOCK MEDICINE PROCESS====================//
+      function restock_medicine_view_all_drug()
+      {
+        $header['title'] = "HIS: Restock";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $data['requests'] = $this->Model_Purchasing->get_restock_requests();
+
+        $data['unique_ids'] = $this->Model_Purchasing->get_restock_unique_ids();
+        $data['table_details'] = array();
+        foreach($data['unique_ids'] as $d)
+        {
+          $data['new_details'] = $this->Model_Purchasing->get_specific_restock_request($d->unique_id);
+          $quantity = 0;
+          $requestedby;
+          $date;
+          $status;
+          foreach($data['new_details'] as $nd)
+          {
+            $quantity   += $nd->quant_requested;
+            $requestedby = $nd->phar_user_id;
+            $date        = $nd->date_req;
+            $status    = $nd->phar_stat;
+
+          }
+          $data['table_details'][$d->unique_id] = array(
+                                                        'date'=>$date,
+                                                        'quantity'=>$quantity,
+                                                        'requestedby'=>$requestedby,
+
+                                                        'status'=>$status,
+                                                        'unique_id'=>$d->unique_id);
+        }
+
+        $this->load->view('users/includes/header',$header);
+        $this->load->view('Purchasing/restock_release_modal');
+        $this->load->view('Purchasing/restock_medicine_view_drug',$data);
+      }
+
+      function view_one_restock_request_drug()
+      {
+        $header['title'] = "HIS: Restock";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $id = $this->uri->segment('3');
+
+        $data['details'] = $this->Model_Purchasing->get_specific_restock_request($id);
+        $data['items'] = $this->Model_Purchasing->get_drug_inventory();
+
+        $data['id'] = $id;
+        $this->load->view('users/includes/header',$header);
+        $this->load->view('Purchasing/restock_accept_request_modal');
+        $this->load->view('Purchasing/restock_reject_request_modal');
+        $this->load->view('Purchasing/restock_view_specific_request_drug',$data);
+      }
+
+      function accept_restock_request_drug()
+      {
+        $postid = $this->uri->segment(3);
+        $data = array('phar_stat'=>1);
+        $this->Model_Purchasing->process_restock_request($postid,$data);
+        redirect('Purchasing/restock_medicine_view_all_drug');
+      }
+
+      function release_restock_request_drug()
+      {
+        $auditid = $this->uri->segment(3);
+        $data['details'] = $this->Model_Purchasing->get_specific_restock_request($auditid);
+        $itemid = array();
+        $quantity = array();
+        foreach($data['details'] as $d)
+        {
+          $itemid[] = $d->phar_item;
+          $quantity[] = $d->quant_requested;
+        }
+
+          $data['items'] = $this->Model_Purchasing->get_drug_inventory();
+
+          foreach($data['items'] as $d)
+          {
+            foreach($itemid as $key => $i)
+            {
+              if($d->drug_code == $i)
+              {
+                $newquantity = $d->drug_quantity + $quantity[$key];
+                $data = array('drug_quantity'=>$newquantity);
+                $this->Model_Purchasing->update_drug_inventory($d->drug_code,$data);
+              }
+            }
+          }
+
+        $data = array('phar_stat'=>2);
+        $this->Model_Purchasing->process_restock_request($auditid,$data);
+        redirect('Purchasing/restock_medicine_view_all_drug');
+      }
+
+      function reject_restock_request_drug()
+      {
+        $postid = $this->uri->segment(3);
+        $data = array('phar_stat'=>3);
+        $this->Model_Purchasing->process_restock_request($postid,$data);
+        redirect('Purchasing/restock_medicine_view_all_drug');
+      }
   }
 ?>
