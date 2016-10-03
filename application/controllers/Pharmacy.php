@@ -66,6 +66,9 @@ class Pharmacy extends CI_Controller{
 
   function process_pharmacy_request()
   {
+    $header['title'] = "HIS: Request";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['requests'] = $this->Model_pharmacy->get_pharmacy_requests();
     //$data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
     //$data['patient'] = $this->Model_pharmacy->get_all_patients();
@@ -155,6 +158,9 @@ class Pharmacy extends CI_Controller{
 
   function view_one_request()
   {
+    $header['title'] = "HIS: Request";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $id = $this->uri->segment('3');
 
     $data['details'] = $this->Model_pharmacy->get_specific_request($id);
@@ -457,6 +463,6 @@ class Pharmacy extends CI_Controller{
       $this->Model_pharmacy->insert_restock_medicine($data);
     }
 
-    redirect('Pharmacy/restock_medicine');
+    redirect('Pharmacy/drug_restock_medicine');
   }
 }

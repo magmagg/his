@@ -201,6 +201,52 @@
         $this->db->update('drugs', $data);
       }
 
+      //=========================RESTOCK MEDICINE PROCESS====================//
+      function get_restock_requests()
+      {
+        $this->db->select('*');
+        $this->db->from('pharmacy_restock');
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function get_restock_unique_ids()
+      {
+        $this->db->select('unique_id');
+        $this->db->from('pharmacy_restock');
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function get_specific_restock_request($id)
+      {
+        $this->db->select('*');
+        $this->db->from('pharmacy_restock');
+        $this->db->where('unique_id',$id);
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function process_restock_request($id,$data)
+      {
+        $this->db->where('unique_id',$id);
+        $this->db->update('pharmacy_restock',$data);
+      }
+
+      function update_pharmacy_quantity($id,$data)
+      {
+        $this->db->where('item_id',$id);
+        $this->db->update('pharmacy_inventory',$data);
+      }
+
+      //=========================DRUGS RESTOCK===================//
+      function update_drug_quantity($id,$data)
+      {
+        $this->db->where('drug_code',$id);
+        $this->db->update('drugs',$data);
+      }
+
+
 
   }
 ?>
