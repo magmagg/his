@@ -7,7 +7,7 @@
             </div>
             <div class="modal-body">
 
-            Are you sure with your pharmacy request?
+            Are you sure with your request?
                            </table>  </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

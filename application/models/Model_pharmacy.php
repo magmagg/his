@@ -142,6 +142,20 @@ class Model_pharmacy extends CI_Model
     $this->db->insert('pharmacy_restock',$data);
   }
 
+  //====================REQUEST MEDICINE========================//
+  function get_all_drug_inventory_status_zero()
+  {
+    $this->db->select('*');
+    $this->db->from('drugs');
+    $this->db->where('status',0);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function insert_request_medicine($data)
+  {
+    $this->db->insert('medicine_request',$data);
+  }
 
 
 }

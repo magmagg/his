@@ -37,7 +37,6 @@
                     $count = 0;
                       foreach($items as $i)
                       {
-                        $selectquantity = $i->item_quantity;
                         echo '<input type="hidden" name="itemid[]" value="'.$i->item_id.'">';
                         echo '<input type="hidden" name="price[]" value="'.$i->item_price.'">';
                         echo '<tr>';
