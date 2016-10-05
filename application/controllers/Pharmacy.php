@@ -181,9 +181,6 @@ class Pharmacy extends CI_Controller{
     $data['items'] = $this->Model_pharmacy->get_drug_inventory();
     $data['patients'] = $this->Model_pharmacy->get_all_patients();
     $this->load->view('users/includes/header.php',$header);
-
-    $this->load->view('pharmacy/pharmacy_request',$data);
-    $this->load->view('pharmacy/pharmacy_request_modal');
     $this->load->view('includes/toastr.php');
 
     $this->load->view('pharmacy/drugs_pharmacy_request',$data);
@@ -464,5 +461,36 @@ class Pharmacy extends CI_Controller{
     }
 
     redirect('Pharmacy/drug_restock_medicine');
+  }
+
+  //========================REQUEST NEW MED=============================//
+  function request_medicine()
+  {
+    $header['title'] = "HIS: Request medicine";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['items'] = $this->Model_pharmacy->get_all_drug_inventory_status_zero();
+    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('pharmacy/pharmacy_request_modal');
+    $this->load->view('Pharmacy/request_medicine_view',$data);
+  }
+
+  function request_medicine_submit()
+  {
+    $itemids = $this->input->post('itemids');
+    $userid = $this->session->userdata('user_id');
+
+    $unique_id = bin2hex(mcrypt_create_iv(5, MCRYPT_DEV_URANDOM));
+
+    foreach($itemids as $i)
+    {
+      $data = array('requestor_id'=>$userid,
+                    'drug_code'=>$i,
+                    'req_status'=>0,
+                    'unique_id'=>$unique_id
+                  );
+      $this->Model_pharmacy->insert_request_medicine($data);
+    }
+    redirect('Pharmacy/request_medicine');
   }
 }

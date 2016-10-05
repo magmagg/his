@@ -601,5 +601,89 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         $this->Model_Purchasing->process_restock_request($postid,$data);
         redirect('Purchasing/restock_medicine_view_all_drug');
       }
+
+      //==============================REQUEST MEDICINE============================//
+      function request_medicine_view_all()
+      {
+        $header['title'] = "HIS: Restock";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+
+        $data['unique_ids'] = $this->Model_Purchasing->get_request_medicines_unique_ids();
+        $data['table_details'] = array();
+        foreach($data['unique_ids'] as $d)
+        {
+          $data['new_details'] = $this->Model_Purchasing->get_specific_request_medicines($d->unique_id);
+          $quantity = 0;
+          $requestedby;
+          $date;
+          $status;
+          foreach($data['new_details'] as $nd)
+          {
+            $requestedby = $nd->requestor_id;
+            $date        = $nd->date_requested;
+            $status    = $nd->req_status;
+
+          }
+          $data['table_details'][$d->unique_id] = array(
+                                                        'date'=>$date,
+                                                        'requestedby'=>$requestedby,
+
+                                                        'status'=>$status,
+                                                        'unique_id'=>$d->unique_id);
+        }
+
+        $this->load->view('users/includes/header',$header);
+        $this->load->view('Purchasing/restock_release_modal');
+        $this->load->view('Purchasing/request_medicine_view_all',$data);
+      }
+
+      function view_one_request_medicine()
+      {
+        $header['title'] = "HIS: Restock";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $id = $this->uri->segment('3');
+
+        $data['details'] = $this->Model_Purchasing->get_specific_request_medicines($id);
+        $data['items'] = $this->Model_Purchasing->get_all_drug_inventory();
+
+        $data['id'] = $id;
+        $this->load->view('users/includes/header',$header);
+        $this->load->view('Purchasing/restock_accept_request_modal');
+        $this->load->view('Purchasing/restock_reject_request_modal');
+        $this->load->view('Purchasing/request_medicine_view_specific',$data);
+      }
+
+      function accept_medicine_request()
+      {
+        $postid = $this->uri->segment(3);
+        $data = array('req_status'=>1);
+        $this->Model_Purchasing->process_medicine_request($postid,$data);
+        redirect('Purchasing/request_medicine_view_all');
+      }
+
+      function release_medicine_request()
+      {
+        $auditid = $this->uri->segment(3);
+        $data['details'] = $this->Model_Purchasing->get_specific_request_medicines($auditid);
+
+        foreach($data['details'] as $d)
+        {
+          $data = array('status'=>1);
+          $this->Model_Purchasing->process_drug($d->drug_code,$data);
+        }
+        $data = array('req_status'=>2);
+        $this->Model_Purchasing->process_medicine_request($auditid,$data);
+        redirect('Purchasing/request_medicine_view_all');
+      }
+
+      function reject_medicine_request()
+      {
+        $postid = $this->uri->segment(3);
+        $data = array('req_status'=>3);
+        $this->Model_Purchasing->process_medicine_request($postid,$data);
+        redirect('Purchasing/request_medicine_view_all');
+      }
   }
 ?>

@@ -246,6 +246,31 @@
         $this->db->update('drugs',$data);
       }
 
+      //==============================REQUEST MEDICINE==================//
+      function get_specific_request_medicines($id)
+      {
+        $this->db->select('*');
+        $this->db->from('medicine_request');
+        $this->db->where('unique_id',$id);
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function get_request_medicines_unique_ids()
+      {
+        $this->db->select('unique_id');
+        $this->db->from('medicine_request');
+        $query = $this->db->get();
+        return $query->result();
+      }
+
+      function process_medicine_request($id,$data)
+      {
+        $this->db->where('unique_id',$id);
+        $this->db->update('medicine_request',$data);
+      }
+
+
 
 
   }
