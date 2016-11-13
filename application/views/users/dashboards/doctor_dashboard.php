@@ -2,6 +2,10 @@
   <!--main content start-->
   <section id="main-content">
       <section class="wrapper">
+
+        <?php
+              $this->load->view('includes/changePasswordModal');
+        ?>
         <center><h1>DOCTOR</h1></center>
 
           <!--state overview start-->
@@ -66,47 +70,26 @@
               <div class="col-lg-4">
                   <!--user info table start-->
                   <section class="panel">
-                      <div class="panel-body">
-                          <a href="#" class="task-thumb">
-                              <img src="img/avatar1.jpg" alt="">
-                          </a>
-                          <div class="task-thumb-details">
-                              <h1><a href="#">Anjelina Joli</a></h1>
-                              <p>Senior Architect</p>
-                          </div>
+                    <div class="panel-body">
+                      <div class="form">
+                        <?php
+                            echo form_open('dashboard/updateProfessionalFee');
+                        ?>
+                        <div class="form-group ">
+                            <label for="firstname" class="control-label col-lg-">Default Professional fee  (current: P<?php echo $defaultProfessionalFee; ?>)</label>
+                                <div class="col-lg-10">
+                                    <input class=" form-control" id="firstname" name="dfprofessionalfee" type="text" placeholder="Update professional fee" />
+                                </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-10">
+                               <button class="btn btn-danger" type="submit">Update</button>
+
+                             </div>
+                        </div>
+                      </form>
                       </div>
-                      <table class="table table-hover personal-task">
-                          <tbody>
-                            <tr>
-                                <td>
-                                    <i class=" fa fa-tasks"></i>
-                                </td>
-                                <td>New Task Issued</td>
-                                <td> 02</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <i class="fa fa-exclamation-triangle"></i>
-                                </td>
-                                <td>Task Pending</td>
-                                <td> 14</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <i class="fa fa-envelope"></i>
-                                </td>
-                                <td>Inbox</td>
-                                <td> 45</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <i class=" fa fa-bell-o"></i>
-                                </td>
-                                <td>New Notification</td>
-                                <td> 09</td>
-                            </tr>
-                          </tbody>
-                      </table>
+                    </div>
                   </section>
                   <!--user info table end-->
               </div>
@@ -194,7 +177,6 @@
                   <!--work progress end-->
               </div>
           </div>
-
 
 
       </section>

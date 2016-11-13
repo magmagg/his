@@ -2,6 +2,9 @@
   <!--main content start-->
   <section id="main-content">
       <section class="wrapper">
+        <?php
+              $this->load->view('includes/changePasswordModal');
+        ?>
         <center><h1>BILLING CLERK</h1></center>
 
           <!--state overview start-->

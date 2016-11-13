@@ -57,6 +57,7 @@
                   "user_employmentdate"=>$user_details->employment_date,
                   "user_status"=>$user_details->status,
                   "user_controller_type"=>$user_details->controller_type,
+                  "defaultpassword"=>$user_details->default_password,
                   "user_loggedin"=>TRUE
                 );
               $this->session->set_userdata($user_session);

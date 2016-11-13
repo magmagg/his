@@ -2,7 +2,7 @@
 <footer class="site-footer">
     <div class="container">
       <div class="text-center">
-          2013 &copy; FlatLab by VectorLab.
+          2013 &copy; Hospital.
       </div>
     </div>
 </footer>

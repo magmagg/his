@@ -83,5 +83,43 @@
       $this->db->update('doctor_information', $data);
     }
 
+    function getDefaultPassword(){
+      $this->db->select('default_password');
+      $this->db->from('users');
+      $this->db->where('user_id', $this->session->userdata("user_id"));
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
+    function changedefaultpassword($data){
+      $this->db->where('user_id', $this->session->userdata("user_id"));
+      $sql = $this->db->update('users', $data);
+        if($sql){
+          return true;
+        }else{
+          return false;
+        }
+
+    }
+
+
+    function updateProfessionalFee($data){
+      $this->db->where('user_id', $this->session->userdata("user_id"));
+      $sql = $this->db->update('doctor_information', $data);
+        if($sql){
+          return true;
+        }else{
+          return false;
+        }
+    }
+
+    function getDefaultProfessionalFee(){
+      $this->db->select('default_PF');
+      $this->db->from('doctor_information');
+      $this->db->where('user_id', $this->session->userdata("user_id"));
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
   }
 ?>
