@@ -6,6 +6,7 @@
                   <header style="font-weight:300" class="panel-heading">
       						 Request List
                    <a href="<?=base_url()?>Radiology/PendingRadiologyRequests" class="btn btn-info btn-xs pull-right" role="button">Pending Requests</a>
+                   <a href="<?=base_url()?>Radiology/ApprovedRadiologyRequests" class="btn btn-success btn-xs pull-right" role="button">Approved Requests</a>
 					 <span class="tools pull-right">
 					 </span>
 				  </header>
@@ -38,8 +39,10 @@
                                 echo "<span class='label label-info'>PENDING</span>";
                               }elseif($radiology_request['request_status'] == 1){
                                 echo "<span class='label label-success'>APPROVED</span>";
-                              }else{
+                              }elseif($radiology_request['request_status'] == 2){
                                 echo "<span class='label label-danger'>DECLINED</span>";
+                              }else{
+                                echo "<span class='label label-success'>DONE</span>";
                               }
                             echo "</td>";
                           echo "</tr>";

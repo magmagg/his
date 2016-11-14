@@ -3,11 +3,6 @@
     <div class="row">
         <div class="col-sm-3">
             <section class="panel">
-
-      				<header style="font-weight:300" class="panel-heading">
-      					 New Patient
-
-      				</header>
       				<div class="panel-body">
       				<div class="adv-table">
                 <table class="table">
@@ -29,7 +24,7 @@
         <div class="col-sm-9">
             <section class="panel">
                   <header style="font-weight:300" class="panel-heading">
-						 Patient List
+						 List of requests
 					 <span class="tools pull-right">
 					 </span>
 				  </header>
@@ -56,7 +51,11 @@
                             echo "<td>".$radiology_request['first_name']." ".$radiology_request['middle_name']." ".$radiology_request['last_name']."</td>";
                             echo "<td>".$radiology_request['req_notes']."</td>";
                             echo "<td>";
-                              echo "<a href='".base_url()."Radiology/approve_request/".$radiology_request['trans_id']."' role='button' class='btn btn-info btn-xs'>APPROVE</a>";
+                              if($radiology_request['request_status'] == 0){
+                                echo "<a href='".base_url()."Radiology/approve_request/".$radiology_request['trans_id']."' role='button' class='btn btn-info btn-xs'>APPROVE</a>";
+                              }else{
+                                echo "<a href='".base_url()."Radiology/mark_done_request/".$radiology_request['trans_id']."' role='button' class='btn btn-success btn-xs'>MARK AS DONE</a>";
+                              }
                             echo "</td>";
                           echo "</tr>";
                         }

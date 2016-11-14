@@ -22,6 +22,11 @@
       $this->db->insert('radiology_exam', $data);
     }
 
+    function update_radiology_exam($data, $id){
+      $this->db->where("exam_id", $id);
+      $this->db->update("radiology_exam", $data);
+    }
+
     function get_patient_list(){
       $this->db->select('*');
       $this->db->from('patient');
@@ -81,7 +86,24 @@
       return $query->result_array();
     }
 
+    function get_approved_requests(){
+      $this->db->select('*');
+      $this->db->select('c.first_name as P_first_name, c.middle_name as P_middle_name, c.last_name as P_last_name');
+      $this->db->from('radiology_pat a');
+      $this->db->join('radiology_request b', 'a.rad_reqid=b.request_id', 'left');
+      $this->db->join('patient c', 'c.patient_id=a.pat_id', 'left');
+      $this->db->join('users d', 'b.user_id_fk=d.user_id', 'left');
+      $this->db->where('a.request_status', 1);
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
     function approve_request($id, $data){
+      $this->db->where('trans_id', $id);
+      $this->db->update('radiology_pat', $data);
+    }
+
+    function mark_done_request($id, $data){
       $this->db->where('trans_id', $id);
       $this->db->update('radiology_pat', $data);
     }

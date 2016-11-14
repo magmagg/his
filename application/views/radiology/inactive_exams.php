@@ -2,46 +2,59 @@
   <section class="wrapper">
     <div class="row">
       <div class="col-sm-3">
-          <section class="panel">
-              <header class="panel-heading" style="background-color: #000;"></header>
-              <table class="table">
-                <tr>
-                  <td colspan="2" align="center"><h5><a class="btn btn-info" data-toggle="modal" href="#myModal5">+ADD NEW EXAM</a></h5></td>
-                </tr>
-                <tr>
-                  <td colspan="2" align="center"><h5><a class="btn btn-info" data-toggle="modal" href="<?=base_url()?>Radiology/Maintenance">SHOW ACTIVE EXAM</a></h5></td>
-                </tr>
-              </table>
-          </section>
+        <section class="panel">
+          <div class="panel-body">
+          <center style="padding: 20px;" >
+            <a class="btn btn-round btn-sm btn-success" data-toggle="modal" href="#addnewexam"><i class="fa fa-plus-circle"></i> ADD NEW EXAM</a>
+            <br>
+            <br>
+            <a class="btn btn-round btn-info btn-sm"  href="<?=base_url()?>Radiology/Maintenance">SHOW ACTIVE EXAM</a>
+          </center>
+          </div>
+        </section>
       </div>
+
       <div class="col-sm-9">
         <section class="panel">
-          <header class="panel-heading">
-              <center><h4>RADIOLOGY EXAMS<h4></center>
+          <header style="font-weight:300" class="panel-heading">
+             Radiology Exam List
+          <span class="tools pull-right">
+          </span>
           </header>
-          <table class="table table-hovered" style="text-align: center;">
-            <tr id="tblheader">
-              <td>ID</td>
-              <td>Name</td>
-              <td>Description</td>
-              <td>Action</td>
-            </tr>
-            <?php
-              foreach($radiology_exams as $radiology_exam){
-                echo "<tr>";
-                  echo "<td>".$radiology_exam['exam_id']."</td>";
-                  echo "<td>".$radiology_exam['exam_name']."</td>";
-                  echo "<td>".$radiology_exam['exam_description']."</td>";
-                  echo "<td>";
-                    echo "<a href='".base_url()."Radiology/ActivateExam/".$radiology_exam['exam_id']."' role='button' class='btn btn-default btn-sm'>Activate</a>";
-                  echo "</td>";
-                echo "</tr>";
-              }
-            ?>
-          </table>
+
+        <div class="panel-body">
+          <div class="adv-table">
+            <table class="table table-striped" style="text-align: center;" id="dynamic-table">
+              <thead>
+                <tr id="tblheader">
+                  <td>ID</td>
+                  <td>Name</td>
+                  <td>Description</td>
+                  <td>Action</td>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                  foreach($radiology_exams as $radiology_exam){
+                    echo "<tr>";
+                      echo "<td>".$radiology_exam['exam_id']."</td>";
+                      echo "<td>".$radiology_exam['exam_name']."</td>";
+                      echo "<td>".$radiology_exam['exam_description']."</td>";
+                      echo "<td>";
+                        echo "<a href='".base_url()."Radiology/ActivateExam/".$radiology_exam['exam_id']."' role='button' class='btn btn-success btn-sm'>Activate</a>";
+                      echo "</td>";
+                    echo "</tr>";
+                  }
+                ?>
+              </tbody>
+            </table>
+          </div>
+        </div>
         </section>
       </div>
     </div>
+  </section>
+</section>
 
     <div class="modal fade modal-dialog-center" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -81,8 +94,7 @@
             </div>
         </div>
     </div>
-  </section>
-</section>
+
 
 <!--footer start-->
 <footer class="site-footer">
