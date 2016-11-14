@@ -54,7 +54,7 @@
                       echo "<td>".$etype['lab_exam_type_description']."</td>";
                       echo "<td>".$etype['lab_exam_type_price']."</td>";
                       echo "<td>";
-                        echo "<a data-id='".$etype['lab_exam_type_id']."' data-name='".$etype['lab_exam_type_name']."' data-category='".$etype['exam_cat_name']."'
+                        echo "<a data-id='".$etype['lab_exam_type_id']."' data-name='".$etype['lab_exam_type_name']."' data-category='".$etype['exam_cat_id']."'
                         data-description='".$etype['lab_exam_type_description']."' data-price='".$etype['lab_exam_type_price']."' role='button'
                         onclick='updateexamtype(this)' class='btn btn-warning btn-xs'>Update</a>";
                       echo "</td>";
@@ -163,16 +163,16 @@
                               if($examcateg != NULL){
                             ?>
                             <select id="examcateg" class="form-control" name="examcateg">
-                              <?php
+                            <?php
                               foreach($examcateg as $categ){
                               echo "<option value=".$categ['exam_cat_id'].">".$categ['exam_cat_name']."</option>";
                               }
-                              ?>
+                            ?>
                             </select>
                             <?php
-                          } else {
-                            echo "No Examination Category";
-                          }
+                              } else {
+                                echo "No Examination Category";
+                              }
                             ?>
                           </div>
                       </div>
@@ -208,7 +208,7 @@
     document.getElementById("id").value = d.getAttribute("data-id");
     document.getElementById("originalname").value = d.getAttribute("data-name");
     document.getElementById("name").value = d.getAttribute("data-name");
-    document.getElementById("examcateg").value = d.getAttribute("data-category");
+    $("#examcateg").val(d.getAttribute("data-category")).change();
     document.getElementById("description").value = d.getAttribute("data-description");
     document.getElementById("price").value = d.getAttribute("data-price");
     $("#updateexamtype").modal();

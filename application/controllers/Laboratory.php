@@ -217,11 +217,14 @@
      }
 
      function insert_category(){
-       $this->form_validation->set_rules('categname', 'Name', 'required|trim|xss_clean|strip_tags');
+       $this->form_validation->set_rules('categname', 'Name', 'required|trim|xss_clean|strip_tags|is_unique[examination_category.exam_cat_name]');
        $this->form_validation->set_rules('categdesc', 'Description', 'required|trim|xss_clean|strip_tags');
 
        if($this->form_validation->run() == FALSE){
-         echo "Something's Wrong";
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="'.validation_errors().'">
+                                   <input type="hidden" id="type" value="error">' );
+         redirect(base_url()."Laboratory/LabExamCateg");
        } else {
          $data = array ('exam_cat_name' => $this->input->post('categname'),
                         'exam_cat_desc' => $this->input->post('categdesc'));
@@ -233,17 +236,25 @@
        }
      }
 
-     function update_examination_category($id)
+     function update_examination_category()
      {
-       $this->form_validation->set_rules('catname', 'Name', 'required|trim|xss_clean|strip_tags');
-       $this->form_validation->set_rules('catdesc', 'Description', 'required|trim|xss_clean|strip_tags');
+       if($this->input->post("originalname") == $this->input->post("name")){
+         $is_unique = "|is_unique[examination_category.exam_cat_name]";
+       }else{
+         $is_unique = "";
+       }
+       $this->form_validation->set_rules('name', 'Name', 'required|trim|xss_clean|strip_tags'.$is_unique);
+       $this->form_validation->set_rules('description', 'Description', 'required|trim|xss_clean|strip_tags');
 
        if($this->form_validation->run()==FALSE){
-         echo "Something's Wrong";
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="'.validation_errors().'">
+                                   <input type="hidden" id="type" value="error">' );
+         redirect(base_url()."Laboratory/LabExamCateg");
        } else {
-         $data = array ('exam_cat_name' => $this->input->post('catname'),
-                        'exam_cat_desc' => $this->input->post('catdesc'));
-          $insertcategory = $this->Model_Laboratory->updatecategory($id,$data);
+         $data = array ('exam_cat_name' => $this->input->post('name'),
+                        'exam_cat_desc' => $this->input->post('description'));
+          $insertcategory = $this->Model_Laboratory->updatecategory($this->input->post('id'),$data);
           $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                     <input type="hidden" id="msg" value="Updated exam category">
                                     <input type="hidden" id="type" value="success">' );
@@ -253,17 +264,29 @@
 
      function update_exam_type()
      {
-       $this->form_validation->set_rules('typename', 'Name', 'required|trim|xss_clean|strip_tags');
-       $this->form_validation->set_rules('typecateg', 'Category', 'required|trim|xss_clean|strip_tags');
-       $this->form_validation->set_rules('typedesc', 'Description', 'required|trim|xss_clean|strip_tags');
+       if($this->input->post('originalname') == $this->input->post('name')){
+         $is_unique = "";
+       }else{
+         $is_unique = "|is_unique[laboratory_examination_type.lab_exam_type_name]";
+       }
+       $this->form_validation->set_rules('name', 'Name', 'required|trim|xss_clean|strip_tags'.$is_unique);
+       $this->form_validation->set_rules('examcateg', 'Category', 'required|trim|xss_clean|strip_tags');
+       $this->form_validation->set_rules('description', 'Description', 'required|trim|xss_clean|strip_tags');
+       $this->form_validation->set_rules('price', 'Price', 'required|trim|xss_clean|strip_tags');
 
        if($this->form_validation->run()==FALSE){
-         echo "Something's Wrong";
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="'.validation_errors().'">
+                                   <input type="hidden" id="type" value="error">' );
+         redirect(base_url()."Laboratory/LabExamType");
        } else {
-         $data = array ('lab_exam_type_name' => $this->input->post('typename'),
-                        'lab_exam_type_category_id' => $this->input->post('typecateg'),
-                        'lab_exam_type_description' => $this->input->post('typedesc'));
-          $insertcategory = $this->Model_Laboratory->updateexamtype($id,$data);
+         $data = array (
+                        'lab_exam_type_name' => $this->input->post('name'),
+                        'lab_exam_type_category_id' => $this->input->post('examcateg'),
+                        'lab_exam_type_price'=> $this->input->post('price'),
+                        'lab_exam_type_description' => $this->input->post('description')
+                      );
+          $insertcategory = $this->Model_Laboratory->updateexamtype($this->input->post('id'), $data);
           $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                     <input type="hidden" id="msg" value="Updated exam type">
                                     <input type="hidden" id="type" value="success">' );
@@ -281,6 +304,7 @@
        } else {
          $data = array('lab_exam_type_name' => $this->input->post('typename'),
                        'lab_exam_type_category_id' => $this->input->post('examcateg'),
+                       'lab_exam_type_price'=>$this->input->post('price'),
                        'lab_exam_type_description' => $this->input->post('typedesc'));
         $insertetype = $this->Model_Laboratory->insertexamtype($data);
         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
@@ -292,12 +316,14 @@
 
      function insert_labspecimen()
      {
-       $this->form_validation->set_rules('specname', 'Name', 'required|trim|xss_clean|strip_tags');
+       $this->form_validation->set_rules('specname', 'Name', 'required|trim|xss_clean|strip_tags|is_unique[laboratory_specimens.specimen_name]');
        $this->form_validation->set_rules('specdesc', 'Description', 'required|trim|xss_clean|strip_tags');
-
        if($this->form_validation->run()==FALSE)
        {
-         echo "Something is Wrong";
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="'.validation_errors().'">
+                                   <input type="hidden" id="type" value="error">' );
+         redirect(base_url()."Laboratory/LabExamSpec");
        }
        else
        {
@@ -311,19 +337,28 @@
        }
      }
 
-     function update_lab_specimen($id){
-       $this->form_validation->set_rules('specname', 'Name', 'required|trim|xss_clean|strip_tags');
-       $this->form_validation->set_rules('specdesc', 'Description', 'required|trim|xss_clean|strip_tags');
+     function update_lab_specimen(){
+       if($this->input->post('originalname') == $this->input->post('name')){
+         $is_unique = "";
+       }else{
+         $is_unique = "|is_unique[laboratory_specimens.specimen_name]";
+       }
+
+       $this->form_validation->set_rules('name', 'Name', 'required|trim|xss_clean|strip_tags'.$is_unique);
+       $this->form_validation->set_rules('description', 'Description', 'required|trim|xss_clean|strip_tags');
 
        if($this->form_validation->run()==FALSE)
        {
-         echo "Something is Wrong";
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                   <input type="hidden" id="msg" value="'.validation_errors().'">
+                                   <input type="hidden" id="type" value="error">' );
+         redirect(base_url()."Laboratory/LabExamSpec");
        }
        else
        {
-         $data = array('specimen_name' => $this->input->post('specname'),
-                       'specimen_description' => $this->input->post('specdesc'));
-         $this->Model_Laboratory->updatespecimen($id,$data);
+         $data = array('specimen_name' => $this->input->post('name'),
+                       'specimen_description' => $this->input->post('description'));
+         $this->Model_Laboratory->updatespecimen($this->input->post('id'),$data);
          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                    <input type="hidden" id="msg" value="Updated specimen requirement">
                                    <input type="hidden" id="type" value="success">' );

@@ -51,7 +51,7 @@
                       echo "<td>".$categ['exam_cat_name']."</td>";
                       echo "<td>".$categ['exam_cat_desc']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Laboratory/EditExamCateg/".$categ['exam_cat_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
+                        echo "<a data-id='".$categ['exam_cat_id']."' data-name='".$categ['exam_cat_name']."' data-description='".$categ['exam_cat_desc']."' onclick='updatecategory(this)' role='button' class='btn btn-warning btn-xs'>Update</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -101,8 +101,60 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade modal-dialog-center" id="updatecategory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content-wrap">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" align="center">Update Category</h4>
+                    </div>
+                    <div class="modal-body">
+                      <?php
+                        $attributes = array('class'=>'form-horizontal', 'role'=>'form');
+                        echo form_open('Laboratory/update_examination_category', $attributes);
+                      ?>
+
+                      <div class="form-group">
+                          <label  class="col-lg-3 col-sm-3 control-label">Name: </label>
+                          <div class="col-lg-9">
+                            <input type="hidden" name="id" id="id" class="form-control">
+                            <input type="text" name="name" id="name" class="form-control">
+                            <input type="hidden" name="originalname" id="originalname" class="form-control" >
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+                          <label  class="col-lg-3 col-sm-3 control-label">Description: </label>
+                          <div class="col-lg-9">
+                            <input type="text" name="description" id="description" class="form-control" placeholder="Description">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                        <input type="submit" value="Submit" class="btn btn-warning">
+                    </div>
+                    <?=form_close()?>
+                </div>
+            </div>
+        </div>
+    </div>
   </section>
 </section>
+
+<script>
+  function updatecategory(d){
+    document.getElementById("id").value = d.getAttribute("data-id");
+    document.getElementById("name").value = d.getAttribute("data-name");
+    document.getElementById("originalname").value = d.getAttribute("data-name");
+    document.getElementById("description").value = d.getAttribute("data-description");
+    $("#updatecategory").modal();
+  }
+</script>
+
+
 <!-- js placed at the end of the document so the pages load faster -->
 
 <script src="<?=base_url()?>js/jquery.js"></script>
