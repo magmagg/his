@@ -57,6 +57,7 @@
       $data['total_pending_request'] = $this->Model_radiology->count_pending_radiology_request();
       $this->load->view('users/includes/header.php', $header);
       $this->load->view('radiology/radiology_requests.php', $data);
+      $this->load->view('includes/toastr.php');
     }
 
     function PendingRadiologyRequests(){
@@ -71,6 +72,18 @@
       $this->load->view('includes/toastr.php');
     }
 
+    function ApprovedRadiologyRequests(){
+      $header['title'] = "HIS: Approved Radiology Requests";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['radiology_requests'] = $this->Model_radiology->get_approved_requests();
+      $data['total_radiology_request'] = $this->Model_radiology->count_all_radiology_request();
+      $data['total_pending_request'] = $this->Model_radiology->count_pending_radiology_request();
+      $this->load->view('users/includes/header.php', $header);
+      $this->load->view('radiology/pending_requests.php', $data);
+      $this->load->view('includes/toastr.php');
+    }
+
     function approve_request($trans_id){
       $data = array('request_status'=>1);
       $this->Model_radiology->approve_request($trans_id, $data);
@@ -78,6 +91,15 @@
                                 <input type="hidden" id="msg" value="Approved radiology request">
                                 <input type="hidden" id="type" value="success">' );
       redirect(base_url().'Radiology/PendingRadiologyRequests');
+    }
+
+    function mark_done_request($trans_id){
+      $data = array('request_status'=>3);
+      $this->Model_radiology->mark_done_request($trans_id, $data);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Requests is mark as done.">
+                                <input type="hidden" id="type" value="success">' );
+      redirect(base_url().'Radiology/RadiologyRequests');
     }
 
     function DeactivateExam($id){
@@ -100,11 +122,14 @@
 
 
     function insert_radiology_exam(){
-      $this->form_validation->set_rules('name', 'Exam Name', 'required|trim');
+      $this->form_validation->set_rules('name', 'Exam Name', 'required|trim|is_unique[radiology_exam.exam_name]');
       $this->form_validation->set_rules('description', 'Exam Description', 'required|trim');
       $this->form_validation->set_rules('price', 'Exam Price', 'required|trim');
       if($this->form_validation->run() == FALSE){
-        echo validation_errors();
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                    						  <input type="hidden" id="msg" value="'.validation_errors().'">
+                    						  <input type="hidden" id="type" value="error">' );
+        redirect(base_url()."Radiology/Maintenance", "refresh");
       }else{
         $data = array(
                       'exam_name'=>$this->input->post('name'),
@@ -120,12 +145,43 @@
       }
     }
 
+    function update_radiology_exam(){
+      if($this->input->post("originalname") == $this->input->post("name")){
+        $is_unique = "";
+      }else{
+        $is_unique = "|is_unique[radiology_exam.exam_name]";
+      }
+
+      $this->form_validation->set_rules('name', 'Exam Name', 'required|trim'.$is_unique);
+      $this->form_validation->set_rules('description', 'Exam Description', 'required|trim');
+      $this->form_validation->set_rules('price', 'Exam Price', 'required|trim');
+      if($this->form_validation->run() == FALSE){
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                  <input type="hidden" id="msg" value="'.validation_errors().'">
+                                  <input type="hidden" id="type" value="error">' );
+        redirect(base_url()."Radiology/Maintenance");
+      }else{
+          $data = array(
+            "exam_name"=>$this->input->post("name"),
+            "exam_description"=>$this->input->post("description"),
+            "exam_price"=>$this->input->post("price")
+          );
+          $this->Model_radiology->update_radiology_exam($data, $this->input->post("id"));
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Successfully updated.">
+                                    <input type="hidden" id="type" value="success">' );
+          redirect(base_url()."Radiology/Maintenance");
+      }
+    }
     function insert_request(){
       $this->form_validation->set_rules('exams[]', 'Radiology Exams', 'required|trim');
       $this->form_validation->set_rules('patient', 'Patient', 'required|trim');
       $this->form_validation->set_rules('note', 'Request Note', 'trim|xss_clean|strip_tags');
       if($this->form_validation->run() == FALSE){
-        echo validation_errors();
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                    						  <input type="hidden" id="msg" value="'.validation_errors().'">
+                    						  <input type="hidden" id="type" value="error">' );
+        redirect(base_url()."Radiology/ViewRequest");
       }else{
         $exams = $this->input->post('exams[]');
         for($i = 0; $i<count($exams); $i++){
@@ -151,6 +207,7 @@
         redirect(base_url()."Radiology/ViewRequest");
       }
     }
+
 
   }
 ?>

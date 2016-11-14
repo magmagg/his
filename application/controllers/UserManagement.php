@@ -36,11 +36,10 @@ class UserManagement extends CI_Controller{
                       						  <input type="hidden" id="msg" value="'. validation_errors().'">
                       						  <input type="hidden" id="type" value="error">' );
   		 redirect(base_url().'usermanagement/User');
-
       }else{
         $data = array("type_id"=>$this->input->post('usertype'),
                       "username"=>$this->input->post('username'),
-                      "password"=>sha1("pharmacist"),
+                      "password"=>sha1("dfgh@1234"),
                       "email"=>$this->input->post('email'),
                       "first_name"=>$this->input->post('firstname'),
                       "last_name"=>$this->input->post('lastname'),
