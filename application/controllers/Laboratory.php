@@ -251,7 +251,7 @@
        }
      }
 
-     function update_exam_type($id)
+     function update_exam_type()
      {
        $this->form_validation->set_rules('typename', 'Name', 'required|trim|xss_clean|strip_tags');
        $this->form_validation->set_rules('typecateg', 'Category', 'required|trim|xss_clean|strip_tags');
