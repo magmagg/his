@@ -7,7 +7,6 @@
               <header style="font-weight:300" class="panel-heading">
                  New Specimen
              <span class="tools pull-right">
-
              </span>
             </header>
 			   <div class="panel-body">
@@ -50,7 +49,7 @@
                       echo "<td>".$spec['specimen_name']."</td>";
                       echo "<td>".$spec['specimen_description']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Laboratory/EditSpec/".$spec['specimen_id']."' role='button' class='btn btn-warning btn-xs'>Update</a>";
+                        echo "<a data-id='".$spec['specimen_id']."' data-name='".$spec['specimen_name']."' data-description='".$spec['specimen_description']."' onclick='updatespecimen(this)' role='button' class='btn btn-warning btn-xs'>Update</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -100,10 +99,58 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade modal-dialog-center" id="updatespecimen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content-wrap">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" align="center">ADD LAB SPECIMEN</h4>
+                    </div>
+                    <div class="modal-body">
+                      <?php
+                        $attributes = array('class'=>'form-horizontal', 'role'=>'form');
+                        echo form_open('Laboratory/update_lab_specimen', $attributes);
+                      ?>
+
+                      <div class="form-group">
+                          <label  class="col-lg-3 col-sm-3 control-label">Name: </label>
+                          <div class="col-lg-9">
+                                <input type="text" name="name" id="name" class="form-control">
+                                <input type="hidden" name="originalname" id="originalname" class="form-control">
+                                <input type="hidden" name="id" id="id" class="form-control">
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+                          <label  class="col-lg-3 col-sm-3 control-label">Description: </label>
+                          <div class="col-lg-9">
+                              <input type="text" name="description" id="description" class="form-control" placeholder="Specimen Description">
+                          </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                        <input type="submit" value="Submit" class="btn btn-warning">
+                    </div>
+                    <?=form_close()?>
+                </div>
+            </div>
+        </div>
+    </div>
   </section>
 </section>
-<!-- js placed at the end of the document so the pages load faster -->
 
+<script>
+  function updatespecimen(d){
+    document.getElementById("id").value = d.getAttribute("data-id");
+    document.getElementById("name").value = d.getAttribute("data-name");
+    document.getElementById("originalname").value = d.getAttribute("data-name");
+    document.getElementById("description").value = d.getAttribute("data-description");
+    $("#updatespecimen").modal();
+  }
+</script>
 <!-- js placed at the end of the document so the pages load faster -->
 
 <script src="<?=base_url()?>js/jquery.js"></script>
