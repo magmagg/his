@@ -117,7 +117,7 @@
 
         }else{
           $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Failed">
-                                    <input type="hidden" id="msg" value="failed to updated.">
+                                   <input type="hidden" id="msg" value="'. validation_errors().'">
                                     <input type="hidden" id="type" value="error">' );
               $this->index();
 

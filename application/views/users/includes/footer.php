@@ -20,6 +20,9 @@
 <script src="<?=base_url()?>js/owl.carousel.js" ></script>
 <script src="<?=base_url()?>js/jquery.customSelect.min.js" ></script>
 <script src="<?=base_url()?>js/respond.min.js" ></script>
+<script type="text/javascript" src="<?=base_url()?>assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+ <script type="text/javascript" src="<?=base_url()?>assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+ <script type="text/javascript" src="<?=base_url()?>assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 <!--right slidebar-->
 <script src="<?=base_url()?>js/slidebars.min.js"></script>
@@ -31,7 +34,12 @@
 <script src="<?=base_url()?>js/sparkline-chart.js"></script>
 <script src="<?=base_url()?>js/easy-pie-chart.js"></script>
 <script src="<?=base_url()?>js/count.js"></script>
-
+<script src="<?=base_url()?>js/advanced-form-components.js"></script>
+ <script src="<?=base_url()?>assets/fullcalendar/fullcalendar/fullcalendar.min.js"></script>
+     <!-- <script src="<?=base_url()?>js/external-dragging-calendar.js"></script> -->
+     <?php
+     $this->load->view('includes/calendar');
+     ?>
 <script>
 //owl carousel
 $(document).ready(function() {

@@ -6228,5 +6228,11 @@ header.blue-bg .search:focus {
 
 .adv-table table tbody td:last-child{
 	text-align:center;
-	
+
 }
+
+@media only screen and (max-width : 1200px) {
+      #calendarmargin {
+        margin-top: 20%;
+      }
+   }
