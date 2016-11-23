@@ -14,19 +14,25 @@
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
       $data['radiology_requests'] = $this->Model_radiology->get_radiology_request($this->session->userdata('user_id'));
       $this->load->view('users/includes/header.php',$header);
-      $this->load->view('radiology/radiology_requests.php', $data);
+      $this->load->view('radiology/radiology_request_by_user.php', $data);
       $this->load->view('includes/toastr.php');
     }
 
-    function MakeRadiologyRequest(){
-      $header['title'] = "HIS: Make Radiology Request";
-      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $data['radiology_exams'] = $this->Model_radiology->get_radiology_exams();
-      $data['patients'] = $this->Model_radiology->get_patient_list();
-      $this->load->view('users/includes/header.php', $header);
+
+  function MakeRadiologyRequest()
+  {
+    $header['title'] = "HIS: Make Radiology Request";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['radiology_exams'] = $this->Model_radiology->get_radiology_exams();
+    $data['patients'] = $this->Model_radiology->get_patient_list();
+    $this->load->view('users/includes/header.php', $header);
+    if(!$this->uri->segment(3)) {
       $this->load->view('radiology/makeradiologyrequst.php', $data);
+    }else{
+      $this->load->view('radiology/choose_radiology_exam.php', $data);
     }
+  }
 
     function Maintenance(){
       $header['title'] = "HIS: Radiology Maintenance";
@@ -84,12 +90,18 @@
       $this->load->view('includes/toastr.php');
     }
 
-    function approve_request($trans_id){
+    function approve_request(){
       $data = array('request_status'=>1);
-      $this->Model_radiology->approve_request($trans_id, $data);
+      $request_details = $this->Model_radiology->approve_request($this->uri->segment(3), $data, $this->uri->segment(4));
+      $bill_data = array(
+        "bill_name"=>$request_details->exam_name,
+        "price"=>$request_details->exam_price,
+        "patient_id"=>$request_details->patient_id
+      );
+      $this->Model_radiology->insert_bill($bill_data);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
-                                <input type="hidden" id="msg" value="Approved radiology request">
-                                <input type="hidden" id="type" value="success">' );
+                                //<input type="hidden" id="msg" value="Approved radiology request">
+                                //<input type="hidden" id="type" value="success">' );
       redirect(base_url().'Radiology/PendingRadiologyRequests');
     }
 
@@ -175,7 +187,6 @@
     }
     function insert_request(){
       $this->form_validation->set_rules('exams[]', 'Radiology Exams', 'required|trim');
-      $this->form_validation->set_rules('patient', 'Patient', 'required|trim');
       $this->form_validation->set_rules('note', 'Request Note', 'trim|xss_clean|strip_tags');
       if($this->form_validation->run() == FALSE){
         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
@@ -187,7 +198,7 @@
         for($i = 0; $i<count($exams); $i++){
           $data_radiology_request = array(
                         'exam_id'=>$exams[$i],
-                        'patient_id'=>$this->input->post('patient'),
+                        'patient_id'=>$this->input->post('patient_id'),
                         'request_date'=>date('Y-m-d'),
                         'user_id_fk'=>$this->session->userdata('user_id'),
                         'req_notes'=>$this->input->post('note')
@@ -195,7 +206,7 @@
           $request = $this->Model_radiology->insert_request($data_radiology_request);
           $data_radiology_pat = array(
                                       'rad_reqid'=>$request->request_id,
-                                      'pat_id'=>$this->input->post('patient'),
+                                      'pat_id'=>$this->input->post('patient_id'),
                                       'request_status'=>0
                                      );
           $this->Model_radiology->insert_radiology_pat($data_radiology_pat);

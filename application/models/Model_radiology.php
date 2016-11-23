@@ -98,9 +98,20 @@
       return $query->result_array();
     }
 
-    function approve_request($id, $data){
+    function approve_request($id, $data, $reqid){
       $this->db->where('trans_id', $id);
       $this->db->update('radiology_pat', $data);
+
+      $this->db->select('*');
+      $this->db->from('radiology_request rr');
+      $this->db->join('radiology_exam re', 're.exam_id = rr.exam_id', 'left');
+      $this->db->where('rr.request_id', $reqid);
+      $query = $this->db->get();
+      return $query->row();
+    }
+
+    function insert_bill($data){
+      $this->db->insert('rad_billing', $data);
     }
 
     function mark_done_request($id, $data){

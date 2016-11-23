@@ -52,7 +52,7 @@
                             echo "<td>".$radiology_request['req_notes']."</td>";
                             echo "<td>";
                               if($radiology_request['request_status'] == 0){
-                                echo "<a href='".base_url()."Radiology/approve_request/".$radiology_request['trans_id']."' role='button' class='btn btn-info btn-xs'>APPROVE</a>";
+                                echo "<a href='".base_url()."Radiology/approve_request/".$radiology_request['trans_id']."/".$radiology_request['rad_reqid']."' role='button' class='btn btn-info btn-xs'>APPROVE</a>";
                               }else{
                                 echo "<a href='".base_url()."Radiology/mark_done_request/".$radiology_request['trans_id']."' role='button' class='btn btn-success btn-xs'>MARK AS DONE</a>";
                               }

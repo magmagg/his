@@ -34,13 +34,31 @@
 
 
     function MakeLaboratoryRequests(){
-      $header['title'] = "HIS: Laboratory: Create Laboratory Request";
-      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
+        $header['title'] = "HIS: Laboratory: Create Laboratory Request";
+        $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+        $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+        $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
+        $data['labexamtype'] = $this->Model_Laboratory->get_all_examtype();
+        $data['urgencycat'] = $this->Model_Laboratory->get_all_urgencycategory();
+        $data['fastingcat'] = $this->Model_Laboratory->get_all_fastingcategory();
+        $data['specimen'] = $this->Model_Laboratory->get_all_labspec();
       $this->load->view('users/includes/header.php',$header);
-      $this->load->view('laboratory/makelaboratoryrequest.php',$data);
+        if(!$this->uri->segment(3)){
+            $this->load->view('laboratory/makelaboratoryrequest.php',$data);
+        }else{
+            $data['patient'] = $this->Model_Laboratory->get_single_patient($this->uri->segment(3));
+            $this->load->view('laboratory/makelaboratoryrequest2', $data);
+        }
     }
+
+      /*function MakeLaboratoryRequests(){
+          $header['title'] = "HIS: Laboratory: Create Laboratory Request";
+          $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+          $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+          $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
+          $this->load->view('users/includes/header.php',$header);
+          $this->load->view('laboratory/makelaboratoryrequest.php',$data);
+      }
 
     function MakeLaboratoryRequests2(){
       $header['title'] = "HIS: Laboratory: Create Laboratory Request";
@@ -58,7 +76,7 @@
         $this->load->view('users/includes/header.php',$header);
         $this->load->view('laboratory/makelaboratoryrequest2.php',$data);
       }
-    }
+    }*/
 
     function AppofReq(){
       $header['title'] = "HIS: Laboratory: Approval of Requests";
@@ -72,12 +90,18 @@
 
     function ApproveLabReq($id)
     {
-          $data = array('lab_status'=>2);
-          $this->Model_Laboratory->approvelabreq($id,$data);
-          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+      $data = array('lab_status'=>2);
+      $laboratory_details = $this->Model_Laboratory->approvelabreq($id,$data);
+        $bill_data = array(
+            "bill_name"=>$laboratory_details->exam_name,
+            "price"=>$laboratory_details->exam_price,
+            "patient_id"=>$laboratory_details->lab_patient
+        );
+        $this->Model_Laboratory->insert_bill($bill_data);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                     <input type="hidden" id="msg" value="Approved laboratory exam request">
                                     <input type="hidden" id="type" value="success">' );
-          redirect(base_url()."Laboratory/AppofReq");
+      redirect(base_url()."Laboratory/AppofReq");
     }
 
     function LabAccRequest()
@@ -368,11 +392,10 @@
 
      function insert_laboratoryrequest()
      {
-       $this->form_validation->set_rules('labremark', 'Remark', 'required|trim|xss_clean|strip_tags');
-
+       $this->form_validation->set_rules('labremark', 'Remark', 'trim|xss_clean|strip_tags');
        if($this->form_validation->run()==FALSE)
        {
-         echo "Something is Wrong";
+         echo validation_errors();
        }
        else {
          $specimens = $this->input->post('specimens');
