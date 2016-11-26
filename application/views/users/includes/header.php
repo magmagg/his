@@ -17,8 +17,10 @@
     <link rel="stylesheet" href="<?=base_url()?>css/owl.carousel.css" type="text/css">
   	<link href="<?php echo base_url() ?>assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet" />
   	<link href="<?php echo base_url() ?>assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/bootstrap-datepicker/css/datepicker.css" />
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/bootstrap-datetimepicker/css/datetimepicker.css" />
   	<link rel="stylesheet" href="<?php echo base_url() ?>assets/data-tables/DT_bootstrap.css" />
-
+    
     <!--right slidebar-->
     <link href="<?=base_url()?>css/slidebars.css" rel="stylesheet">
     <!-- Custom styles for this template -->

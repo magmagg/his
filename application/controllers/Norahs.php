@@ -22,6 +22,7 @@
 
     function index(){
       $this->load->view('loginpage.php');
+      $this->load->view('includes/toastr.php');
     }
 
     function checkLogin(){
@@ -65,12 +66,16 @@
             }
           }else{
             //Unsuccess
-            echo "Wrong password and Username!";
+            $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Error">
+                                      <input type="hidden" id="msg" value="Invalid username and password.">
+                                      <input type="hidden" id="type" value="error">' );
             $this->index();
           }
         }else{
           //Unsuccess
-          echo "Wrong password and Username!";
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Error">
+                                    <input type="hidden" id="msg" value="'. validation_errors().'">
+                                    <input type="hidden" id="type" value="error">' );
           $this->index();
         }
       }else{

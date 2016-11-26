@@ -5,59 +5,64 @@
               <!-- page start-->
               <div class="row">
                   <aside class="col-lg-3">
-                      <h4 class="drg-event-title"> My schedules</h4>
-                      <div id='external-events'>
-                          <div class='external-event label label-primary'>My Event 1</div>
-                          <div class='external-event label label-success'>My Event 2</div>
-                          <div class='external-event label label-info'>My Event 3</div>
-                          <div class='external-event label label-inverse'>My Event 4</div>
-                          <div class='external-event label label-warning'>My Event 5</div>
-                          <div class='external-event label label-danger'>My Event 6</div>
-                          <div class='external-event label label-default'>My Event 7</div>
-                          <div class='external-event label label-primary'>My Event 8</div>
-                          <div class='external-event label label-info'>My Event 9</div>
-                          <div class='external-event label label-success'>My Event 10</div>
-                          <p class="border-top drp-rmv">
-                              <input type='checkbox' id='drop-remove' />
-                              remove after drop
-                          </p>
-                      </div>
-                      <div class="col-sm-12">
-                            <section class="panel">
+                      <h4 class="drg-event-title"> Draggable Events</h4>
+                      <div>
+                        <?php echo form_open('Appointment/addAppointment'); ?>
 
-                                <table class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Mon</th>
-                                        <th>Tues</th>
-                                        <th>Wed</th>
-                                        <th>Thurs</th>
-                                        <th>Fri</th>
-                                        <th>Sat</th>
-                                        <th>Sun</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>9-10 am</td>
-                                        <td>9-10 pm</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                    </tr>
 
-                                    </tbody>
-                                </table>
-                            </section>
+                        <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Title</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="title">
+                                </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                             <label class="col-sm-6 control-label">Select date</label>
+                             <div class="col-sm-10">
+                               <input size="16" type="text" readonly class="form_datetime form-control" name="adate">
+                             </div>
+                         </div>
+
+                         <div class="form-group">
+                                <label class="control-label col-md-3">Date Range</label>
+                                <div class="col-md-4">
+                                    <div class="input-group input-large">
+                                      <input size="16" type="text" readonly class="form_datetime form-control" name="from">
+                                        <!-- <input type="text" class="form-control dpd1" name="from"> -->
+                                        <span class="input-group-addon">To</span>
+                                        <input size="16" type="text" readonly class="form_datetime form-control" name="end">
+                                    </div>
+                                    <span class="help-block">Select date range</span>
+                                </div>
+                            </div>
+
+                         <div class="form-group">
+                              <label class="col-sm-6 control-label">Description</label>
+                              <div class="col-sm-10">
+                                  <textarea type="text" class="form-control" name="adescription"></textarea>
+                              </div>
+                          </div>
+                            <br>
+
+                          <div class="form-group">
+                              <div class="col-sm-10">
+                                 <button class="btn btn-danger" type="submit">Add appointment</button>
+
+                               </div>
+                          </div>
+
+                        </form>
+                      </div>
+                  </aside>
+                  <aside class="col-lg-9" id="calendarmargin">
+                      <section class="panel">
+                          <div class="panel-body">
+                              <div id="calendar" class="has-toolbar"></div>
+                          </div>
+                      </section>
+                  </aside>
               </div>
               <!-- page end-->
           </section>
       </section>
       <!--main content end-->
-
-
-      <
