@@ -143,7 +143,9 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       } else {
         $data = array('item_stock'=>$this->input->post('item_quant'),
                       'item_desc'=>$this->input->post('item_desc'),
-                      'item_name'=>$this->input->post('item_name'));
+                      'item_name'=>$this->input->post('item_name'),
+                      'item_price'=>$this->input->post('item_price')
+                    );
        $this->Model_Purchasing->insertproduct($data);
        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                  <input type="hidden" id="msg" value="Added new CSR item">
