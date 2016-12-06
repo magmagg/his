@@ -38,6 +38,25 @@ class Model_Rooms extends CI_Model{
     return $query->result_array();
   }
 
+  function get_operation_room_list()
+  {
+    $this->db->select('*');
+    $this->db->from('room_operation ro');
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+
+  function get_operating_room_data($id){
+    $this->db->select('*');
+    $this->db->from('beds_operation bo');
+    $this->db->join('room_operation ro', 'bo.bed_roomid = ro.or_id', 'left');
+    $this->db->join('maintenance m', 'bo.bed_maintenance = m.maintenance_status_id', 'left');
+    $this->db->join('patient p', 'bo.bed_patient=p.patient_id','left');
+    $this->db->where('bo.bed_roomid', $id);
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+
   function get_room_data($id)
   {
     $this->db->select('*');
@@ -60,8 +79,23 @@ class Model_Rooms extends CI_Model{
     return $room_id;
   }
 
+  function insertoperatingroom($data){
+    $this->db->insert('room_operation', $data);
+
+    $this->db->select('or_id');
+    $this->db->from('room_operation');
+    $this->db->order_by('UPPER(or_id)', 'desc');
+    $this->db->limit(1);
+    $room_id = $this->db->get()->row()->or_id;
+    return $room_id;
+  }
+
   function insertbedsinroom($data){
     $this->db->insert('beds',$data);
+  }
+
+  function insertbedsinoperatingroom($data){
+    $this->db->insert('beds_operation',$data);
   }
 
   function removebed($id){
