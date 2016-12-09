@@ -87,22 +87,44 @@
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
       $data['csrinventory'] = $this->Model_Csr->get_csr_inventory();
+      $data['patients'] = $this->Model_Csr->get_patients();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('csr/requestitem.php', $data);
       $this->load->view('includes/toastr.php');
     }
 
     function insert_csr_item_request(){
-      $data = array(
-                  "nurse_id"=>$this->session->userdata('user_id'),
-                  "csr_item_id"=>$this->input->post('item'),
-                  "item_quant"=>$this->input->post('quantity')
-                  );
-      $this->Model_Csr->insert_csr_item_request($data);
-      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
-                                <input type="hidden" id="msg" value="Successfully requested item">
-                                <input type="hidden" id="type" value="success">');
-      redirect(base_url().'Csr/RequestItem');
+      $this->form_validation->set_rules('quantity', 'Quantity', 'callback_check_quantity');
+      if($this->form_validation->run() == FALSE){
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Error">
+                                  <input type="hidden" id="msg" value="'.validation_errors().'">
+                                  <input type="hidden" id="type" value="error">');
+        redirect(base_url().'Csr/RequestItem');
+      }else{
+        $data = array(
+                    "nurse_id"=>$this->session->userdata('user_id'),
+                    "csr_item_id"=>$this->input->post('item'),
+                    "patient_id"=>$this->input->post('patient_id'),
+                    "item_quant"=>$this->input->post('quantity')
+                    );
+        $this->Model_Csr->insert_csr_item_request($data);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                  <input type="hidden" id="msg" value="Successfully requested item">
+                                  <input type="hidden" id="type" value="success">');
+        redirect(base_url().'Csr/RequestItem');
+      }
+    }
+
+    function check_quantity(){
+      $item_id = $this->input->post('item');
+      $request_quantity = $this->input->post('quantity');
+      $remaining_quantity = $this->Model_Csr->check_quantity($item_id);
+      if($request_quantity < $remaining_quantity){
+        return true;
+      }else{
+        $this->form_validation->set_message('check_quantity', 'Insuficcient stock. The remaining stock is '.$remaining_quantity);
+        return false;
+      }
     }
 
     function ViewRequest(){
@@ -159,7 +181,13 @@
       $datareq = array('csr_status' =>1,
                        'date_altered_status'=>date('Y-m-d H:i:s'));
       //CSR REQUEST
-      $this->Model_Csr->accept_request($id,$datareq);
+      $request_details = $this->Model_Csr->accept_request($id,$datareq);
+      $data = array(
+        "bill_name"=>$request_details->item_name,
+        "price"=>$request_details->item_price,
+        "patient_id"=>$request_details->patient_id
+      );
+      $this->Model_Csr->insert_bill($data);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Approved CSR request">
                                 <input type="hidden" id="type" value="success">' );

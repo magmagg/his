@@ -79,6 +79,7 @@ class Admitting extends CI_Controller{
     $data_admission_schedule = array(
                                       "admission_date"=>date('Y-m-d H:i:s'),
                                       "patient_id"=>$patient,
+                                      "bed"=>$bed_id,
                                       "status"=>1
                                     );
     $data_admitting_resident = array(

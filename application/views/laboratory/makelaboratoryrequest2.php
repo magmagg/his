@@ -46,23 +46,27 @@
                 echo form_open('Laboratory/insert_laboratoryrequest/', $attributes);
               ?>
               <header class="panel-heading" align="center">CHOOSE LABORATORY EXAMINATION</header>
-            <div class="form-group">
-                <div class="col-lg-12">
-                  <?php if($labexamtype != NULL){?>
-                  <select name="laboratoryexam" size="10" style="height: 100%;">
-                    <?php
-                      foreach($labexamtype as $etype){
-                        echo "<option value='".$etype['lab_exam_type_id']."'>";
-                          echo $etype['lab_exam_type_id'].": ".$etype['lab_exam_type_name'];
-                        echo "</option>";
-                      }
-                    ?>
-                  </select>
-                  <?php
-                } else {
-                   echo "No Laboratory Examination Type";
-                }
-                  ?>
+
+                <div class="form-group">
+                    <br>
+                    <label  class="col-lg-5 col-sm-3 control-label">Exam:</label>
+                    <div class="col-lg-2">
+                        <select class="form-control" name="laboratoryexam">
+                            <?php
+                            if(empty($labexamtype)){
+
+                            }else{
+                                foreach($labexamtype as $data){
+                                    echo "<option value='".$data['lab_exam_type_id']."'>";
+                                        echo $data['lab_exam_type_name'];
+                                    echo "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
                   <div class="form-group">
                     <br>
                       <label  class="col-lg-5 col-sm-3 control-label">Urgency:</label>
@@ -119,8 +123,6 @@
                       </div>
                   </div>
 
-                </div>
-            </div>
             <div class="form-group">
                 <div class="col-lg-12">
                   <center>

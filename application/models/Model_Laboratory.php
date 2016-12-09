@@ -102,8 +102,19 @@ function get_laboratorytoremarks_data($id)
 
 function approvelabreq($id,$data)
 {
-  $this->db->where('lab_id',$id);
-  $this->db->update('laboratory_request',$data);
+    $this->db->where('lab_id',$id);
+    $this->db->update('laboratory_request',$data);
+
+    $this->db->select('*');
+    $this->db->from('laboratory_request lr');
+    $this->db->join('laboratory_examination_type let', 'let.lab_exam_type_id = lr.exam_type_fk', 'left');
+    $this->db->where('lr.lab_id', $id);
+    $query = $this->db->get();
+    return $query->row();
+}
+
+function insert_bill($data){
+    $this->db->insert('lab_billing', $data);
 }
 
 function get_accepted_labreq()

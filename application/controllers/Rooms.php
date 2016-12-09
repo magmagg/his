@@ -112,6 +112,15 @@
       }
     }
 
+    function OperationRoom(){
+      $header['title'] = "HIS: Rooms: Operation Room List";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['rooms'] = $this->Model_Rooms->get_operation_room_list();
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('rooms/operationroomlist.php', $data);
+    }
+
     function ViewRoom($id){
       $header['title'] = "HIS: Rooms: View Room";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
@@ -121,6 +130,54 @@
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('rooms/viewroom.php', $data);
       $this->load->view('users/includes/footer.php');
+    }
+
+    function ViewOperatingRoom($id){
+      $header['title'] = "HIS: Rooms: View Room";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $data['roomdata'] = $this->Model_Rooms->get_operating_room_data($id);
+      $data['roomid'] = $id;
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('rooms/viewoperatingroom.php', $data);
+      $this->load->view('users/includes/footer.php');
+    }
+
+    function insert_operation_room(){
+      $this->form_validation->set_rules('roomprice', 'Room Price', 'required|trim|xss_clean|strip_tags');
+      $this->form_validation->set_rules('roomloc', 'Room Location', 'required|trim|xss_clean|strip_tags');
+
+      if($this->form_validation->run() == FALSE){
+        echo validation_errors();
+      }else{
+        $data = array(
+                      'price' => $this->input->post('roomprice'),
+                      'room_location' => $this->input->post('roomloc')
+                    );
+        $insertroomtype = $this->Model_Rooms->insertoperatingroom($data);
+        $beddata = array(
+                        'bed_roomid' => $insertroomtype
+                        );
+        $bednum = $this->input->post('bednum');
+        for($i=1;$i<=$bednum;$i++)
+        {
+            $this->Model_Rooms->insertbedsinoperatingroom($beddata);
+        }
+
+        redirect(base_url()."Rooms/Rooms");
+      }
+    }
+
+    function add_operating_bed($id){
+      $beddata = array(
+                      'bed_roomid' => $id
+                      );
+      $bednum = $this->input->post('bednum');
+      for($i=1;$i<=$bednum;$i++)
+      {
+          $this->Model_Rooms->insertbedsinoperatingroom($beddata);
+      }
+      redirect(base_url()."Rooms/ViewOperatingRoom/".$id);
     }
 
     function UpdateRoom($id){

@@ -1,22 +1,11 @@
 <section id="main-content">
   <section class="wrapper">
     <div class="row">
-      <div class="col-sm-3">
-          <section class="panel">
-			     <div class="panel-body">
-            <div class="adv-table">
-      			  <center>
-      				      <a href="#requestcsritem" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> Request CSR Item</a>
-      				</center>
-    				</div>
-  				</div>
-          </section>
-      </div>
-      <div class="col-sm-9">
+      <div class="col-sm-12">
           <section class="panel">
 
               <header class="panel-heading">
-                  CSR Product List
+                   Patient List
 				  <span class="tools pull-right">
 				  </span>
               </header>
@@ -26,15 +15,21 @@
               <table id="dynamic-table" class="table table-striped" style="text-align: center;">
 			    <thead>
                 <tr id="tblheader">
-                    <th>#</th>
-                    <th>Item Name</th>
-                    <th>Item Description</th>
-                    <th>Item Stocks</th>
+                    <th>Patient ID</th>
+                    <th>Name</th>
+                    <th>Action</th>
                 </tr>
 				</thead>
 				<tbody align="center">
                 <?php
-                foreach($csrinventory as $item)
+                foreach($patients as $patient){
+                  echo "<tr>";
+                    echo "<td>".$patient['patient_id']."</td>";
+                    echo "<td>".$patient['first_name']." ".$patient['middle_name']." ".$patient['last_name']."</td>";
+                    echo "<td><a data-id='".$patient['patient_id']."' role='button' class='btn btn-success btn-xs' onclick='requestitem(this)' >Request Item</td>";
+                  echo "</tr>";
+                }
+                /*foreach($csrinventory as $item)
                 {
                   echo "<tr>";
                   echo "<td>".$item['csr_id']."</td>";
@@ -46,7 +41,7 @@
                     echo "<td>Out of Stock</td>";
                   }
                   echo "</tr>";
-                }
+                }*/
                  ?>
 			  </tbody>
               </table>
@@ -71,26 +66,29 @@
                 $attributes = array('class'=>'form-horizontal', 'role'=>'form');
                 echo form_open('Csr/insert_csr_item_request', $attributes);
               ?>
+              <input type="hidden" id="patient_id" name="patient_id">
               <div id="items">
                 <div class="form-group">
                   <div class="col-lg-9">
-                    <select class="form-control" name="item" onchange="quantity(this)">
+                    <select class="form-control" name="item">
                       <?php
                         foreach($csrinventory as $item){
-                          echo "<option value='".$item['csr_id']."'>".$item['item_name']."</option>";
+                          echo "<option value='".$item['csr_id']."' data-foo='".$item['item_stock']."'>".$item['item_name']."</option>";
                         }
                       ?>
                     </select>
                   </div>
 
                   <div class="col-lg-3">
-                    <select class="form-control" name="quantity" id="quantity">
-                      <?php
-                        for($i = 1; $i <= 20; $i++){
-                          echo "<option value='".$i."'>".$i."</option>";
-                        }
-                      ?>
-                    </select>
+                    <div id="select_quantity">
+                      <select class="form-control" name="quantity">
+                        <?php
+                           for($i = 20; $i > 0; $i--){
+                             echo "<option value='".$i."'>".$i."</option>";
+                           }
+                         ?>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -108,6 +106,14 @@
 
 
 <!-- js placed at the end of the document so the pages load faster -->
+
+<script>
+  function requestitem(d){
+    document.getElementById("patient_id").value = d.getAttribute("data-id");
+    $("#requestcsritem").modal();
+  }
+</script>
+
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 
@@ -124,9 +130,3 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
-
-<script>
-  function quantity(e){
-
-  }
-</script>

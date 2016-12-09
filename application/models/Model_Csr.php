@@ -169,8 +169,17 @@
     {
       $this->db->where('csr_req_id',$id);
       $this->db->update('csr_request',$datareq);
+
+      $this->db->select('*');
+      $this->db->from('csr_request cr');
+      $this->db->join('csr_inventory ci', 'cr.csr_item_id = ci.csr_id', 'left');
+      $query = $this->db->get();
+      return $query->row();
     }
 
+    function insert_bill($data){
+      $this->db->insert('csr_billing', $data);
+    }
     function setstock($csrid,$datainv)
     {
       $this->db->where('csr_id',$csrid);
@@ -205,6 +214,21 @@
       $this->db->where('a.nurse_id', $id);
       $query = $this->db->get();
       return $query->result_array();
+    }
+
+    function get_patients(){
+      $this->db->select('*');
+      $this->db->from('patient');
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
+    function check_quantity($id){
+      $this->db->select('item_stock');
+      $this->db->from('csr_inventory');
+      $this->db->where('csr_id', $id);
+      $query = $this->db->get();
+      return $query->row('item_stock');
     }
   }
 ?>

@@ -150,6 +150,14 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-sm-3 control-label">Price: </label>
+                      <div class="col-lg-9">
+                        <input type="text" name="item_price" step="0.01" class="form-control" placeholder="Item Price">
+                      </div>
+                  </div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
@@ -197,4 +205,3 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
-
