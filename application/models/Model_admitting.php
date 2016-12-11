@@ -192,6 +192,22 @@
 
         $this->db->where('patient_id', $patient);
         $this->db->update('patient', $data_patient_status);
+
+        $this->db->select('*');
+        $this->db->from('beds b');
+        $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
+        $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+        $this->db->where('b.bed_id', $bed);
+        $query = $this->db->get()->row();
+
+        $data_bed_billing = array(
+                                "description"=>$query->room_name." Bill",
+                                "bill_name"=>$query->room_name." Bill",
+                                "bed_rate"=>$query->room_price,
+                                "price"=>$query->room_price,
+                                "patient_id"=>$patient
+                              );
+        $this->db->insert('bed_billing', $data_bed_billing);
       }
 
       function get_direct_rooms_admitted(){
