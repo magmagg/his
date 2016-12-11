@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2016 at 01:31 PM
+-- Generation Time: Dec 11, 2016 at 01:35 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 7.0.9
 
@@ -11294,7 +11294,7 @@ CREATE TABLE `permission` (
 
 INSERT INTO `permission` (`permission_id`, `permission_name`, `permission_link`, `task_id`) VALUES
 (1, 'Emergency Room', 'Admitting/EmergencyRoom', 1),
-(2, 'Direct Room', 'Admitting/DirectRoomAdmission', 1),
+(2, 'Direct Room', 'Admitting/DirectRoom', 1),
 (3, 'Admitted Patients', 'Admitting/AdmittedPatients', 1),
 (4, 'List', 'Patient/List', 2),
 (5, 'Make Radiology Request', 'Radiology/MakeRadiologyRequest', 3),
@@ -11326,7 +11326,9 @@ INSERT INTO `permission` (`permission_id`, `permission_name`, `permission_link`,
 (32, 'Patient Billing', 'Billing/PatientBilling', 5),
 (33, 'Emergency Room', 'Rooms/EmergencyRoom', 4),
 (34, 'ICU', 'Rooms/ICU', 4),
-(35, 'Operation Room', 'Rooms/OperationRoom', 4);
+(35, 'Operation Room', 'Rooms/OperationRoom', 4),
+(36, 'Intensive Care Unit', 'Admitting/ICU', 1),
+(37, 'Operating Room', 'Admitting/OperatingRoom', 1);
 
 -- --------------------------------------------------------
 
@@ -11385,7 +11387,9 @@ INSERT INTO `permission_usertype` (`permission_usertype_id`, `user_type_id`, `pe
 (44, 1, 18, 1),
 (45, 1, 33, 1),
 (46, 1, 34, 1),
-(47, 1, 35, 1);
+(47, 1, 35, 1),
+(48, 14, 36, 1),
+(49, 14, 37, 1);
 
 -- --------------------------------------------------------
 
@@ -13613,12 +13617,12 @@ ALTER TABLE `patient_sequence`
 -- AUTO_INCREMENT for table `permission`
 --
 ALTER TABLE `permission`
-  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `permission_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `permission_usertype`
 --
 ALTER TABLE `permission_usertype`
-  MODIFY `permission_usertype_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `permission_usertype_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 --
 -- AUTO_INCREMENT for table `pharid_sequence`
 --
