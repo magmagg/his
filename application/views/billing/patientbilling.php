@@ -83,28 +83,14 @@
           <div class="col-lg-2">
             <div class="form-group">
               <label>Date Admitted</label>
-              <?php
-                if(!empty($admitting_detail)){
-                  $admission_date = date('F d, Y', strtotime($admitting_detail->admission_date));
-                }else{
-                  $admission_date = "";
-                }
-              ?>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$admission_date?>" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('M d, Y', strtotime($patient_detail->date_admitted))?>" disabled>
             </div>
           </div>
 
           <div class="col-lg-2">
             <div class="form-group">
               <label>Time</label>
-              <?php
-                if(!empty($admitting_detail)){
-                  $admission_time = date('h:i:s', strtotime($admitting_detail->admission_date));
-                }else{
-                  $admission_time = "";
-                }
-              ?>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$admission_time?>" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('h:i:s A', strtotime($patient_detail->date_admitted))?>" disabled>
             </div>
           </div>
         </div>
@@ -193,10 +179,16 @@
 
         <div class="row">
           <div class="col-lg-2">
-            <label>PHARMACY</label>
+            <label>Room</label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+            <?php
+                if(!empty($directroom_bill)){
+                  echo $directroom_bill->price;
+                }
+            ?>
+            </label>
           </div>
           <div class="col-lg-1">
             <label></label>
@@ -218,7 +210,7 @@
 
         <div class="row">
           <div class="col-lg-2">
-            <label>R/B ACCOMODATION</label>
+            <label>PHARMACY</label>
           </div>
           <div class="col-lg-1">
             <label></label>
@@ -299,39 +291,18 @@
 
         <div class="row">
           <div class="col-lg-2">
-            <label>PULMONARY</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
             <label>RADIOLOGY</label>
           </div>
           <div class="col-lg-1">
             <label>
               <?php
+                $total_price = 0;
                 if(!empty($radiology_bill)){
-                  echo $radiology_bill->price;
+                  foreach($radiology_bill as $bill){
+                    $total_price += $bill['price'];
+                  }
                 }
+                echo $total_price;
               ?>
             </label>
           </div>
@@ -405,183 +376,7 @@
 
         <div class="row">
           <div class="col-lg-2">
-            <label>NURSE STATION</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
             <label>ICU</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>NICU</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>NICU</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>PT REHAB</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>DIALYSIS</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>BILLING</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>HEART STATION</label>
           </div>
           <div class="col-lg-1">
             <label></label>

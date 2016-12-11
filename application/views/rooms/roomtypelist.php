@@ -44,7 +44,11 @@
                       echo "<td>".$roomtype['room_description']."</td>";
                       echo "<td>".$roomtype['room_price']."</td>";
                       echo "<td>";
-                        echo "<a href='".base_url()."Rooms/UpdateRoomType/".$roomtype['room_type_id']."' role='button' class='btn btn-sm btn-warning'>Edit</a>";
+                        echo "<a data-id='".$roomtype['room_type_id']."'
+                                 data-name='".$roomtype['room_name']."'
+                                 data-description='".$roomtype['room_description']."'
+                                 data-price='".$roomtype['room_price']."'
+                             role='button' class='btn btn-sm btn-warning' onclick='updateroomtype(this)'>Edit</a>";
                       echo "</td>";
                     echo "</tr>";
                   }
@@ -104,9 +108,72 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade modal-dialog-center" id="updateroomtype" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content-wrap">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <div id="update_title">
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                      <?php
+                        $attributes = array('class'=>'form-horizontal', 'role'=>'form');
+                        echo form_open('Rooms/update_roomtype', $attributes);
+                      ?>
+
+                      <div class="form-group">
+                          <label  class="col-lg-3 col-sm-3 control-label">Room Name </label>
+                          <div class="col-lg-9">
+                            <input type="text" class="form-control"  name="roomname" id="roomname">
+                            <input type="hidden" class="form-control"  name="originalname" id="originalname">
+                            <input type="hidden" class="form-control"  name="roomid" id="roomid">
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+
+                          <label  class="col-lg-3 col-sm-3 control-label">Room Price </label>
+
+                          <div class="col-lg-9">
+                            <input type="text" class="form-control"  name="roomprice" id="roomprice">
+                          </div>
+                      </div>
+
+                      <div class="form-group">
+                          <label  class="col-lg-3 col-sm-3 control-label">Room Description </label>
+                          <div class="col-lg-9">
+                            <textarea class="form-control" name="roomdesc" id="roomdesc"></textarea>
+                          </div>
+                      </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-default" type="button">Close</button>
+                        <input type="submit" value="Submit" class="btn btn-success">
+                    </div>
+                    <?=form_close()?>
+                </div>
+            </div>
+        </div>
+    </div>
+
   </section>
 </section>
-
+<script>
+  function updateroomtype(e){
+    $("#update_title").html();
+    $("#update_title").append('<h4 class="modal-title" align="center">'+e.getAttribute('data-name')+'</h4>');
+    document.getElementById("roomid").value = e.getAttribute('data-id');
+    document.getElementById("roomname").value = e.getAttribute('data-name');
+    document.getElementById("originalname").value = e.getAttribute('data-name');
+    document.getElementById("roomprice").value = e.getAttribute('data-price');
+    document.getElementById("roomdesc").value = e.getAttribute('data-description');
+    $("#updateroomtype").modal();
+  }
+</script>
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 

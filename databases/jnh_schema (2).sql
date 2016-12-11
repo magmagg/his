@@ -49,11 +49,11 @@ INSERT INTO `admission_schedule` (`admission_id`, `patient_id`, `status`, `admis
 --
 DELIMITER $$
 CREATE TRIGGER `trg_addmission_stats` AFTER UPDATE ON `admission_schedule` FOR EACH ROW BEGIN
-	
+
 	insert ignore into discharge_schedule(patient_id,admission_id)
     select patient_id,admission_id from admission_schedule
-    where status = 2; 
-	
+    where status = 2;
+
 END
 $$
 DELIMITER ;
@@ -453,7 +453,7 @@ CREATE TABLE `doctor_schedules` (
   `endDate` datetime DEFAULT NULL,
   `description` text NOT NULL,
   `status` tinyint(4) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `doctor_schedules`
@@ -11418,18 +11418,18 @@ CREATE TRIGGER `trg_billing_rad_breakdown` AFTER INSERT ON `radiology_request` F
 	set patient = (select patient_id from radiology_request
 	ORDER BY request_id DESC
 	limit 1);
-    
+
     set exam = (select exam_id from radiology_request
 	ORDER BY request_id DESC
 	limit 1);
-    
+
     insert ignore into billing_rad_breakdown(patient_id, radiology_exam_id)
     VALUES (patient, exam);
-    
+
     set breakdown_id = (select billing_breakdown_id from 	billing_rad_breakdown
 	ORDER BY billing_breakdown_id DESC
 	limit 1);
-    
+
 	update billing_rad_breakdown
     set radiology_exam_price =
     (
