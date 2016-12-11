@@ -8,19 +8,17 @@
               <thead>
               <tr>
                   <th>Room ID</th>
-                  <th>Room Type</th>
                   <th>Location</th>
                   <th>Action</th>
               </tr>
               </thead>
               <tbody>
                 <?php
-                  foreach($direct_room as $data){
+                  foreach($icu_room as $data){
                     echo "<tr>";
-                      echo "<td>".$data['room_id']."</td>";
-                      echo "<td>".$data['room_name']."</td>";
+                      echo "<td>".$data['icu_id']."</td>";
                       echo "<td>".$data['room_location']."</td>";
-                      echo "<td><a href='".base_url()."Admitting/DirectRoom/".$data['room_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
+                      echo "<td><a href='".base_url()."Admitting/ICU/".$data['icu_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
                     echo "</tr>";
                   }
                 ?>

@@ -14,6 +14,7 @@
                             <th>Patient No.</th>
                             <th>Name</th>
                             <th>Date Registered</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -31,6 +32,13 @@
                             echo $patient['first_name']." ".$patient['middle_name']." ".$patient['last_name'];
                             echo "</td>";
                             echo "<td>".date('F d, Y', strtotime($patient['date_registered']))."</td>";
+                            echo "<td>";
+                              if($patient['patient_status'] == 0){
+                                echo "<span class='label label-success'>NOT ADMITTED</span>";
+                              }else{
+                                echo "<span class='label label-warning'>ADMITTED</span>";
+                              }
+                            echo "</td>";
                             echo "<td>";
                             echo "<div class='btn-group' role='group' aria-label='...'>";
                             echo "<a href='".base_url()."Radiology/MakeRadiologyRequest/".$patient['patient_id']."' role='button' class='btn btn-sm btn-success'>SELECT</a>";

@@ -5,19 +5,9 @@
     function __construct(){
       parent::__construct();
       $this->load->model('Model_core');
-      /*if($this->session->userdata("user_loggedin")==TRUE && $this->session->userdata("user_type")==1){
-        redirect(base_url()."Admin", "refresh");
-      }else if($this->session->userdata("user_loggedin")==TRUE && $this->session->userdata("user_type")==2){
-        ///redirect("Host","refresh");
-      }else if($this->session->userdata("user_loggedin")==TRUE && $this->session->userdata("user_type")==3){
-      redirect("Nurse","refresh");
-      }else if($this->session->userdata("user_loggedin")==TRUE && $this->session->userdata("user_type")==4){
-        //redirect(base_url());
-      }else if($this->session->userdata("user_loggedin")==TRUE && $this->session->userdata("user_type")==5){
-        //redirect(base_url());
-      }else if($this->session->userdata("user_loggedin")==TRUE && $this->session->userdata("user_type")==6){
-        redirect(base_url()."Radiology", "refresh");
-      }*/
+        if($this->session->userdata("user_loggedin")==TRUE){
+          redirect(base_url()."Dashboard");
+        }
     }
 
     function index(){

@@ -1,0 +1,6 @@
+Patient
+0 - Not admitted
+1 - Emergency Room
+2 - Ward or Direct Room
+3 - ICU
+4 - Operating Room

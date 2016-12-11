@@ -2,25 +2,25 @@
     <section class="wrapper">
       <section class="panel">
           <header class="panel-heading">
-              <h3 align="center">Choose Room</h3>
+              <h3 align="center">Direct Room Patients</h3>
           </header>
           <table class="table table-hover p-table">
               <thead>
               <tr>
-                  <th>Room ID</th>
+                  <th>Name</th>
+                  <th>Date Admitted</th>
                   <th>Room Type</th>
                   <th>Location</th>
-                  <th>Action</th>
               </tr>
               </thead>
               <tbody>
                 <?php
-                  foreach($direct_room as $data){
+                  foreach($direct_room_patients as $data){
                     echo "<tr>";
-                      echo "<td>".$data['room_id']."</td>";
+                      echo "<td>".$data['first_name']." ".$data['middle_name']." ".$data['last_name']."</td>";
+                      echo "<td>".date('M d,Y', strtotime($data['admission_date']))."</td>";
                       echo "<td>".$data['room_name']."</td>";
                       echo "<td>".$data['room_location']."</td>";
-                      echo "<td><a href='".base_url()."Admitting/DirectRoom/".$data['room_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
                     echo "</tr>";
                   }
                 ?>

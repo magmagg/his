@@ -2,9 +2,10 @@
 if (!defined('BASEPATH'))exit('No direct script access allowed');
 class Model_billing extends CI_Model{
 
-  function get_patients(){
+  function get_admitted_patients(){
       $this->db->select('*');
       $this->db->from('patient');
+      $this->db->Where('patient_status !=', 0);
       $query = $this->db->get();
       return $query->result_array();
   }
@@ -30,7 +31,7 @@ class Model_billing extends CI_Model{
     $this->db->from('rad_billing');
     $this->db->where(array('patient_id'=>$id, 'rad_bill_status'=>0));
     $query = $this->db->get();
-    return $query->row();
+    return $query->result_array();
   }
 
   function get_laboratory_bill($id){
