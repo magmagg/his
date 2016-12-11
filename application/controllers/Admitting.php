@@ -146,25 +146,25 @@ class Admitting extends CI_Controller{
                                     );
 
     if(preg_match("/^[ER]{2}/", $room)){
-      $data_patient_status = array("patient_status"=>1);
+      $data_patient_status = array("patient_status"=>1, "date_admitted"=>date('Y-m-d H:i:s'));
       $sql = $this->Model_admitting->admit_patient_to_er($bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                               <input type="hidden" id="msg" value="Patient has been admitted to the Emergency.">
                               <input type="hidden" id="type" value="success">' );
     }else if(preg_match("/^[OR]{2}/", $room)){
-      $data_patient_status = array("patient_status"=>4);
+      $data_patient_status = array("patient_status"=>4, "date_admitted"=>date('Y-m-d H:i:s'));
       $sql = $this->Model_admitting->admit_patient_to_or($bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been admitted to the Operating.">
                                 <input type="hidden" id="type" value="success">' );
     }else if(preg_match("/^[ICU]{3}/", $room)){
-      $data_patient_status = array("patient_status"=>3);
+      $data_patient_status = array("patient_status"=>3, "date_admitted"=>date('Y-m-d H:i:s'));
       $sql = $this->Model_admitting->admit_patient_to_icu($bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been admitted to the ICU.">
                                 <input type="hidden" id="type" value="success">' );
     }else{
-      $data_patient_status = array("patient_status"=>2);
+      $data_patient_status = array("patient_status"=>2, "date_admitted"=>date('Y-m-d H:i:s'));
       $this->Model_admitting->admit_patient_to_direct_room($bed, $patient, $data_beds, $data_admission, $data_patient_status);
 
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">

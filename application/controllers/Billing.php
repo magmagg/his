@@ -19,12 +19,11 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       }else{
         $id = $this->uri->segment(3);
         $data['patient_detail'] = $this->Model_billing->get_patient_detail($id);
-        $data['admitting_detail'] = $this->Model_billing->get_patient_admitting_info($id);
+        $data['directroom_bill'] = $this->Model_billing->get_directroom_billing($id);
         $data['radiology_bill'] = $this->Model_billing->get_radiology_bill($id);
         $data['laboratory_bill'] = $this->Model_billing->get_laboratory_bill($id);
         $this->load->view('billing/patientbilling.php', $data);
       }
     }
-
   }
 ?>
