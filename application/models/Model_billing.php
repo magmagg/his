@@ -41,5 +41,37 @@ class Model_billing extends CI_Model{
     $query = $this->db->get();
     return $query->row();
   }
+    
+  function get_emergencyroom_billing($id){
+    $this->db->select('*');
+    $this->db->from('bill_er');
+    $this->db->where(array('patient_id'=>$id, 'bill_status'=>0));
+    $query = $this->db->get();
+    return $query->row();
+  }
+    
+  function get_icu_billing($id){
+    $this->db->select('*');
+    $this->db->from('bill_icu');
+    $this->db->where(array('patient_id'=>$id, 'bill_status'=>0));
+    $query = $this->db->get();
+    return $query->row();
+  }
+    
+  function get_or_billing($id){
+    $this->db->select('*');
+    $this->db->from('bill_or');
+    $this->db->where(array('patient_id'=>$id, 'bill_status'=>0));
+    $query = $this->db->get();
+    return $query->row();
+  }
+    
+  function get_csr_billing($id){
+    $this->db->select('*');
+    $this->db->from('csr_billing');
+    $this->db->where(array('patient_id'=>$id, 'csr_bill_status'=>0));
+    $query = $this->db->get();
+    return $query->result_array();
+  }
 }
 ?>

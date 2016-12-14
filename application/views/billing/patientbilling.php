@@ -6,21 +6,21 @@
           <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="form-group">
               <label>Name</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$patient_detail->first_name." ".$patient_detail->middle_name." ".$patient_detail->last_name?>" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$patient_detail->first_name." ".$patient_detail->middle_name." ".$patient_detail->last_name?>" readonly>
             </div>
           </div>
 
           <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="form-group">
               <label>Age</label>
-              <input type="text" class="form-control" id="exampleInputPassword1" value="<?=$patient_detail->age?>" disabled>
+              <input type="text" class="form-control" id="exampleInputPassword1" value="<?=$patient_detail->age?>" readonly>
             </div>
           </div>
 
           <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="form-group">
               <label>Sex</label>
-              <input type="text" class="form-control" id="exampleInputPassword1" value="<?=$patient_detail->gender?>" disabled>
+              <input type="text" class="form-control" id="exampleInputPassword1" value="<?=$patient_detail->gender?>" readonly>
             </div>
           </div>
 
@@ -30,7 +30,7 @@
           <div class="col-lg-9">
             <div class="form-group">
               <label>Address</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$patient_detail->present_address?>" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$patient_detail->present_address?>" readonly>
             </div>
           </div>
         </div>
@@ -39,28 +39,28 @@
           <div class="col-lg-3">
             <div class="form-group">
               <label>Doctor</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
             </div>
           </div>
 
           <div class="col-lg-3">
             <div class="form-group">
               <label>PHIC</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
             </div>
           </div>
 
           <div class="col-lg-3">
             <div class="form-group">
               <label>Room</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
             </div>
           </div>
 
           <div class="col-lg-3">
             <div class="form-group">
               <label>Day</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
             </div>
           </div>
         </div>
@@ -69,28 +69,28 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>Type</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
             </div>
           </div>
 
           <div class="col-lg-4">
             <div class="form-group">
               <label>HMD/Comp</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
             </div>
           </div>
 
           <div class="col-lg-2">
             <div class="form-group">
               <label>Date Admitted</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('M d, Y', strtotime($patient_detail->date_admitted))?>" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('M d, Y', strtotime($patient_detail->date_admitted))?>" readonly>
             </div>
           </div>
 
           <div class="col-lg-2">
             <div class="form-group">
               <label>Time</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('h:i:s A', strtotime($patient_detail->date_admitted))?>" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('h:i:s A', strtotime($patient_detail->date_admitted))?>" readonly>
             </div>
           </div>
         </div>
@@ -99,22 +99,20 @@
           <div class="col-lg-4">
             <div class="form-group">
               <label>Final Diagnosis</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
             </div>
           </div>
 
           <div class="col-lg-2 col-lg-offset-4">
             <div class="form-group">
               <label>Date Discharge</label>
-
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('M d, Y')?>" readonly>
             </div>
           </div>
 
           <div class="col-lg-2">
             <div class="form-group">
               <label>Time</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" disabled>
+              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('h:i:s A')?>" readonly>
             </div>
           </div>
         </div>
@@ -240,9 +238,15 @@
           <div class="col-lg-1">
             <label>
               <?php
-              if(!empty($laboratory_bill)){
-                echo $laboratory_bill->price;
-              }
+              $total_price = 0;
+                if(!empty($laboratory_bill)){
+                  foreach($laboratory_bill as $bill){
+                    $total_price += $bill['price'];
+                  }
+                }
+                if($total_price != 0){
+                    echo $total_price;
+                }
               ?>
             </label>
           </div>
@@ -269,7 +273,13 @@
             <label>EMERGENCY ROOM</label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+            <?php
+                if(!empty($emergencyroom_bill)){
+                  echo $emergencyroom_bill->price;
+                }
+            ?>
+            </label>
           </div>
           <div class="col-lg-1">
             <label></label>
@@ -302,7 +312,9 @@
                     $total_price += $bill['price'];
                   }
                 }
-                echo $total_price;
+                if($total_price != 0){
+                    echo $total_price;
+                }
               ?>
             </label>
           </div>
@@ -329,7 +341,13 @@
             <label>OPERATING ROOM</label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+            <?php
+                if(!empty($operation_bill)){
+                  echo $operation_bill->price;
+                }
+            ?>
+            </label>
           </div>
           <div class="col-lg-1">
             <label></label>
@@ -354,7 +372,19 @@
             <label>CENTRAL SUPPLY ROOM</label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+                <?php
+                    $total_price = 0;
+                    if(!empty($csr_bill)){
+                      foreach($csr_bill as $bill){
+                        $total_price += $bill['price'];
+                      }
+                    }
+                    if($total_price != 0){
+                        echo $total_price;
+                    }
+                ?>
+            </label>
           </div>
           <div class="col-lg-1">
             <label></label>
@@ -379,7 +409,13 @@
             <label>ICU</label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+                <?php
+                    if(!empty($icu_bill)){
+                        echo $icu_bill->price;
+                    }
+                ?>
+            </label>
           </div>
           <div class="col-lg-1">
             <label></label>
