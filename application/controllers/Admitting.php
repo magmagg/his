@@ -131,6 +131,54 @@ class Admitting extends CI_Controller{
     $this->load->view('admitting/footer');
   }
 
+  function TransferPatient(){
+    $header['title'] = "HIS: Transfer Patients";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $this->load->view('users/includes/header.php',$header);
+    if(!$this->uri->segment(3)){
+      $data['patients'] = $this->Model_admitting->get_admitted_patients();
+      $this->load->view('admitting/choosepatient_transfer.php', $data);
+    }else{
+      $data['direct_room'] = $this->Model_admitting->get_direct_rooms();
+      $data['operating_room'] = $this->Model_admitting->get_operating_rooms();
+      $data['emergency_room'] = $this->Model_admitting->get_emergency_rooms();
+      $data['icu_room'] = $this->Model_admitting->get_icu_rooms();
+      $this->load->view('admitting/chooseroom_transfer', $data);
+    }
+    $this->load->view('admitting/footer');
+  }
+
+  function DirectRoomTransfer(){
+    $header['title'] = "HIS: Direct Room Patient Transfer";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['patient_detail'] = $this->Model_admitting->get_patient_detail($this->uri->segment(3));
+    $data['direct_room'] = $this->Model_admitting->get_direct_rooms();
+    $this->load->view('users/includes/header.php',$header);
+  }
+
+  function EmergencyRoomTransfer(){
+    $header['title'] = "HIS: Direct Room Patient Transfer";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $this->load->view('users/includes/header.php',$header);
+  }
+
+  function OperatingRoomTransfer(){
+    $header['title'] = "HIS: Direct Room Patient Transfer";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $this->load->view('users/includes/header.php',$header);
+  }
+
+  function ICUTransfer(){
+    $header['title'] = "HIS: Direct Room Patient Transfer";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $this->load->view('users/includes/header.php',$header);
+  }
+
   function admitpatient(){
     $room = $this->uri->segment(3);
     $bed = $this->uri->segment(4);

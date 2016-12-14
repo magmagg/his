@@ -10,6 +10,22 @@
       return $query->result_array();
     }
 
+    function get_admitted_patients(){
+      $this->db->select('*');
+      $this->db->from('patient');
+      $this->db->where('patient_status !=', 0);
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
+    function get_patient_detail($id){
+      $this->db->select('*');
+      $this->db->from('patient');
+      $this->db->where('patient_id', $id);
+      $query = $this->db->get();
+      return $query->row();
+    }
+
     public function get_room_list()
     {
       $this->db->select('*');
@@ -71,7 +87,7 @@
 
       $this->db->where('patient_id', $patient);
       $this->db->update('patient', $data_patient_status);
-        
+
       $this->db->select('*');
       $this->db->from('beds_emergency be');
       $this->db->join('room_emergency re', 'be.bed_roomid = re.er_id', 'left');
@@ -126,13 +142,13 @@
 
         $this->db->where('patient_id', $patient);
         $this->db->update('patient', $data_patient_status);
-        
+
         $this->db->select('*');
         $this->db->from('beds_intensive bi');
         $this->db->join('room_intensive ri', 'bi.bed_roomid = ri.icu_id', 'left');
         $this->db->where('bi.bed_id', $bed);
         $query = $this->db->get()->row();
-          
+
         $data_icu_billing = array(
                             "description"=>"ICU Bill",
                             "bill_name"=>"ICU Bill",
@@ -181,7 +197,7 @@
 
         $this->db->where('patient_id', $patient);
         $this->db->update('patient', $data_patient_status);
-          
+
         $this->db->select('*');
         $this->db->from('beds_operation bo');
         $this->db->join('room_operation ro', 'bo.bed_roomid = ro.or_id', 'left');
