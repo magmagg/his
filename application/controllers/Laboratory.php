@@ -93,11 +93,12 @@
       $data = array('lab_status'=>2);
       $laboratory_details = $this->Model_Laboratory->approvelabreq($id,$data);
         $bill_data = array(
-            "bill_name"=>$laboratory_details->exam_name,
-            "price"=>$laboratory_details->exam_price,
+            "bill_name"=>$laboratory_details->lab_exam_type_name,
+            "price"=>$laboratory_details->lab_exam_type_price,
             "patient_id"=>$laboratory_details->lab_patient
         );
-        $this->Model_Laboratory->insert_bill($bill_data);
+        
+      $this->Model_Laboratory->insert_bill($bill_data);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                     <input type="hidden" id="msg" value="Approved laboratory exam request">
                                     <input type="hidden" id="type" value="success">' );
