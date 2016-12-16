@@ -79,7 +79,7 @@
       return $query->result_array();
     }
 
-    function admit_patient_to_er($bed, $patient, $data_beds, $data_admission, $data_patient_status){
+    function admit_patient_to_er($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
       $this->db->where('bed_id' ,$bed);
       $this->db->update('beds_emergency', $data_beds);
 
@@ -97,6 +97,8 @@
       $data_er_billing = array(
                             "description"=>"ER Bill",
                             "bill_name"=>"ER Bill",
+                            "bill_room_id"=>$room,
+                            "bed_id"=>$bed,
                             "er_rate"=>$query->price,
                             "price"=>$query->price,
                             "patient_id"=>$patient
@@ -113,6 +115,27 @@
       $this->db->where('aer.status', 0);
       $query = $this->db->get();
       return $query->result_array();
+    }
+      
+    function remove_patient_from_er($patient){
+        $data = array("bed_patient"=>NULL);
+        $this->db->where('bed_patient', $patient);
+        $this->db->update('beds_emergency', $data);
+        
+        $this->db->select('*');
+        $this->db->from('bill_er');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('bill_er_id', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+          
+        $data_bill = array("bill_status"=>1);
+        $this->db->where('bill_er_id',$query->row()->bill_er_id);
+        $this->db->update('bill_er', $data_bill);
+        
+        $data_admission = array("status"=>1);
+        $this->db->where('patient_id', $patient);
+        $this->db->update('admission_emergency_room', $data_admission);
     }
     /*Emergency*/
 
@@ -134,7 +157,7 @@
         return $query->result_array();
       }
 
-      function admit_patient_to_icu($bed, $patient, $data_beds, $data_admission, $data_patient_status){
+      function admit_patient_to_icu($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
         $this->db->where('bed_id' ,$bed);
         $this->db->update('beds_intensive', $data_beds);
 
@@ -152,6 +175,8 @@
         $data_icu_billing = array(
                             "description"=>"ICU Bill",
                             "bill_name"=>"ICU Bill",
+                            "bill_room_id"=>$room,
+                            "bed_id"=>$bed,
                             "icu_rate"=>$query->price,
                             "price"=>$query->price,
                             "patient_id"=>$patient
@@ -168,6 +193,27 @@
         $this->db->where('air.status', 0);
         $query = $this->db->get();
         return $query->result_array();
+      }
+      
+      function remove_patient_from_icu($patient){
+        $data = array("bed_patient"=>NULL);
+        $this->db->where('bed_patient', $patient);
+        $this->db->update('beds_intensive', $data);
+        
+        $this->db->select('*');
+        $this->db->from('bill_icu');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('bill_icu_id', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+          
+        $data_bill = array("bill_status"=>1);
+        $this->db->where('bill_icu_id',$query->row()->bill_icu_id);
+        $this->db->update('bill_icu', $data_bill);
+        
+        $data_admission = array("status"=>1);
+        $this->db->where('patient_id', $patient);
+        $this->db->update('admission_intensive_room', $data_admission);
       }
       /*ICU*/
 
@@ -189,7 +235,7 @@
         return $query->result_array();
       }
 
-      function admit_patient_to_or($bed, $patient, $data_beds, $data_admission, $data_patient_status){
+      function admit_patient_to_or($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
         $this->db->where('bed_id' ,$bed);
         $this->db->update('beds_operation', $data_beds);
 
@@ -207,6 +253,8 @@
         $data_bed_billing = array(
                                 "description"=>"OR Bill",
                                 "bill_name"=>"OR Bill",
+                                "bill_room_id"=>$room,
+                                "bed_id"=>$bed,
                                 "or_rate"=>$query->price,
                                 "price"=>$query->price,
                                 "patient_id"=>$patient
@@ -223,6 +271,27 @@
         $this->db->where('aor.status', 0);
         $query = $this->db->get();
         return $query->result_array();
+      }
+      
+      function remove_patient_from_or($patient){
+        $data = array("bed_patient"=>NULL);
+        $this->db->where('bed_patient', $patient);
+        $this->db->update('beds_operation', $data);
+        
+        $this->db->select('*');
+        $this->db->from('bill_or');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('bill_or_id', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+          
+        $data_bill = array("bill_status"=>1);
+        $this->db->where('bill_or_id',$query->row()->bill_or_id);
+        $this->db->update('bill_or', $data_bill);
+        
+        $data_admission = array("status"=>1);
+        $this->db->where('patient_id', $patient);
+        $this->db->update('admission_operation_room', $data_admission);
       }
       /*OR*/
 
@@ -245,7 +314,7 @@
         return $query->result_array();
       }
 
-      function admit_patient_to_direct_room($bed, $patient, $data_beds, $data_admission, $data_patient_status){
+      function admit_patient_to_direct_room($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
         $this->db->where('bed_id' ,$bed);
         $this->db->update('beds', $data_beds);
 
@@ -264,6 +333,8 @@
         $data_bed_billing = array(
                                 "description"=>$query->room_name." Bill",
                                 "bill_name"=>$query->room_name." Bill",
+                                "bill_room_id"=>$room,
+                                "bed_id"=>$bed,
                                 "bed_rate"=>$query->room_price,
                                 "price"=>$query->room_price,
                                 "patient_id"=>$patient
@@ -281,6 +352,27 @@
         $this->db->where('as.status', 0);
         $query = $this->db->get();
         return $query->result_array();
+      }
+      
+      function remove_patient_from_dr($patient){
+        $data = array("bed_patient"=>NULL);
+        $this->db->where('bed_patient', $patient);
+        $this->db->update('beds', $data);
+        
+        $this->db->select('*');
+        $this->db->from('bed_billing');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('bed_bill_id', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+          
+        $data_bill = array("bed_bill_status"=>1);
+        $this->db->where('bed_bill_id',$query->row()->bed_bill_id);
+        $this->db->update('bed_billing', $data_bill);
+        
+        $data_admission = array("status"=>1);
+        $this->db->where('patient_id', $patient);
+        $this->db->update('admission_schedule', $data_admission);
       }
       /*Direct Room*/
     }
