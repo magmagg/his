@@ -154,8 +154,15 @@ class Admitting extends CI_Controller{
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['patient_detail'] = $this->Model_admitting->get_patient_detail($this->uri->segment(3));
-    $data['direct_room'] = $this->Model_admitting->get_direct_rooms();
-    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('users/includes/header.php',$header);    
+      if(!$this->uri->segment(4)){
+        $data['direct_room'] = $this->Model_admitting->get_direct_rooms();
+        $this->load->view('admitting/choosedr_type.php',$data);
+      }else{
+        $data['direct_room_beds'] = $this->Model_admitting->get_direct_room_beds($this->uri->segment(4));
+        $this->load->view('admitting/choosebed_transfer.php', $data);
+      }
+    $this->load->view('admitting/footer');
   }
 
   function EmergencyRoomTransfer(){
@@ -163,6 +170,7 @@ class Admitting extends CI_Controller{
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $this->load->view('users/includes/header.php',$header);
+   $this->load->view('admitting/footer');
   }
 
   function OperatingRoomTransfer(){
@@ -170,6 +178,7 @@ class Admitting extends CI_Controller{
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $this->load->view('users/includes/header.php',$header);
+    $this->load->view('admitting/footer');
   }
 
   function ICUTransfer(){
@@ -177,6 +186,7 @@ class Admitting extends CI_Controller{
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $this->load->view('users/includes/header.php',$header);
+    $this->load->view('admitting/footer');
   }
 
   function admitpatient(){
@@ -195,30 +205,84 @@ class Admitting extends CI_Controller{
 
     if(preg_match("/^[ER]{2}/", $room)){
       $data_patient_status = array("patient_status"=>1, "date_admitted"=>date('Y-m-d H:i:s'));
-      $this->Model_admitting->admit_patient_to_er($bed, $patient, $data_beds, $data_admission, $data_patient_status);
+      $this->Model_admitting->admit_patient_to_er($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                               <input type="hidden" id="msg" value="Patient has been admitted to the Emergency.">
                               <input type="hidden" id="type" value="success">' );
     }else if(preg_match("/^[OR]{2}/", $room)){
       $data_patient_status = array("patient_status"=>4, "date_admitted"=>date('Y-m-d H:i:s'));
-      $this->Model_admitting->admit_patient_to_or($bed, $patient, $data_beds, $data_admission, $data_patient_status);
+      $this->Model_admitting->admit_patient_to_or($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been admitted to the Operating.">
                                 <input type="hidden" id="type" value="success">' );
     }else if(preg_match("/^[ICU]{3}/", $room)){
       $data_patient_status = array("patient_status"=>3, "date_admitted"=>date('Y-m-d H:i:s'));
-      $this->Model_admitting->admit_patient_to_icu($bed, $patient, $data_beds, $data_admission, $data_patient_status);
+      $this->Model_admitting->admit_patient_to_icu($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been admitted to the ICU.">
                                 <input type="hidden" id="type" value="success">' );
     }else{
       $data_patient_status = array("patient_status"=>2, "date_admitted"=>date('Y-m-d H:i:s'));
-      $this->Model_admitting->admit_patient_to_direct_room($bed, $patient, $data_beds, $data_admission, $data_patient_status);
+      $this->Model_admitting->admit_patient_to_direct_room($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been admitted to room.">
                                 <input type="hidden" id="type" value="success">' );
     }
     redirect(base_url().'Dashboard', 'refresh');
+  }
+    
+  function transfer_patient(){
+      $patient = $this->uri->segment(3);
+      $room = $this->uri->segment(4);
+      $bed = $this->uri->segment(5);
+      $patient_detail = $this->Model_admitting->get_patient_detail($patient);
+      /*Removing previous admission*/
+      if($patient_detail->patient_status == 1){
+          $this->Model_admitting->remove_patient_from_er($patient, $room, $bed);
+      }else if($patient_detail->patient_status == 2){
+          $this->Model_admitting->remove_patient_from_dr($patient);
+      }else if($patient_detail->patient_status == 3){
+          $this->Model_admitting->remove_patient_from_or($patient);
+      }else if($patient_detail->patient_status == 4){
+          $this->Model_admitting->remove_patient_from_icu($patient);
+      }
+      
+      /*Admitting to new room and bed*/
+      $data_beds = array(
+        "bed_patient"=>$patient
+      );
+
+      $data_admission = array(
+          "admission_date"=>date('Y-m-d H:i:s'),
+          "patient_id"=>$patient,
+          "bed"=>$bed
+       );
+      if(preg_match("/^[ER]{2}/", $room)){
+      $data_patient_status = array("patient_status"=>1, "date_admitted"=>date('Y-m-d H:i:s'));
+      $this->Model_admitting->admit_patient_to_er($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                              <input type="hidden" id="msg" value="Patient has been admitted to the Emergency.">
+                              <input type="hidden" id="type" value="success">' );
+      }else if(preg_match("/^[OR]{2}/", $room)){
+        $data_patient_status = array("patient_status"=>4, "date_admitted"=>date('Y-m-d H:i:s'));
+        $this->Model_admitting->admit_patient_to_or($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Patient has been admitted to the Operating.">
+                                    <input type="hidden" id="type" value="success">' );
+      }else if(preg_match("/^[ICU]{3}/", $room)){
+          $data_patient_status = array("patient_status"=>3, "date_admitted"=>date('Y-m-d H:i:s'));
+          $this->Model_admitting->admit_patient_to_icu($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Patient has been admitted to the ICU.">
+                                    <input type="hidden" id="type" value="success">' );
+      }else{
+          $data_patient_status = array("patient_status"=>2, "date_admitted"=>date('Y-m-d H:i:s'));
+          $this->Model_admitting->admit_patient_to_direct_room($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                    <input type="hidden" id="msg" value="Patient has been admitted to room.">
+                                    <input type="hidden" id="type" value="success">' );
+      }
+      redirect(base_url().'Dashboard', 'refresh');
   }
 }
 ?>

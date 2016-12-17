@@ -152,38 +152,20 @@
 
         <div class="row">
           <div class="col-lg-2">
-            <label>ADMITTING</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
             <label>Room</label>
           </div>
           <div class="col-lg-1">
             <label>
             <?php
+                $total_price = 0;
                 if(!empty($directroom_bill)){
-                  echo $directroom_bill->price;
+                  foreach($directroom_bill as $bill){
+                    $total_price += $bill['price'];
+                  }
+                }
+                
+                if($total_price != 0){
+                  echo $total_price;
                 }
             ?>
             </label>
@@ -275,8 +257,15 @@
           <div class="col-lg-1">
             <label>
             <?php
+                $total_price = 0;
                 if(!empty($emergencyroom_bill)){
-                  echo $emergencyroom_bill->price;
+                  foreach($emergencyroom_bill as $bill){
+                    $total_price += $bill['price'];
+                  }
+                }
+                
+                if($total_price != 0){
+                  echo $total_price;
                 }
             ?>
             </label>
@@ -343,8 +332,14 @@
           <div class="col-lg-1">
             <label>
             <?php
+                $total_price = 0;
                 if(!empty($operation_bill)){
-                  echo $operation_bill->price;
+                  foreach($operation_bill as $bill){
+                    $total_price += $bill['price'];
+                  }
+                }
+                if($total_price != 0){
+                    echo $total_price;
                 }
             ?>
             </label>
@@ -411,8 +406,14 @@
           <div class="col-lg-1">
             <label>
                 <?php
+                    $total_price = 0;
                     if(!empty($icu_bill)){
-                        echo $icu_bill->price;
+                      foreach($icu_bill as $bill){
+                        $total_price += $bill['price'];
+                      }
+                    }
+                    if($total_price != 0){
+                        echo $total_price;
                     }
                 ?>
             </label>
