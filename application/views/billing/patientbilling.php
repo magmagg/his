@@ -122,6 +122,10 @@
     <!--==========================================================================================================================================================-->
     <!--Horizontal = AMOUNT, RETURNS, TOTAL, SC/PWD DISC, PHIC, C/O HMO, OTHER DISC, NET TOTAL
     Vertical = ADMITTING, PHARMACY, R/B ACCOMODATION, LABORATORY, ER, PULMONARY, RADIOLOGY, OPERATING ROOM, CSR, NURSE STATION, ICU, NICU, PT REHAB, DIALYSIS, BILLING, HEART STATION, OTHERS-->
+        <?php
+          $overall_amount = 0;
+        ?>
+
         <div class="row">
           <div class="col-lg-12 text-center">
             <label>HOSPITAL BILL</label>
@@ -162,8 +166,9 @@
                   foreach($directroom_bill as $bill){
                     $total_price += $bill['price'];
                   }
+                  $overall_amount += $total_price;
                 }
-                
+
                 if($total_price != 0){
                   echo $total_price;
                 }
@@ -174,7 +179,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+            <?php
+              if($total_price != 0){
+                echo $total_price;
+              }
+            ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -184,7 +195,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+                if($total_price != 0){
+                  echo $total_price;
+                }
+              ?>
+            </label>
           </div>
         </div>
 
@@ -225,6 +242,7 @@
                   foreach($laboratory_bill as $bill){
                     $total_price += $bill['price'];
                   }
+                  $overall_amount += $total_price;
                 }
                 if($total_price != 0){
                     echo $total_price;
@@ -236,7 +254,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+            <?php
+            if($total_price != 0){
+                echo $total_price;
+            }
+            ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -246,7 +270,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div>
         </div>
 
@@ -262,8 +292,9 @@
                   foreach($emergencyroom_bill as $bill){
                     $total_price += $bill['price'];
                   }
+                  $overall_amount += $total_price;
                 }
-                
+
                 if($total_price != 0){
                   echo $total_price;
                 }
@@ -274,7 +305,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -284,7 +321,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div>
         </div>
 
@@ -300,6 +343,7 @@
                   foreach($radiology_bill as $bill){
                     $total_price += $bill['price'];
                   }
+                  $overall_amount += $total_price;
                 }
                 if($total_price != 0){
                     echo $total_price;
@@ -311,7 +355,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -321,7 +371,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div>
         </div>
 
@@ -337,6 +393,7 @@
                   foreach($operation_bill as $bill){
                     $total_price += $bill['price'];
                   }
+                  $overall_amount += $total_price;
                 }
                 if($total_price != 0){
                     echo $total_price;
@@ -348,7 +405,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -358,7 +421,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div>
         </div>
 
@@ -374,6 +443,7 @@
                       foreach($csr_bill as $bill){
                         $total_price += $bill['price'];
                       }
+                      $overall_amount += $total_price;
                     }
                     if($total_price != 0){
                         echo $total_price;
@@ -385,7 +455,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -395,7 +471,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div>
         </div>
 
@@ -411,6 +493,7 @@
                       foreach($icu_bill as $bill){
                         $total_price += $bill['price'];
                       }
+                      $overall_amount += $total_price;
                     }
                     if($total_price != 0){
                         echo $total_price;
@@ -422,7 +505,13 @@
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -432,22 +521,40 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($total_price != 0){
+                  echo $total_price;
+              }
+              ?>
+            </label>
           </div>
         </div>
-
+        <br>
         <div class="row">
           <div class="col-lg-2">
-            <label>OTHERS</label>
+            <label>OVERALL TOTAL</label>
+          </div>
+          <div class="col-lg-1">
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  echo $overall_amount;
+              }
+              ?>
+            </label>
           </div>
           <div class="col-lg-1">
             <label></label>
           </div>
           <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  echo $overall_amount;
+              }
+              ?>
+            </label>
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
@@ -457,7 +564,13 @@
           </div><div class="col-lg-1">
             <label></label>
           </div><div class="col-lg-1">
-            <label></label>
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  echo $overall_amount;
+              }
+              ?>
+            </label>
           </div>
         </div>
 
