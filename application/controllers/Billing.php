@@ -19,14 +19,16 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       }else{
         $id = $this->uri->segment(3);
         $data['patient_detail'] = $this->Model_billing->get_patient_detail($id);
-        $data['directroom_bill'] = $this->Model_billing->get_directroom_billing($id);        
-        $data['emergencyroom_bill'] = $this->Model_billing->get_emergencyroom_billing($id);        
-        $data['icu_bill'] = $this->Model_billing->get_icu_billing($id);        
+        $data['directroom_bill'] = $this->Model_billing->get_directroom_billing($id);
+        $data['emergencyroom_bill'] = $this->Model_billing->get_emergencyroom_billing($id);
+        $data['icu_bill'] = $this->Model_billing->get_icu_billing($id);
         $data['operatingroom_bill'] = $this->Model_billing->get_or_billing($id);
         $data['radiology_bill'] = $this->Model_billing->get_radiology_bill($id);
-        $data['laboratory_bill'] = $this->Model_billing->get_laboratory_bill($id);        
+        $data['laboratory_bill'] = $this->Model_billing->get_laboratory_bill($id);
         $data['csr_bill'] = $this->Model_billing->get_csr_billing($id);
+        $this->load->view('billing/input_pf_modal.php');
         $this->load->view('billing/patientbilling.php', $data);
+
       }
     }
   }

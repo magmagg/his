@@ -533,7 +533,7 @@
         <br>
         <div class="row">
           <div class="col-lg-2">
-            <label>OVERALL TOTAL</label>
+            <label>TOTAL</label>
           </div>
           <div class="col-lg-1">
             <label>
@@ -577,14 +577,79 @@
         <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
 
         <div class="row">
-          <div class="col-lg-12 text-center">
+          <div class="col-lg-2">
             <label>PROFESSIONAL FEE</label>
+          </div>
+          <div class="col-lg-8">
+            <label id="prof_fee"></label>
+            <input type="hidden" id="prof_fee_input" name="prof_fee">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-2">
+            <a role="button" class="btn btn-info btn-xs" onclick="input_pf_modal()">Input Fee</a>
+          </div>
+        </div>
+
+        <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
+
+        <div class="row">
+          <div class="col-lg-2">
+            <label>TOTAL</label>
+          </div>
+          <div class="col-lg-1">
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  echo $overall_amount;
+              }
+              ?>
+            </label>
+          </div>
+          <div class="col-lg-1">
+            <label></label>
+          </div>
+          <div class="col-lg-1">
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  echo $overall_amount;
+              }
+              ?>
+            </label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  echo $overall_amount;
+              }
+              ?>
+            </label>
           </div>
         </div>
       </form>
     </section>
 </section>
+<script>
+  function input_pf_modal(){
+    $("#input_pf").modal();
+  }
 
+  function submit_by_id() {
+    var amount = document.getElementById("inputted_pf").value;
+    document.getElementById("prof_fee_input").value = amount;
+    $("#prof_fee").html(amount);
+    $("#input_pf").modal('hide');
+  }
+</script>
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
