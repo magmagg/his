@@ -20,6 +20,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 <a style="margin-top: -5px;" class="btn btn-success btn-ok" onclick="submit_by_id()">Confirm</a>
             </div>
+            <?=form_close()?>
         </div>
     </div>
 </div>

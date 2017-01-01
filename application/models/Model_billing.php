@@ -41,7 +41,7 @@ class Model_billing extends CI_Model{
     $query = $this->db->get();
     return $query->result_array();
   }
-    
+
   function get_emergencyroom_billing($id){
     $this->db->select('*');
     $this->db->from('bill_er');
@@ -49,7 +49,7 @@ class Model_billing extends CI_Model{
     $query = $this->db->get();
     return $query->result_array();
   }
-    
+
   function get_icu_billing($id){
     $this->db->select('*');
     $this->db->from('bill_icu');
@@ -57,7 +57,7 @@ class Model_billing extends CI_Model{
     $query = $this->db->get();
     return $query->result_array();
   }
-    
+
   function get_or_billing($id){
     $this->db->select('*');
     $this->db->from('bill_or');
@@ -65,13 +65,23 @@ class Model_billing extends CI_Model{
     $query = $this->db->get();
     return $query->result_array();
   }
-    
+
   function get_csr_billing($id){
     $this->db->select('*');
     $this->db->from('csr_billing');
     $this->db->where(array('patient_id'=>$id, 'csr_bill_status'=>0));
     $query = $this->db->get();
     return $query->result_array();
+  }
+
+  function submit_to_cashier($data){
+    $this->db->insert('billing', $data);
+    $this->db->select('transaction_id');
+    $this->db->from('billing');
+    $this->db->order_by('date_submitted', 'desc');
+    $this->db->limit(1);
+    $query = $this->db->get();
+    return $query->row('transaction_id');
   }
 }
 ?>

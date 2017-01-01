@@ -1,8 +1,6 @@
 <section id="main-content">
     <section class="wrapper">
-      <form>
         <div class="row">
-
           <div class="col-lg-8 col-md-8 col-sm-8">
             <div class="form-group">
               <label>Name</label>
@@ -125,7 +123,11 @@
         <?php
           $overall_amount = 0;
         ?>
-
+        <?php
+          $attributes = array('class'=>'form-horizontal', 'role'=>'form');
+          echo form_open('Billing/submit_to_cashier', $attributes);
+        ?>
+        <input type="hidden" name="patient_id" value="<?=$patient_detail->patient_id?>"
         <div class="row">
           <div class="col-lg-12 text-center">
             <label>HOSPITAL BILL</label>
@@ -162,9 +164,13 @@
             <label>
             <?php
                 $total_price = 0;
+                $room_data_1 = array();
+                $room_data_2 = "";
                 if(!empty($directroom_bill)){
                   foreach($directroom_bill as $bill){
                     $total_price += $bill['price'];
+                    array_push($room_data_1, $bill['bed_bill_id']);
+                    $room_data_2 = implode(',', $room_data_1);
                   }
                   $overall_amount += $total_price;
                 }
@@ -173,6 +179,7 @@
                   echo $total_price;
                 }
             ?>
+            <input type="hidden" name="room_data" value="<?=$room_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -238,9 +245,13 @@
             <label>
               <?php
               $total_price = 0;
+              $lab_data_1 = array();
+              $lab_data_2 = "";
                 if(!empty($laboratory_bill)){
                   foreach($laboratory_bill as $bill){
                     $total_price += $bill['price'];
+                    array_push($lab_data_1, $bill['lab_bill_id']);
+                    $lab_data_2 = implode(',', $lab_data_1);
                   }
                   $overall_amount += $total_price;
                 }
@@ -248,6 +259,7 @@
                     echo $total_price;
                 }
               ?>
+              <input type="hidden" name="lab_data" value="<?=$lab_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -288,9 +300,13 @@
             <label>
             <?php
                 $total_price = 0;
+                $er_data_1 = array();
+                $er_data_2 = "";
                 if(!empty($emergencyroom_bill)){
                   foreach($emergencyroom_bill as $bill){
                     $total_price += $bill['price'];
+                    array_push($er_data_1, $bill['bill_er_id']);
+                    $er_data_2 = implode(',', $er_data_1);
                   }
                   $overall_amount += $total_price;
                 }
@@ -299,6 +315,7 @@
                   echo $total_price;
                 }
             ?>
+            <input type="hidden" name="er_data" value="<?=$er_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -339,9 +356,13 @@
             <label>
               <?php
                 $total_price = 0;
+                $rad_data_1 = array();
+                $rad_data_2 = "";
                 if(!empty($radiology_bill)){
                   foreach($radiology_bill as $bill){
                     $total_price += $bill['price'];
+                    array_push($rad_data_1, $bill['rad_bill_id']);
+                    $rad_data_2 = implode(',', $rad_data_1);
                   }
                   $overall_amount += $total_price;
                 }
@@ -349,6 +370,7 @@
                     echo $total_price;
                 }
               ?>
+              <input type="hidden" name="rad_data" value="<?=$rad_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -389,9 +411,13 @@
             <label>
             <?php
                 $total_price = 0;
+                $or_data_1 = array();
+                $or_data_2 = "";
                 if(!empty($operation_bill)){
                   foreach($operation_bill as $bill){
                     $total_price += $bill['price'];
+                    array_push($or_data_1, $bill['bill_or_id']);
+                    $or_data_2 = implode(',', $or_data_1);
                   }
                   $overall_amount += $total_price;
                 }
@@ -399,6 +425,7 @@
                     echo $total_price;
                 }
             ?>
+            <input type="hidden" name="or_data" value="<?=$or_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -439,9 +466,13 @@
             <label>
                 <?php
                     $total_price = 0;
+                    $csr_data_1 = array();
+                    $csr_data_2 = "";
                     if(!empty($csr_bill)){
                       foreach($csr_bill as $bill){
                         $total_price += $bill['price'];
+                        array_push($csr_data_1, $bill['csr_bill_id']);
+                        $csr_data_2 = implode(',', $csr_data_1);
                       }
                       $overall_amount += $total_price;
                     }
@@ -449,6 +480,7 @@
                         echo $total_price;
                     }
                 ?>
+            <input type="hidden" name="csr_data" value="<?=$csr_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -489,9 +521,13 @@
             <label>
                 <?php
                     $total_price = 0;
+                    $icu_data_1 = array();
+                    $icu_data_2 = "";
                     if(!empty($icu_bill)){
                       foreach($icu_bill as $bill){
                         $total_price += $bill['price'];
+                        array_push($icu_data_1, $bill['bill_icu_id']);
+                        $icu_data_2 = implode(',', $icu_data_1);
                       }
                       $overall_amount += $total_price;
                     }
@@ -499,6 +535,7 @@
                         echo $total_price;
                     }
                 ?>
+            <input type="hidden" name="icu_data" value="<?=$icu_data_2?>">
             </label>
           </div>
           <div class="col-lg-1">
@@ -595,47 +632,49 @@
 
         <div class="row">
           <div class="col-lg-2">
-            <label>TOTAL</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  echo $overall_amount;
-              }
-              ?>
-            </label>
+            <label>OVERALL TOTAL</label>
           </div>
           <div class="col-lg-1">
             <label></label>
           </div>
           <div class="col-lg-1">
+            <label></label>
+          </div>
+          <div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-1">
+            <label></label>
+          </div><div class="col-lg-2">
             <label>
               <?php
               if($overall_amount != 0){
-                  echo $overall_amount;
+                  //echo $overall_amount;
               }
               ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  echo $overall_amount;
-              }
-              ?>
+              <input type="text" id="overall_amount" name="overall_amount" class="form-control" readonly>
             </label>
           </div>
         </div>
-      </form>
+        <br>
+        <div class="row">
+          <div class="col-lg-12">
+            <label>
+              <?php
+              if($overall_amount != 0){
+                  //echo $overall_amount;
+              }
+              ?>
+              <button class="btn btn-success btn-xs">Submit to cashier</button>
+            </label>
+          </div>
+        </div>
+      <?=form_close()?>
     </section>
 </section>
 <script>
@@ -644,14 +683,22 @@
   }
 
   function submit_by_id() {
-    var amount = document.getElementById("inputted_pf").value;
-    document.getElementById("prof_fee_input").value = amount;
-    $("#prof_fee").html(amount);
+    var pf_amount = document.getElementById("inputted_pf").value;
+    var overall_amount = <?=$overall_amount?>;
+    document.getElementById("prof_fee_input").value = pf_amount;
+    $("#prof_fee").html(pf_amount);
+    document.getElementById("overall_amount").value = +overall_amount + +pf_amount;
     $("#input_pf").modal('hide');
   }
 </script>
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="<?=base_url()?>js/jquery.js"></script>
+<script>
+  $(document).ready(function(){
+    document.getElementById("overall_amount").value = <?=$overall_amount?>;
+    //alert(document.getElementById("overall_amount").value);
+  });
+</script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 <script class="include" type="text/javascript" src="<?=base_url()?>js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?=base_url()?>js/jquery.scrollTo.min.js"></script>

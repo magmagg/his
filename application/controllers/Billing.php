@@ -28,8 +28,24 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         $data['csr_bill'] = $this->Model_billing->get_csr_billing($id);
         $this->load->view('billing/input_pf_modal.php');
         $this->load->view('billing/patientbilling.php', $data);
-
       }
+    }
+
+    function submit_to_cashier(){
+      $data = array(
+        "patient_id"=>$this->input->post('patient_id'),
+        "room_billing_ids"=>$this->input->post('room_data'),
+        "lab_billing_ids"=>$this->input->post('lab_data'),
+        "er_billing_ids"=>$this->input->post('er_data'),
+        "rad_billing_ids"=>$this->input->post('rad_data'),
+        "or_billing_ids"=>$this->input->post('or_data'),
+        "csr_billing_ids"=>$this->input->post('csr_data'),
+        "icu_billing_ids"=>$this->input->post('icu_data'),
+        "professional_fee"=>$this->input->post('prof_fee'),
+        "total_bill"=>$this->input->post('overall_amount')
+      );
+      $transaction_id = $this->Model_billing->submit_to_cashier($data);
+      echo $transaction_id;
     }
   }
 ?>
