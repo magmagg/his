@@ -37,6 +37,7 @@ class Model_Rooms extends CI_Model{
     $this->db->select('*');
     $this->db->from('rooms a');
     $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+    $this->db->where('b.room_name != "Emergency Room" AND b.room_name != "Operating Room" AND b.room_name != "ICU"');
     $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
     $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
     $this->db->order_by('a.room_id','asc');
@@ -91,103 +92,42 @@ class Model_Rooms extends CI_Model{
   function get_operation_room_list()
   {
     $this->db->select('*');
-    $this->db->from('room_operation ro');
+    $this->db->from('rooms a');
+    $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+    $this->db->where('b.room_name = "Operating Room"');
+    $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+    $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+    $this->db->order_by('a.room_id','asc');
     $query = $this->db->get();
     return $query->result_array();
-  }
-
-  function get_operating_room_data($id){
-    $this->db->select('*');
-    $this->db->from('beds_operation bo');
-    $this->db->join('room_operation ro', 'bo.bed_roomid = ro.or_id', 'left');
-    $this->db->join('maintenance m', 'bo.bed_maintenance = m.maintenance_status_id', 'left');
-    $this->db->join('patient p', 'bo.bed_patient=p.patient_id','left');
-    $this->db->where('bo.bed_roomid', $id);
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function insertoperatingroom($data){
-    $this->db->insert('room_operation', $data);
-
-    $this->db->select('or_id');
-    $this->db->from('room_operation');
-    $this->db->order_by('UPPER(or_id)', 'desc');
-    $this->db->limit(1);
-    $room_id = $this->db->get()->row()->or_id;
-    return $room_id;
-  }
-
-  function insertbedsinoperatingroom($data){
-    $this->db->insert('beds_operation',$data);
   }
   /*Operation Room*/
 
   /*Emergency Room*/
   function get_emergency_room_list(){
     $this->db->select('*');
-    $this->db->from('room_emergency');
+    $this->db->from('rooms a');
+    $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+    $this->db->where('b.room_name = "Emergency Room"');
+    $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+    $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+    $this->db->order_by('a.room_id','asc');
     $query = $this->db->get();
     return $query->result_array();
-  }
-
-  function get_emergency_room_data($id){
-    $this->db->select('*');
-    $this->db->from('beds_emergency be');
-    $this->db->join('room_emergency re', 'be.bed_roomid = re.er_id', 'left');
-    $this->db->join('patient p', 'be.bed_patient=p.patient_id','left');
-    $this->db->where('be.bed_roomid', $id);
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function insertemergencyroom($data){
-    $this->db->insert('room_emergency', $data);
-
-    $this->db->select('er_id');
-    $this->db->from('room_emergency');
-    $this->db->order_by('UPPER(er_id)', 'desc');
-    $this->db->limit(1);
-    $room_id = $this->db->get()->row()->er_id;
-    return $room_id;
-  }
-
-  function insertbedsinemergencyroom($data){
-    $this->db->insert('beds_emergency',$data);
   }
   /*Emergency Room*/
 
   /*ICU*/
   function get_icu_list(){
     $this->db->select('*');
-    $this->db->from('room_intensive');
+    $this->db->from('rooms a');
+    $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+    $this->db->where('b.room_name = "ICU"');
+    $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+    $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+    $this->db->order_by('a.room_id','asc');
     $query = $this->db->get();
     return $query->result_array();
-  }
-
-  function get_icu_data($id){
-    $this->db->select('*');
-    $this->db->from('beds_intensive bi');
-    $this->db->join('room_intensive ri', 'bi.bed_roomid = ri.icu_id', 'left');
-    $this->db->join('patient p', 'bi.bed_patient=p.patient_id','left');
-    $this->db->where('bi.bed_roomid', $id);
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function inserticu($data){
-    $this->db->insert('room_intensive', $data);
-
-    $this->db->select('icu_id');
-    $this->db->from('room_intensive');
-    $this->db->order_by('UPPER(icu_id)', 'desc');
-    $this->db->limit(1);
-    $room_id = $this->db->get()->row()->icu_id;
-    return $room_id;
-  }
-
-  function insertbedsinicu($data){
-    $this->db->insert('beds_intensive',$data);
   }
   /*ICU*/
 }
