@@ -47,5 +47,66 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $transaction_id = $this->Model_billing->submit_to_cashier($data);
       echo $transaction_id;
     }
+
+    function mark_as_paid(){
+        $transaction_id = $this->uri->segment(3);
+        $transaction_data = $this->Model_billing->get_transaction_details($transaction_id);
+
+        $room_bill_ids = explode(",", $transaction_data->room_billing_ids);
+        foreach($room_bill_ids as $room_bill){
+            $this->Model_billing->mark_room_bill_as_paid($room_bill);
+        }
+
+        $pharm_bill_ids = explode(",", $transaction_data->pharm_billing_ids);
+        foreach($pharm_bill_ids as $pharm_bill){
+            //$this->Model_billing->mark_pharm_bill_as_paid($pharm_bill);
+        }
+
+        $lab_bill_ids = explode(",", $transaction_data->lab_billing_ids);
+        foreach($lab_bill_ids as $lab_bill){
+            $this->Model_billing->mark_lab_bill_as_paid($lab_bill);
+        }
+
+        $er_bill_ids = explode(",", $transaction_data->er_billing_ids);
+        foreach($er_bill_ids as $er_bill){
+            $this->Model_billing->mark_er_bill_as_paid($er_bill);
+        }
+
+        $rad_bill_ids = explode(",", $transaction_data->rad_billing_ids);
+        foreach($rad_bill_ids as $rad_bill){
+            $this->Model_billing->mark_rad_bill_as_paid($rad_bill);
+        }
+
+        $or_bill_ids = explode(",", $transaction_data->or_billing_ids);
+        foreach($or_bill_ids as $or_bill){
+            $this->Model_billing->mark_or_bill_as_paid($or_bill);
+        }
+
+        $csr_bill_ids = explode(",", $transaction_data->csr_billing_ids);
+        foreach($csr_bill_ids as $csr_bill){
+            $this->Model_billing->mark_csr_bill_as_paid($csr_bill);
+        }
+
+        $icu_bill_ids = explode(",", $transaction_data->icu_billing_ids);
+        foreach($icu_bill_ids as $icu_bill){
+            $this->Model_billing->mark_icu_bill_as_paid($icu_bill);
+        }
+
+        $this->Model_billing->mark_as_paid($transaction_id);
+        $this->Model_billing->discharge_patient($transaction_data->patient_id, $transaction_data->patient_status);
+    }
+
+    function testing(){
+        if($patient_detail->patient_status == 1){
+          $this->Model_admitting->remove_patient_from_er($patient, $room, $bed);
+      }else if($patient_detail->patient_status == 2){
+          $this->Model_admitting->remove_patient_from_dr($patient);
+      }else if($patient_detail->patient_status == 3){
+          $this->Model_admitting->remove_patient_from_or($patient);
+      }else if($patient_detail->patient_status == 4){
+          $this->Model_admitting->remove_patient_from_icu($patient);
+      }
+    }
+
   }
 ?>

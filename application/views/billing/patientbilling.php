@@ -305,7 +305,7 @@
                 if(!empty($emergencyroom_bill)){
                   foreach($emergencyroom_bill as $bill){
                     $total_price += $bill['price'];
-                    array_push($er_data_1, $bill['bill_er_id']);
+                    array_push($er_data_1, $bill['bed_bill_id']);
                     $er_data_2 = implode(',', $er_data_1);
                   }
                   $overall_amount += $total_price;
@@ -413,10 +413,10 @@
                 $total_price = 0;
                 $or_data_1 = array();
                 $or_data_2 = "";
-                if(!empty($operation_bill)){
-                  foreach($operation_bill as $bill){
+                if(!empty($operatingroom_bill)){
+                  foreach($operatingroom_bill as $bill){
                     $total_price += $bill['price'];
-                    array_push($or_data_1, $bill['bill_or_id']);
+                    array_push($or_data_1, $bill['bed_bill_id']);
                     $or_data_2 = implode(',', $or_data_1);
                   }
                   $overall_amount += $total_price;
@@ -526,7 +526,7 @@
                     if(!empty($icu_bill)){
                       foreach($icu_bill as $bill){
                         $total_price += $bill['price'];
-                        array_push($icu_data_1, $bill['bill_icu_id']);
+                        array_push($icu_data_1, $bill['bed_bill_id']);
                         $icu_data_2 = implode(',', $icu_data_1);
                       }
                       $overall_amount += $total_price;

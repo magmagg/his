@@ -21,7 +21,7 @@
                     echo "<td>".$patient['patient_id']."</td>";
                     echo "<td>".$patient['first_name']." ".$patient['middle_name']." ".$patient['last_name']."</td>";
                     echo "<td>".$patient['date_registered']."</td>";
-                    echo "<td><a href='".base_url()."Admitting/admitpatient/".$this->uri->segment(3)."/".$this->uri->segment(4)."/".$patient['patient_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</a></td>";
+                    echo "<td><a href='".base_url()."Admitting/admitpatient/".$this->uri->segment(3)."/".$this->uri->segment(4)."/".$this->uri->segment(5)."/".$patient['patient_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</a></td>";
                     echo "</tr>";
                   }
                 ?>

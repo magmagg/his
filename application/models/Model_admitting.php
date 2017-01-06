@@ -2,7 +2,54 @@
   if (!defined('BASEPATH'))exit('No direct script access allowed');
   class Model_admitting extends CI_Model{
     /*Admitting*/
-    public function get_non_admitted_patient_list(){
+
+    function admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
+        $this->db->where('bed_id' ,$bed);
+        $this->db->update('beds', $data_beds);
+
+        $this->db->insert('admission_schedule', $data_admission);
+
+        $this->db->where('patient_id', $patient);
+        $this->db->update('patient', $data_patient_status);
+
+        $this->db->select('*');
+        $this->db->from('beds b');
+        $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
+        $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+        $this->db->where('b.bed_id', $bed);
+        $query = $this->db->get()->row();
+
+        $data_bed_billing = array(
+                                "description"=>$query->room_name." Bill",
+                                "bill_name"=>$query->room_name." Bill",
+                                "price"=>$query->room_price,
+                                "patient_id"=>$patient
+                              );
+        $this->db->insert('bed_billing', $data_bed_billing);
+    }
+
+    function remove_patient_from_previous_admit($patient){
+        $data = array("bed_patient"=>NULL);
+        $this->db->where('bed_patient', $patient);
+        $this->db->update('beds', $data);
+
+        $this->db->select('*');
+        $this->db->from('bed_billing');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('bed_bill_id', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get();
+
+        $data_bill = array("bed_bill_status"=>1);
+        $this->db->where('bed_bill_id',$query->row()->bed_bill_id);
+        $this->db->update('bed_billing', $data_bill);
+
+        $data_admission = array("status"=>1);
+        $this->db->where('patient_id', $patient);
+        $this->db->update('admission_schedule', $data_admission);
+    }
+
+    function get_non_admitted_patient_list(){
       $this->db->select('*');
       $this->db->from('patient');
       $this->db->where('patient_status', 0);
@@ -64,75 +111,55 @@
     /*Emergency*/
     function get_emergency_rooms(){
       $this->db->select('*');
-      $this->db->from('room_emergency');
+      $this->db->from('rooms a');
+      $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+      $this->db->where('b.room_name = "Emergency Room"');
+      $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+      $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+      $this->db->order_by('a.room_id','asc');
       $query = $this->db->get();
       return $query->result_array();
     }
 
     function get_emergency_room_beds($id){
       $this->db->select('*');
-      $this->db->from('beds_emergency be');
-      $this->db->join('room_emergency re', 're.er_id=be.bed_roomid', 'left');
-      $this->db->join('patient p', 'p.patient_id=be.bed_patient', 'left');
-      $this->db->where('be.bed_roomid', $id);
+      $this->db->from('beds b');
+      $this->db->join('rooms r', 'r.room_id=b.bed_roomid', 'left');
+      $this->db->join('patient p', 'p.patient_id=b.bed_patient', 'left');
+      $this->db->where('b.bed_roomid', $id);
       $query = $this->db->get();
       return $query->result_array();
-    }
-
-    function admit_patient_to_er($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
-      $this->db->where('bed_id' ,$bed);
-      $this->db->update('beds_emergency', $data_beds);
-
-      $this->db->insert('admission_emergency_room', $data_admission);
-
-      $this->db->where('patient_id', $patient);
-      $this->db->update('patient', $data_patient_status);
-
-      $this->db->select('*');
-      $this->db->from('beds_emergency be');
-      $this->db->join('room_emergency re', 'be.bed_roomid = re.er_id', 'left');
-      $this->db->where('be.bed_id', $bed);
-      $query = $this->db->get()->row();
-
-      $data_er_billing = array(
-                            "description"=>"ER Bill",
-                            "bill_name"=>"ER Bill",
-                            "bill_room_id"=>$room,
-                            "bed_id"=>$bed,
-                            "er_rate"=>$query->price,
-                            "price"=>$query->price,
-                            "patient_id"=>$patient
-                          );
-      $this->db->insert('bill_er', $data_er_billing);
     }
 
     function get_emergency_room_admitted(){
       $this->db->select('*');
-      $this->db->from('admission_emergency_room aer');
-      $this->db->join('patient p', 'p.patient_id = aer.patient_id', 'left');
-      $this->db->join('beds_emergency be', 'be.bed_id = aer.bed', 'left');
-      $this->db->join('room_emergency re', 'be.bed_roomid = re.er_id', 'left');
-      $this->db->where('aer.status', 0);
+      $this->db->from('admission_schedule as');
+      $this->db->join('patient p', 'p.patient_id = as.patient_id', 'left');
+      $this->db->join('beds b', 'b.bed_id = as.bed', 'left');
+      $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
+      $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+      $this->db->where('rt.room_name = "Emergency Room"');
+      $this->db->where('as.status', 0);
       $query = $this->db->get();
       return $query->result_array();
     }
-      
+
     function remove_patient_from_er($patient){
         $data = array("bed_patient"=>NULL);
         $this->db->where('bed_patient', $patient);
         $this->db->update('beds_emergency', $data);
-        
+
         $this->db->select('*');
         $this->db->from('bill_er');
         $this->db->where('patient_id', $patient);
         $this->db->order_by('bill_er_id', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-          
+
         $data_bill = array("bill_status"=>1);
         $this->db->where('bill_er_id',$query->row()->bill_er_id);
         $this->db->update('bill_er', $data_bill);
-        
+
         $data_admission = array("status"=>1);
         $this->db->where('patient_id', $patient);
         $this->db->update('admission_emergency_room', $data_admission);
@@ -141,76 +168,56 @@
 
       /*ICU*/
       function get_icu_rooms(){
-        $this->db->select('*');
-        $this->db->from('room_intensive');
-        $query = $this->db->get();
-        return $query->result_array();
+       $this->db->select('*');
+       $this->db->from('rooms a');
+       $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+       $this->db->where('b.room_name = "ICU"');
+       $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+       $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+       $this->db->order_by('a.room_id','asc');
+       $query = $this->db->get();
+       return $query->result_array();
       }
 
       function get_icu_room_beds($id){
         $this->db->select('*');
-        $this->db->from('beds_intensive bi');
-        $this->db->join('room_intensive ri', 'ri.icu_id=bi.bed_roomid', 'left');
-        $this->db->join('patient p', 'p.patient_id=bi.bed_patient', 'left');
-        $this->db->where('bi.bed_roomid', $id);
+        $this->db->from('beds b');
+        $this->db->join('rooms r', 'r.room_id=b.bed_roomid', 'left');
+        $this->db->join('patient p', 'p.patient_id=b.bed_patient', 'left');
+        $this->db->where('b.bed_roomid', $id);
         $query = $this->db->get();
         return $query->result_array();
-      }
-
-      function admit_patient_to_icu($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
-        $this->db->where('bed_id' ,$bed);
-        $this->db->update('beds_intensive', $data_beds);
-
-        $this->db->insert('admission_intensive_room', $data_admission);
-
-        $this->db->where('patient_id', $patient);
-        $this->db->update('patient', $data_patient_status);
-
-        $this->db->select('*');
-        $this->db->from('beds_intensive bi');
-        $this->db->join('room_intensive ri', 'bi.bed_roomid = ri.icu_id', 'left');
-        $this->db->where('bi.bed_id', $bed);
-        $query = $this->db->get()->row();
-
-        $data_icu_billing = array(
-                            "description"=>"ICU Bill",
-                            "bill_name"=>"ICU Bill",
-                            "bill_room_id"=>$room,
-                            "bed_id"=>$bed,
-                            "icu_rate"=>$query->price,
-                            "price"=>$query->price,
-                            "patient_id"=>$patient
-                          );
-        $this->db->insert('bill_icu', $data_icu_billing);
       }
 
       function get_icu_room_admitted(){
         $this->db->select('*');
-        $this->db->from('admission_intensive_room air');
-        $this->db->join('patient p', 'p.patient_id = air.patient_id', 'left');
-        $this->db->join('beds_intensive bi', 'bi.bed_id = air.bed', 'left');
-        $this->db->join('room_intensive ri', 'bi.bed_roomid = ri.icu_id', 'left');
-        $this->db->where('air.status', 0);
+        $this->db->from('admission_schedule as');
+        $this->db->join('patient p', 'p.patient_id = as.patient_id', 'left');
+        $this->db->join('beds b', 'b.bed_id = as.bed', 'left');
+        $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
+        $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+        $this->db->where('rt.room_name = "ICU"');
+        $this->db->where('as.status', 0);
         $query = $this->db->get();
         return $query->result_array();
       }
-      
+
       function remove_patient_from_icu($patient){
         $data = array("bed_patient"=>NULL);
         $this->db->where('bed_patient', $patient);
         $this->db->update('beds_intensive', $data);
-        
+
         $this->db->select('*');
         $this->db->from('bill_icu');
         $this->db->where('patient_id', $patient);
         $this->db->order_by('bill_icu_id', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-          
+
         $data_bill = array("bill_status"=>1);
         $this->db->where('bill_icu_id',$query->row()->bill_icu_id);
         $this->db->update('bill_icu', $data_bill);
-        
+
         $data_admission = array("status"=>1);
         $this->db->where('patient_id', $patient);
         $this->db->update('admission_intensive_room', $data_admission);
@@ -220,75 +227,55 @@
       /*OR*/
       function get_operating_rooms(){
         $this->db->select('*');
-        $this->db->from('room_operation');
+        $this->db->from('rooms a');
+        $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+        $this->db->where('b.room_name = "Operating Room"');
+        $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+        $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+        $this->db->order_by('a.room_id','asc');
         $query = $this->db->get();
         return $query->result_array();
       }
 
       function get_operating_room_beds($id){
         $this->db->select('*');
-        $this->db->from('beds_operation bo');
-        $this->db->join('room_operation ro', 'ro.or_id=bo.bed_roomid', 'left');
-        $this->db->join('patient p', 'p.patient_id=bo.bed_patient', 'left');
-        $this->db->where('bo.bed_roomid', $id);
+        $this->db->from('beds b');
+        $this->db->join('rooms r', 'r.room_id=b.bed_roomid', 'left');
+        $this->db->join('patient p', 'p.patient_id=b.bed_patient', 'left');
+        $this->db->where('b.bed_roomid', $id);
         $query = $this->db->get();
         return $query->result_array();
-      }
-
-      function admit_patient_to_or($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
-        $this->db->where('bed_id' ,$bed);
-        $this->db->update('beds_operation', $data_beds);
-
-        $this->db->insert('admission_operating_room', $data_admission);
-
-        $this->db->where('patient_id', $patient);
-        $this->db->update('patient', $data_patient_status);
-
-        $this->db->select('*');
-        $this->db->from('beds_operation bo');
-        $this->db->join('room_operation ro', 'bo.bed_roomid = ro.or_id', 'left');
-        $this->db->where('bo.bed_id', $bed);
-        $query = $this->db->get()->row();
-
-        $data_bed_billing = array(
-                                "description"=>"OR Bill",
-                                "bill_name"=>"OR Bill",
-                                "bill_room_id"=>$room,
-                                "bed_id"=>$bed,
-                                "or_rate"=>$query->price,
-                                "price"=>$query->price,
-                                "patient_id"=>$patient
-                              );
-        $this->db->insert('bill_or', $data_bed_billing);
       }
 
       function get_operating_room_admitted(){
         $this->db->select('*');
-        $this->db->from('admission_operating_room aor');
-        $this->db->join('patient p', 'p.patient_id = aor.patient_id', 'left');
-        $this->db->join('beds_operation bo', 'bo.bed_id = aor.bed', 'left');
-        $this->db->join('room_operation ro', 'bo.bed_roomid = ro.or_id', 'left');
-        $this->db->where('aor.status', 0);
+        $this->db->from('admission_schedule as');
+        $this->db->join('patient p', 'p.patient_id = as.patient_id', 'left');
+        $this->db->join('beds b', 'b.bed_id = as.bed', 'left');
+        $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
+        $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+        $this->db->where('rt.room_name = "Operating Room"');
+        $this->db->where('as.status', 0);
         $query = $this->db->get();
         return $query->result_array();
       }
-      
+
       function remove_patient_from_or($patient){
         $data = array("bed_patient"=>NULL);
         $this->db->where('bed_patient', $patient);
         $this->db->update('beds_operation', $data);
-        
+
         $this->db->select('*');
         $this->db->from('bill_or');
         $this->db->where('patient_id', $patient);
         $this->db->order_by('bill_or_id', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-          
+
         $data_bill = array("bill_status"=>1);
         $this->db->where('bill_or_id',$query->row()->bill_or_id);
         $this->db->update('bill_or', $data_bill);
-        
+
         $data_admission = array("status"=>1);
         $this->db->where('patient_id', $patient);
         $this->db->update('admission_operation_room', $data_admission);
@@ -298,8 +285,12 @@
       /*Direct Room*/
       function get_direct_rooms(){
         $this->db->select('*');
-        $this->db->from('rooms r');
-        $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+        $this->db->from('rooms a');
+        $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
+        $this->db->where('b.room_name != "Emergency Room" AND b.room_name != "Operating Room" AND b.room_name !="ICU"');
+        $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
+        $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
+        $this->db->order_by('a.room_id','asc');
         $query = $this->db->get();
         return $query->result_array();
       }
@@ -314,34 +305,6 @@
         return $query->result_array();
       }
 
-      function admit_patient_to_direct_room($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
-        $this->db->where('bed_id' ,$bed);
-        $this->db->update('beds', $data_beds);
-
-        $this->db->insert('admission_schedule', $data_admission);
-
-        $this->db->where('patient_id', $patient);
-        $this->db->update('patient', $data_patient_status);
-
-        $this->db->select('*');
-        $this->db->from('beds b');
-        $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
-        $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
-        $this->db->where('b.bed_id', $bed);
-        $query = $this->db->get()->row();
-
-        $data_bed_billing = array(
-                                "description"=>$query->room_name." Bill",
-                                "bill_name"=>$query->room_name." Bill",
-                                "bill_room_id"=>$room,
-                                "bed_id"=>$bed,
-                                "bed_rate"=>$query->room_price,
-                                "price"=>$query->room_price,
-                                "patient_id"=>$patient
-                              );
-        $this->db->insert('bed_billing', $data_bed_billing);
-      }
-
       function get_direct_rooms_admitted(){
         $this->db->select('*');
         $this->db->from('admission_schedule as');
@@ -349,27 +312,28 @@
         $this->db->join('beds b', 'b.bed_id = as.bed', 'left');
         $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
         $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
+        $this->db->where('rt.room_name != "Emergency Room" AND rt.room_name != "Operating Room" AND rt.room_name !="ICU"');
         $this->db->where('as.status', 0);
         $query = $this->db->get();
         return $query->result_array();
       }
-      
+
       function remove_patient_from_dr($patient){
         $data = array("bed_patient"=>NULL);
         $this->db->where('bed_patient', $patient);
         $this->db->update('beds', $data);
-        
+
         $this->db->select('*');
         $this->db->from('bed_billing');
         $this->db->where('patient_id', $patient);
         $this->db->order_by('bed_bill_id', 'DESC');
         $this->db->limit(1);
         $query = $this->db->get();
-          
+
         $data_bill = array("bed_bill_status"=>1);
         $this->db->where('bed_bill_id',$query->row()->bed_bill_id);
         $this->db->update('bed_billing', $data_bill);
-        
+
         $data_admission = array("status"=>1);
         $this->db->where('patient_id', $patient);
         $this->db->update('admission_schedule', $data_admission);

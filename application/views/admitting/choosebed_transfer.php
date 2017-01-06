@@ -28,7 +28,7 @@
                                 echo "<td></td>";
                                 echo "<td><span class='label label-success'>AVAILABLE</span></td>";
                             }
-                            echo "<td><a href='".base_url()."Admitting/transfer_patient/".$this->uri->segment(3)."/".$this->uri->segment(4)."/".$room['bed_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
+                            echo "<td><a href='".base_url()."Admitting/transfer_patient/".$this->uri->segment(2)."/".$this->uri->segment(3)."/".$this->uri->segment(4)."/".$room['bed_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
                         echo "</tr>";
                     }
                 ?>
