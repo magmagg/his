@@ -16,13 +16,13 @@
               </thead>
               <tbody>
                 <?php
-                  foreach($operation_room_beds as $data){
+                  foreach($beds as $data){
                     echo "<tr>";
                       echo "<td>".$data['bed_id']."</td>";
                       if($data['bed_patient'] == NULL){
                         echo "<td></td>";
                         echo "<td><span class='label label-success'>AVAILABLE</span></td>";
-                        echo "<td><a href='".base_url()."Admitting/ChoosePatient/".$this->uri->segment(3)."/".$data['bed_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</a></td>";
+                        echo "<td><a href='".base_url()."Admitting/ChoosePatientForOperatingRoom/OperatingRoom/".$this->uri->segment(3)."/".$data['bed_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</a></td>";
                       }else{
                         echo "<td>".$data['first_name']." ".$data['middle_name']." ".$data['last_name']."</td>";
                         echo "<span class='label label-danger>OCCUPIED</span>'";

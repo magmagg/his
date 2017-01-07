@@ -115,11 +115,6 @@ class Model_billing extends CI_Model{
       $this->db->update("lab_billing", $data);
   }
 
-  function mark_er_bill_as_paid($id){
-      $data = array("bill_status"=>2);
-      $this->db->where("bed_bill_id", $id);
-      $this->db->update("bed_billing", $data);
-  }
 
   function mark_rad_bill_as_paid($id){
       $data = array("rad_bill_status"=>1);
@@ -127,22 +122,11 @@ class Model_billing extends CI_Model{
       $this->db->update("rad_billing", $data);
   }
 
-  function mark_or_bill_as_paid($id){
-      $data = array("bill_status"=>2);
-      $this->db->where("bill_or_id", $id);
-      $this->db->update("bill_or", $data);
-  }
 
   function mark_csr_bill_as_paid($id){
       $data = array("csr_bill_status"=>1);
       $this->db->where("csr_bill_id", $id);
       $this->db->update("csr_billing", $data);
-  }
-
-  function mark_icu_bill_as_paid($id){
-      $data = array("bill_status"=>2);
-      $this->db->where("bill_icu_id", $id);
-      $this->db->update("bill_icu", $data);
   }
 
   function discharge_patient($id, $status){
