@@ -69,7 +69,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $er_bill_ids = explode(",", $transaction_data->er_billing_ids);
         foreach($er_bill_ids as $er_bill){
-            $this->Model_billing->mark_er_bill_as_paid($er_bill);
+            $this->Model_billing->mark_room_bill_as_paid($er_bill);
         }
 
         $rad_bill_ids = explode(",", $transaction_data->rad_billing_ids);
@@ -79,7 +79,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $or_bill_ids = explode(",", $transaction_data->or_billing_ids);
         foreach($or_bill_ids as $or_bill){
-            $this->Model_billing->mark_or_bill_as_paid($or_bill);
+            $this->Model_billing->mark_room_bill_as_paid($or_bill);
         }
 
         $csr_bill_ids = explode(",", $transaction_data->csr_billing_ids);
@@ -89,7 +89,7 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $icu_bill_ids = explode(",", $transaction_data->icu_billing_ids);
         foreach($icu_bill_ids as $icu_bill){
-            $this->Model_billing->mark_icu_bill_as_paid($icu_bill);
+            $this->Model_billing->mark_room_bill_as_paid($icu_bill);
         }
 
         $this->Model_billing->mark_as_paid($transaction_id);

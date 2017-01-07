@@ -14,11 +14,11 @@
               </thead>
               <tbody>
                 <?php
-                  foreach($operating_room as $data){
+                  foreach($room as $data){
                     echo "<tr>";
-                      echo "<td>".$data['or_id']."</td>";
+                      echo "<td>".$data['room_id']."</td>";
                       echo "<td>".$data['room_location']."</td>";
-                      echo "<td><a href='".base_url()."Admitting/OperatingRoom/".$data['or_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
+                      echo "<td><a href='".base_url()."Admitting/OperatingRoom/".$data['room_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</td>";
                     echo "</tr>";
                   }
                 ?>

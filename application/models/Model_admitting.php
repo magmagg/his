@@ -49,6 +49,13 @@
         $this->db->update('admission_schedule', $data_admission);
     }
 
+    function get_patients(){
+      $this->db->select('*');
+      $this->db->from('patient');
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
     function get_non_admitted_patient_list(){
       $this->db->select('*');
       $this->db->from('patient');

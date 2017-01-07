@@ -21,10 +21,6 @@
                   <td><a href='<?=base_url()?>Admitting/EmergencyRoomTransfer/<?=$this->uri->segment(3)?>' role='button' class='btn btn-success btn-xs'>CONFIRM</td>
                 </tr>
                 <tr>
-                  <td>Operating Room</td>
-                  <td><a href='<?=base_url()?>Admitting/OperatingRoomTransfer/<?=$this->uri->segment(3)?>' role='button' class='btn btn-success btn-xs'>CONFIRM</td>
-                </tr>
-                <tr>
                   <td>Intensive Care Unit</td>
                   <td><a href='<?=base_url()?>Admitting/ICUTransfer/<?=$this->uri->segment(3)?>' role='button' class='btn btn-success btn-xs'>CONFIRM</td>
                 </tr>
