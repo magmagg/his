@@ -10,6 +10,7 @@
                   <th>Name</th>
                   <th>Date Admitted</th>
                   <th>Location</th>
+                  <th>Assigned physician</th>
               </tr>
               </thead>
               <tbody>
@@ -19,6 +20,7 @@
                       echo "<td>".$data['first_name']." ".$data['middle_name']." ".$data['last_name']."</td>";
                       echo "<td>".date('M d,Y', strtotime($data['admission_date']))."</td>";
                       echo "<td>".$data['room_location']."</td>";
+                      echo "<td></td>";
                     echo "</tr>";
                   }
                 ?>

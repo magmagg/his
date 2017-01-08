@@ -346,5 +346,35 @@
         $this->db->update('admission_schedule', $data_admission);
       }
       /*Direct Room*/
+
+
+      function get_all_doctors(){
+        $this->db->select('*');
+        $this->db->from('users');
+        $this->db->where('type_id', 2);
+        $query = $this->db->get();
+        return $query->result_array();
+      }
+
+      function assigned_doctor($data){
+        $sql = $this->db->insert('attending_physician', $data);
+
+        if($sql){
+          return true;
+        }else{
+          return false;
+        }
+
+      }
+
+      function changeAssignedStatus($id){
+        $data = array(
+          'assigned_to_doctor' => 0
+        );
+        $this->db->where('patient_id', $id);
+        $this->db->update('patient', $data);
+      }
+
+
     }
 ?>
