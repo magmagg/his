@@ -30,7 +30,21 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         $this->load->view('billing/patientbilling.php', $data);
       }
     }
-
+    /*==============================================================================================================================*/
+    function Payment(){
+      $header['title'] = "HIS: Patient Billing";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $this->load->view('users/includes/header', $header);
+      if(!$this->uri->segment(3)){
+        $data['patients'] = $this->Model_billing->get_patient_with_billing();
+        $this->load->view('billing/choose_patient_for_payment.php', $data);
+      }else{
+        $data['billing_detail'] = $this->Model_billing->get_billing_detail($this->uri->segment(3));
+        $this->load->view('billing/payment_details', $data);
+      }
+    }
+    /*==============================================================================================================================*/
     function submit_to_cashier(){
       $data = array(
         "patient_id"=>$this->input->post('patient_id'),
@@ -45,7 +59,10 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
         "total_bill"=>$this->input->post('overall_amount')
       );
       $transaction_id = $this->Model_billing->submit_to_cashier($data);
-      echo $transaction_id;
+      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="'.$transaction_id.' has been passed to Cashier.">
+                                <input type="hidden" id="type" value="success">' );
+      redirect(base_url().'Dashboard', 'refresh');
     }
 
     function mark_as_paid(){
@@ -94,6 +111,10 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $this->Model_billing->mark_as_paid($transaction_id);
         $this->Model_billing->discharge_patient($transaction_data->patient_id, $transaction_data->patient_status);
+        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                  <input type="hidden" id="msg" value=" Bill '.$transaction_id.' has been mark as paid.">
+                                  <input type="hidden" id="type" value="success">' );
+        redirect(base_url().'Dashboard', 'refresh');
     }
 
     function testing(){

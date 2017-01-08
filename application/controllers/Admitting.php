@@ -271,5 +271,17 @@ class Admitting extends CI_Controller{
                                 <input type="hidden" id="type" value="success">' );
       redirect(base_url().'Dashboard', 'refresh');
   }
+
+  function mark_operation_as_done(){
+    $admission_id = $this->uri->segment(3);
+    $bed = $this->uri->segment(4);
+    $data_admission = array("status"=>1);
+    $data_bed = array("bed_patient"=>NULL);
+    $this->Model_admitting->mark_operation_as_done($data_admission, $data_bed, $admission_id, $bed);
+    $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                              <input type="hidden" id="msg" value="Operating room mark successfully as done.">
+                              <input type="hidden" id="type" value="success">' );
+    redirect(base_url().'Dashboard', 'refresh');
+  }
 }
 ?>

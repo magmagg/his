@@ -1,682 +1,243 @@
 <section id="main-content">
     <section class="wrapper">
-        <div class="row">
-          <div class="col-lg-8 col-md-8 col-sm-8">
-            <div class="form-group">
-              <label>Name</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$patient_detail->first_name." ".$patient_detail->middle_name." ".$patient_detail->last_name?>" readonly>
+        <!-- invoice start-->
+        <section>
+            <div class="panel panel-primary">
+                <!--<div class="panel-heading navyblue"> INVOICE</div>-->
+                <div class="panel-body">
+                    <div class="row invoice-list">
+                        <div class="text-center corporate-id">
+                          <h4><b><?=$patient_detail->first_name." ".$patient_detail->middle_name." ".$patient_detail->last_name?></b></h4>
+                        </div>
+                        <div class="col-lg-4 col-sm-4">
+                            <p>Age: <b><?=$patient_detail->age?></b></p>
+                            <p>Gender: <b><?=$patient_detail->gender?></b></p>
+                            <p>Address: <b><?=$patient_detail->present_address?></b></p>
+                        </div>
+                        <div class="col-lg-4 col-sm-4">
+                            <p>Doctor: </p>
+                            <p>PHIC: </p>
+                            <p>HMD/Comp: </p>
+                        </div>
+                        <div class="col-lg-4 col-sm-4">
+                          <p>Date Admitted: <b><?=date('M d, Y - h:i A', strtotime($patient_detail->date_admitted))?></b></p>
+                        </div>
+                    </div>
+                    <?php
+                      $attributes = array('class'=>'form-horizontal', 'role'=>'form');
+                      echo form_open('Billing/submit_to_cashier', $attributes);
+                      $overall_amount = 0;
+                    ?>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th class="hidden-phone">Description</th>
+                            <th>Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                              <td>Room</td>
+                              <td class="hidden-phone">Room Fee</td>
+                              <td>
+                                <?php
+                                    $total_price = 0;
+                                    $room_data_1 = array();
+                                    $room_data_2 = "";
+                                    if(!empty($directroom_bill)){
+                                      foreach($directroom_bill as $bill){
+                                        $total_price += $bill['price'];
+                                        array_push($room_data_1, $bill['bed_bill_id']);
+                                        $room_data_2 = implode(',', $room_data_1);
+                                      }
+                                      $overall_amount += $total_price;
+                                    }
+
+                                    if($total_price != 0){
+                                      echo $total_price;
+                                    }
+                                ?>
+                                <input type="hidden" name="room_data" value="<?=$room_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>Emergency Room</td>
+                              <td class="hidden-phone">Emergency Room Fee</td>
+                              <td>
+                                <?php
+                                    $total_price = 0;
+                                    $er_data_1 = array();
+                                    $er_data_2 = "";
+                                    if(!empty($emergencyroom_bill)){
+                                      foreach($emergencyroom_bill as $bill){
+                                        $total_price += $bill['price'];
+                                        array_push($er_data_1, $bill['bed_bill_id']);
+                                        $er_data_2 = implode(',', $er_data_1);
+                                      }
+                                      $overall_amount += $total_price;
+                                    }
+
+                                    if($total_price != 0){
+                                      echo $total_price;
+                                    }
+                                ?>
+                                <input type="hidden" name="er_data" value="<?=$er_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>Operating Room</td>
+                              <td class="hidden-phone">Operating Room Fee</td>
+                              <td>
+                                <?php
+                                    $total_price = 0;
+                                    $or_data_1 = array();
+                                    $or_data_2 = "";
+                                    if(!empty($operatingroom_bill)){
+                                      foreach($operatingroom_bill as $bill){
+                                        $total_price += $bill['price'];
+                                        array_push($or_data_1, $bill['bed_bill_id']);
+                                        $or_data_2 = implode(',', $or_data_1);
+                                      }
+                                      $overall_amount += $total_price;
+                                    }
+                                    if($total_price != 0){
+                                        echo $total_price;
+                                    }
+                                ?>
+                                <input type="hidden" name="or_data" value="<?=$or_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>ICU</td>
+                              <td class="hidden-phone">ICU Fee</td>
+                              <td>
+                                <?php
+                                    $total_price = 0;
+                                    $icu_data_1 = array();
+                                    $icu_data_2 = "";
+                                    if(!empty($icu_bill)){
+                                      foreach($icu_bill as $bill){
+                                        $total_price += $bill['price'];
+                                        array_push($icu_data_1, $bill['bed_bill_id']);
+                                        $icu_data_2 = implode(',', $icu_data_1);
+                                      }
+                                      $overall_amount += $total_price;
+                                    }
+                                    if($total_price != 0){
+                                        echo $total_price;
+                                    }
+                                ?>
+                                <input type="hidden" name="icu_data" value="<?=$icu_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>Laboratory</td>
+                              <td class="hidden-phone">Laboratory Fee</td>
+                              <td>
+                                <?php
+                                $total_price = 0;
+                                $lab_data_1 = array();
+                                $lab_data_2 = "";
+                                  if(!empty($laboratory_bill)){
+                                    foreach($laboratory_bill as $bill){
+                                      $total_price += $bill['price'];
+                                      array_push($lab_data_1, $bill['lab_bill_id']);
+                                      $lab_data_2 = implode(',', $lab_data_1);
+                                    }
+                                    $overall_amount += $total_price;
+                                  }
+                                  if($total_price != 0){
+                                      echo $total_price;
+                                  }
+                                ?>
+                                <input type="hidden" name="lab_data" value="<?=$lab_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>Radiology</td>
+                              <td class="hidden-phone">Radiology Fee</td>
+                              <td>
+                              <?php
+                                $total_price = 0;
+                                $rad_data_1 = array();
+                                $rad_data_2 = "";
+                                if(!empty($radiology_bill)){
+                                  foreach($radiology_bill as $bill){
+                                    $total_price += $bill['price'];
+                                    array_push($rad_data_1, $bill['rad_bill_id']);
+                                    $rad_data_2 = implode(',', $rad_data_1);
+                                  }
+                                  $overall_amount += $total_price;
+                                }
+                                if($total_price != 0){
+                                    echo $total_price;
+                                }
+                              ?>
+                              <input type="hidden" name="rad_data" value="<?=$rad_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>CSR</td>
+                              <td class="hidden-phone">CSR Fee</td>
+                              <td>
+                                <?php
+                                    $total_price = 0;
+                                    $csr_data_1 = array();
+                                    $csr_data_2 = "";
+                                    if(!empty($csr_bill)){
+                                      foreach($csr_bill as $bill){
+                                        $total_price += $bill['price'];
+                                        array_push($csr_data_1, $bill['csr_bill_id']);
+                                        $csr_data_2 = implode(',', $csr_data_1);
+                                      }
+                                      $overall_amount += $total_price;
+                                    }
+                                    if($total_price != 0){
+                                        echo $total_price;
+                                    }
+                                ?>
+                            <input type="hidden" name="csr_data" value="<?=$csr_data_2?>">
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>Pharmacy</td>
+                              <td class="hidden-phone">Pharmacy Fee</td>
+                              <td>
+
+                              </td>
+                          </tr>
+                          <hr>
+                          <tr>
+                              <td>Professional Fee</td>
+                              <td class="hidden-phone">Professional Fee</td>
+                              <td id="prof_fee">
+                              </td>
+                              <input type="hidden" id="prof_fee_input" name="prof_fee">
+                          </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-lg-4 invoice-block pull-right">
+                            <ul class="unstyled amounts">
+                                <li><strong>Grand Total :</strong><?=" ".$overall_amount?> php</li>
+                                <input type="hidden" id="overall_amount" name="overall_amount" class="form-control" readonly>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center invoice-btn">
+                        <a onclick="input_pf_modal()" class="btn btn-success btn-lg"><i class="fa fa-address-card" aria-hidden="true"></i> Input Professional Fee</a>
+                        <button type="submit" class="btn btn-danger btn-lg"><i class="fa fa-check"></i> Submit Billing </button>
+                        <a class="btn btn-info btn-lg" onclick="javascript:window.print();"><i class="fa fa-print"></i> Print </a>
+                    </div>
+                    <?=form_close()?>
+                </div>
             </div>
-          </div>
-
-          <div class="col-lg-2 col-md-2 col-sm-2">
-            <div class="form-group">
-              <label>Age</label>
-              <input type="text" class="form-control" id="exampleInputPassword1" value="<?=$patient_detail->age?>" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-2 col-md-2 col-sm-2">
-            <div class="form-group">
-              <label>Sex</label>
-              <input type="text" class="form-control" id="exampleInputPassword1" value="<?=$patient_detail->gender?>" readonly>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row">
-          <div class="col-lg-9">
-            <div class="form-group">
-              <label>Address</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=$patient_detail->present_address?>" readonly>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-3">
-            <div class="form-group">
-              <label>Doctor</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="form-group">
-              <label>PHIC</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="form-group">
-              <label>Room</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-3">
-            <div class="form-group">
-              <label>Day</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label>Type</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label>HMD/Comp</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-2">
-            <div class="form-group">
-              <label>Date Admitted</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('M d, Y', strtotime($patient_detail->date_admitted))?>" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-2">
-            <div class="form-group">
-              <label>Time</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('h:i:s A', strtotime($patient_detail->date_admitted))?>" readonly>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="form-group">
-              <label>Final Diagnosis</label>
-            </div>
-          </div>
-
-          <div class="col-lg-2 col-lg-offset-4">
-            <div class="form-group">
-              <label>Date Discharge</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('M d, Y')?>" readonly>
-            </div>
-          </div>
-
-          <div class="col-lg-2">
-            <div class="form-group">
-              <label>Time</label>
-              <input type="text" class="form-control" id="exampleInputEmail1" value="<?=date('h:i:s A')?>" readonly>
-            </div>
-          </div>
-        </div>
-        </div>
-
-        <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
-    <!--==========================================================================================================================================================-->
-    <!--Horizontal = AMOUNT, RETURNS, TOTAL, SC/PWD DISC, PHIC, C/O HMO, OTHER DISC, NET TOTAL
-    Vertical = ADMITTING, PHARMACY, R/B ACCOMODATION, LABORATORY, ER, PULMONARY, RADIOLOGY, OPERATING ROOM, CSR, NURSE STATION, ICU, NICU, PT REHAB, DIALYSIS, BILLING, HEART STATION, OTHERS-->
-        <?php
-          $overall_amount = 0;
-        ?>
-        <?php
-          $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-          echo form_open('Billing/submit_to_cashier', $attributes);
-        ?>
-        <input type="hidden" name="patient_id" value="<?=$patient_detail->patient_id?>"
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <label>HOSPITAL BILL</label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-1 col-lg-offset-2">
-            <label>AMOUNT</label>
-          </div>
-          <div class="col-lg-1">
-            <label>RETURNS</label>
-          </div>
-          <div class="col-lg-1">
-            <label>TOTAL</label>
-          </div><div class="col-lg-1">
-            <label>SC/PWD DISC</label>
-          </div><div class="col-lg-1">
-            <label>PHIC</label>
-          </div><div class="col-lg-1">
-            <label>C/O HMO</label>
-          </div><div class="col-lg-1">
-            <label>OTHER DISC</label>
-          </div><div class="col-lg-1">
-            <label>NET TOTAL</label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>Room</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-            <?php
-                $total_price = 0;
-                $room_data_1 = array();
-                $room_data_2 = "";
-                if(!empty($directroom_bill)){
-                  foreach($directroom_bill as $bill){
-                    $total_price += $bill['price'];
-                    array_push($room_data_1, $bill['bed_bill_id']);
-                    $room_data_2 = implode(',', $room_data_1);
-                  }
-                  $overall_amount += $total_price;
-                }
-
-                if($total_price != 0){
-                  echo $total_price;
-                }
-            ?>
-            <input type="hidden" name="room_data" value="<?=$room_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-            <?php
-              if($total_price != 0){
-                echo $total_price;
-              }
-            ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-                if($total_price != 0){
-                  echo $total_price;
-                }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>PHARMACY</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>LABORATORY</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              $total_price = 0;
-              $lab_data_1 = array();
-              $lab_data_2 = "";
-                if(!empty($laboratory_bill)){
-                  foreach($laboratory_bill as $bill){
-                    $total_price += $bill['price'];
-                    array_push($lab_data_1, $bill['lab_bill_id']);
-                    $lab_data_2 = implode(',', $lab_data_1);
-                  }
-                  $overall_amount += $total_price;
-                }
-                if($total_price != 0){
-                    echo $total_price;
-                }
-              ?>
-              <input type="hidden" name="lab_data" value="<?=$lab_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-            <?php
-            if($total_price != 0){
-                echo $total_price;
-            }
-            ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>EMERGENCY ROOM</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-            <?php
-                $total_price = 0;
-                $er_data_1 = array();
-                $er_data_2 = "";
-                if(!empty($emergencyroom_bill)){
-                  foreach($emergencyroom_bill as $bill){
-                    $total_price += $bill['price'];
-                    array_push($er_data_1, $bill['bed_bill_id']);
-                    $er_data_2 = implode(',', $er_data_1);
-                  }
-                  $overall_amount += $total_price;
-                }
-
-                if($total_price != 0){
-                  echo $total_price;
-                }
-            ?>
-            <input type="hidden" name="er_data" value="<?=$er_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>RADIOLOGY</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-                $total_price = 0;
-                $rad_data_1 = array();
-                $rad_data_2 = "";
-                if(!empty($radiology_bill)){
-                  foreach($radiology_bill as $bill){
-                    $total_price += $bill['price'];
-                    array_push($rad_data_1, $bill['rad_bill_id']);
-                    $rad_data_2 = implode(',', $rad_data_1);
-                  }
-                  $overall_amount += $total_price;
-                }
-                if($total_price != 0){
-                    echo $total_price;
-                }
-              ?>
-              <input type="hidden" name="rad_data" value="<?=$rad_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>OPERATING ROOM</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-            <?php
-                $total_price = 0;
-                $or_data_1 = array();
-                $or_data_2 = "";
-                if(!empty($operatingroom_bill)){
-                  foreach($operatingroom_bill as $bill){
-                    $total_price += $bill['price'];
-                    array_push($or_data_1, $bill['bed_bill_id']);
-                    $or_data_2 = implode(',', $or_data_1);
-                  }
-                  $overall_amount += $total_price;
-                }
-                if($total_price != 0){
-                    echo $total_price;
-                }
-            ?>
-            <input type="hidden" name="or_data" value="<?=$or_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>CENTRAL SUPPLY ROOM</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-                <?php
-                    $total_price = 0;
-                    $csr_data_1 = array();
-                    $csr_data_2 = "";
-                    if(!empty($csr_bill)){
-                      foreach($csr_bill as $bill){
-                        $total_price += $bill['price'];
-                        array_push($csr_data_1, $bill['csr_bill_id']);
-                        $csr_data_2 = implode(',', $csr_data_1);
-                      }
-                      $overall_amount += $total_price;
-                    }
-                    if($total_price != 0){
-                        echo $total_price;
-                    }
-                ?>
-            <input type="hidden" name="csr_data" value="<?=$csr_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>ICU</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-                <?php
-                    $total_price = 0;
-                    $icu_data_1 = array();
-                    $icu_data_2 = "";
-                    if(!empty($icu_bill)){
-                      foreach($icu_bill as $bill){
-                        $total_price += $bill['price'];
-                        array_push($icu_data_1, $bill['bed_bill_id']);
-                        $icu_data_2 = implode(',', $icu_data_1);
-                      }
-                      $overall_amount += $total_price;
-                    }
-                    if($total_price != 0){
-                        echo $total_price;
-                    }
-                ?>
-            <input type="hidden" name="icu_data" value="<?=$icu_data_2?>">
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($total_price != 0){
-                  echo $total_price;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-        <br>
-        <div class="row">
-          <div class="col-lg-2">
-            <label>TOTAL</label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  echo $overall_amount;
-              }
-              ?>
-            </label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  echo $overall_amount;
-              }
-              ?>
-            </label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  echo $overall_amount;
-              }
-              ?>
-            </label>
-          </div>
-        </div>
-
-        <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>PROFESSIONAL FEE</label>
-          </div>
-          <div class="col-lg-8">
-            <label id="prof_fee"></label>
-            <input type="hidden" id="prof_fee_input" name="prof_fee">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-2">
-            <a role="button" class="btn btn-info btn-xs" onclick="input_pf_modal()">Input Fee</a>
-          </div>
-        </div>
-
-        <hr style="width: 100%; color: black; height: 1px; background-color:black;" />
-
-        <div class="row">
-          <div class="col-lg-2">
-            <label>OVERALL TOTAL</label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div>
-          <div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-1">
-            <label></label>
-          </div><div class="col-lg-2">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  //echo $overall_amount;
-              }
-              ?>
-              <input type="text" id="overall_amount" name="overall_amount" class="form-control" readonly>
-            </label>
-          </div>
-        </div>
-        <br>
-        <div class="row">
-          <div class="col-lg-12">
-            <label>
-              <?php
-              if($overall_amount != 0){
-                  //echo $overall_amount;
-              }
-              ?>
-              <button class="btn btn-success btn-xs">Submit to cashier</button>
-            </label>
-          </div>
-        </div>
-      <?=form_close()?>
+        </section>
+        <!-- invoice end-->
     </section>
 </section>
+
 <script>
   function input_pf_modal(){
     $("#input_pf").modal();
