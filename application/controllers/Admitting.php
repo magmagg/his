@@ -78,6 +78,18 @@ class Admitting extends CI_Controller{
     $this->load->view('admitting/footer.php');
   }
 
+  function ChooseDoctor(){
+
+     $header['title'] = "HIS: Choose Doctor";
+     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+     $data['doctors'] = $this->Model_admitting->get_all_doctors();
+     $this->load->view('users/includes/header.php',$header);
+     $this->load->view('admitting/chooseDoctor.php', $data);
+     $this->load->view('admitting/footer.php');
+  }
+
+
   function ChoosePatientForOperatingRoom(){
     $header['title'] = "HIS: Choose Patient";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
@@ -205,6 +217,40 @@ class Admitting extends CI_Controller{
   }
 
   /*=======================================================================================================*/
+
+  function selectdoctor(){
+
+    $patient_id = $this->uri->segment(3);
+    $doctor_id = $this->uri->segment(4);
+
+    $data = array(
+      'patient_id' => $patient_id,
+      'user_id' => $doctor_id,
+      'user_id_fk' => $doctor_id
+    );
+
+    if($this->Model_admitting->assigned_doctor($data)){
+
+         $this->Model_admitting->changeAssignedStatus($patient_id);
+         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
+                                <input type="hidden" id="msg" value="Doctor has been assigned to patient.">
+                                <input type="hidden" id="type" value="success">' );
+        redirect(base_url().'Dashboard', 'refresh');
+    }else{
+          $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="error">
+                                <input type="hidden" id="msg" value="unable to assigned doctor.">
+                                <input type="hidden" id="type" value="error">' );
+        redirect(base_url().'Dashboard', 'refresh');
+    }
+
+   
+
+  }
+
+
+
+
+
   function admitpatient(){
     $room_type = $this->uri->segment(3);
     $room = $this->uri->segment(4);

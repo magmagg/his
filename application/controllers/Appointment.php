@@ -7,70 +7,134 @@ class Appointment extends CI_Controller{
       $this->load->model('Model_appointment');
   }
 public function viewschedule(){
-  $header['title'] = "HIS: View schedules";
+  $header['title'] = "HIS: View schedule";
   $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
   $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+  $user_id = $this->uri->segment(3);
+  $data['monday_datas'] = $this->Model_appointment->get_all_scheds_in_monday($user_id);
+  $data['tuesday_datas'] = $this->Model_appointment->get_all_scheds_in_tuesday($user_id);
+  $data['wednesday_datas'] = $this->Model_appointment->get_all_scheds_in_wednesday($user_id);
+  $data['thursday_datas'] = $this->Model_appointment->get_all_scheds_in_thursday($user_id);
+  $data['friday_datas'] = $this->Model_appointment->get_all_scheds_in_friday($user_id);
+  $data['saturday_datas'] = $this->Model_appointment->get_all_scheds_in_saturday($user_id);
+  $data['sunday_datas'] = $this->Model_appointment->get_all_scheds_in_sunday($user_id);
   $this->load->view('users/includes/header', $header);
+  $this->load->view('appointment/sched', $data);
+  $this->load->view('appointment/footer');
+  $this->load->view('includes/toastr.php');
 }
-public function myschedule(){
+
+
+public function schedules(){
   $header['title'] = "HIS: My schedule";
   $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
   $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-  $data['appointments'] = $this->Model_appointment->fetchAllAppointments();
+  $data['doctors'] = $this->Model_appointment->get_all_doctors();
   $this->load->view('users/includes/header', $header);
-  $this->load->view('appointment/mysched', $data);
-  $this->load->view('users/includes/footer');
+  $this->load->view('appointment/schedules', $data);
+  $this->load->view('appointment/footer');
   $this->load->view('includes/toastr.php');
 }
-public function addAppointment(){
-if($this->input->post('from') == null  && $this->input->post('end') == null ){
-  $this->form_validation->set_rules('adate', 'Date', 'required');
+
+
+
+
+public function arrangeSchedule(){
+  $header['title'] = "HIS: Arrange schedule";
+  $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+  $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+  $data['doctors'] = $this->Model_appointment->get_all_doctors();
+  $user_id = $this->uri->segment(3);
+  $this->load->view('users/includes/header', $header);
+  if($this->Model_appointment->checkuserid($user_id)){
+      $data['monday_datas'] = $this->Model_appointment->get_all_scheds_in_monday($user_id);
+      $data['tuesday_datas'] = $this->Model_appointment->get_all_scheds_in_tuesday($user_id);
+      $data['wednesday_datas'] = $this->Model_appointment->get_all_scheds_in_wednesday($user_id);
+      $data['thursday_datas'] = $this->Model_appointment->get_all_scheds_in_thursday($user_id);
+      $data['friday_datas'] = $this->Model_appointment->get_all_scheds_in_friday($user_id);
+      $data['saturday_datas'] = $this->Model_appointment->get_all_scheds_in_saturday($user_id);
+      $data['sunday_datas'] = $this->Model_appointment->get_all_scheds_in_sunday($user_id);
+     $this->load->view('appointment/editsched', $data);
+  }else{
+    $this->load->view('appointment/manageschedule', $data);
+  }
+  $this->load->view('appointment/footer');
+  $this->load->view('includes/toastr.php');
 }
-if($this->input->post('adate') == null){
-  $this->form_validation->set_rules('from', 'start', 'required');
-  $this->form_validation->set_rules('end', 'end', 'required');
-}
-  $this->form_validation->set_rules('title', 'Title', 'required|trim|xss_clean|strip_tags');
-  $this->form_validation->set_rules('adescription', 'Description', 'required|trim|xss_clean|strip_tags');
-    if($this->form_validation->run()){
-          if(empty($this->input->post('adate'))){
-              $start = $this->input->post('from');
-              $end = $this->input->post('end');
-          }
-          if(empty($this->input->post('from'))){
-              $start = $this->input->post('adate');
-              $end = '';
-          }
-          $data = array(
-            'user_id' => $this->session->userdata("user_id"),
-            'title' => $this->input->post('title'),
-            'startDate' => $start,
-            'endDate' => $end,
-            'description' => $this->input->post('adescription')
+
+public function addschedule(){
+
+  $hiddenid = $this->input->post('hiddenId');
+  echo $this->input->post('seletedDay');
+  echo $this->input->post('from');
+  echo $this->input->post('to');
+  echo $this->input->post('description');
+
+  $this->form_validation->set_rules('seletedDay','Day','trim|required|strip_tags');
+  $this->form_validation->set_rules('from','Start time','trim|required|strip_tags');
+  $this->form_validation->set_rules('to','end time','trim|required|strip_tags');
+  $this->form_validation->set_rules('description','description','trim|required|strip_tags');
+  
+  if($this->form_validation->run()){
+
+     $data = array(
+            'user_id' => $hiddenid,
+            'startTime' => $this->input->post('from'),
+            'endTime' => $this->input->post('to'),
+            'description' => $this->input->post('description'),
+            'day' => $this->input->post('seletedDay')
           );
-          if($this->Model_appointment->checkDuplicateDate($start)){
-                  if($this->Model_appointment->insertAppointment($data)){
+
+          if($this->Model_appointment->checkDuplicateDate($this->input->post('from'), $this->input->post('to'), $hiddenid, $this->input->post('seletedDay'))){
+
+          
+                if($this->Model_appointment->insertAppointment($data)){
                     $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
-                                                              <input type="hidden" id="msg" value="Appointment added successfully.">
-                                                              <input type="hidden" id="type" value="success">' );
-                    $this->myschedule();
-                  }else{
+                                                                        <input type="hidden" id="msg" value="Schedule added successfully.">
+                                                                        <input type="hidden" id="type" value="success">' );
+                    redirect(base_url().'Appointment/arrangeSchedule/'.$hiddenid, 'refresh');
+                                                                        
+
+                }else{
                     $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Warning">
-                                                              <input type="hidden" id="msg" value="Appointment added successfully.">
-                                                              <input type="hidden" id="type" value="warning">' );
-                    $this->myschedule();
-                  }
-           }else{
-             $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Warning">
-                                                       <input type="hidden" id="msg" value="you already have an appointment on that time.">
-                                                       <input type="hidden" id="type" value="warning">' );
-             $this->myschedule();
-           }
-    }else{
-      $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Failed">
+                                                                        <input type="hidden" id="msg" value="something went wrong.">
+                                                                        <input type="hidden" id="type" value="warning">' );
+                    redirect(base_url().'Appointment/arrangeSchedule/'.$hiddenid, 'refresh');
+                }
+
+          }else{
+
+                $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Warning">
+                                                                        <input type="hidden" id="msg" value="time range is already taken.">
+                                                                        <input type="hidden" id="type" value="warning">' );
+                    redirect(base_url().'Appointment/arrangeSchedule/'.$hiddenid, 'refresh');
+
+          }
+
+
+    
+
+  }else{
+     $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Failed">
                                <input type="hidden" id="msg" value="'. validation_errors().'">
                                 <input type="hidden" id="type" value="error">' );
-      $this->myschedule();
-    }
+
+        redirect(base_url().'Appointment/arrangeSchedule/'.$hiddenid, 'refresh');
+
+  }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
 }

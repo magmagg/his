@@ -17,6 +17,10 @@
               <tbody>
                 <?php
                   foreach($beds as $data){
+
+                    // echo "<pre>";
+                    // print_r($data);
+                    // echo "</pre>";
                     echo "<tr>";
                       echo "<td>".$data['bed_id']."</td>";
                       if($data['bed_patient'] == NULL){
@@ -25,8 +29,10 @@
                         echo "<td><a href='".base_url()."Admitting/ChoosePatient/".$this->uri->segment(2)."/".$this->uri->segment(3)."/".$data['bed_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</a></td>";
                       }else{
                         echo "<td>".$data['first_name']." ".$data['middle_name']." ".$data['last_name']."</td>";
-                        echo "<span class='label label-danger>OCCUPIED</span>'";
-                        echo "<td></td>";
+                        echo "<td><span class='label label-danger'>OCCUPIED</span>'</td>";
+                        if($data['assigned_to_doctor'] == 1){
+                        echo "<td><a href='".base_url()."Admitting/ChooseDoctor/".$data['patient_id']."' role='button' class='btn btn-default btn-xs'>ASSIGN DOCTOR</a></td>";
+                        }
                       }
                     echo "</tr>";
                   }
