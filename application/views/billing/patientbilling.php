@@ -28,6 +28,7 @@
                       echo form_open('Billing/submit_to_cashier', $attributes);
                       $overall_amount = 0;
                     ?>
+                    <input type="hidden" name="patient_id" value="<?=$patient_detail->patient_id?>">
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
@@ -220,7 +221,7 @@
                     <div class="row">
                         <div class="col-lg-4 invoice-block pull-right">
                             <ul class="unstyled amounts">
-                                <li><strong>Grand Total :</strong><?=" ".$overall_amount?> php</li>
+                                <li id="grand_total"><strong>Grand Total: </strong><?=" ".$overall_amount?> php</li>
                                 <input type="hidden" id="overall_amount" name="overall_amount" class="form-control" readonly>
                             </ul>
                         </div>
@@ -228,7 +229,6 @@
                     <div class="text-center invoice-btn">
                         <a onclick="input_pf_modal()" class="btn btn-success btn-lg"><i class="fa fa-address-card" aria-hidden="true"></i> Input Professional Fee</a>
                         <button type="submit" class="btn btn-danger btn-lg"><i class="fa fa-check"></i> Submit Billing </button>
-                        <a class="btn btn-info btn-lg" onclick="javascript:window.print();"><i class="fa fa-print"></i> Print </a>
                     </div>
                     <?=form_close()?>
                 </div>
@@ -248,7 +248,8 @@
     var overall_amount = <?=$overall_amount?>;
     document.getElementById("prof_fee_input").value = pf_amount;
     $("#prof_fee").html(pf_amount);
-    document.getElementById("overall_amount").value = +overall_amount + +pf_amount;
+    var new_grand_total = +overall_amount + +pf_amount;
+    $("#grand_total").html("<strong>Grand Total: </strong>"+new_grand_total+" php</li>");
     $("#input_pf").modal('hide');
   }
 </script>
