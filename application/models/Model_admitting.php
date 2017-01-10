@@ -49,6 +49,14 @@
         $this->db->update('admission_schedule', $data_admission);
     }
 
+    function mark_operation_as_done($data_admission, $data_bed, $id, $bed){
+      $this->db->where('admission_id', $id);
+      $this->db->update('admission_schedule', $data_admission);
+
+      $this->db->where('bed_id', $bed);
+      $this->db->update('beds', $data_bed);
+    }
+
     function get_patients(){
       $this->db->select('*');
       $this->db->from('patient');

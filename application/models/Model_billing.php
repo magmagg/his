@@ -10,6 +10,15 @@ class Model_billing extends CI_Model{
       return $query->result_array();
   }
 
+  function get_patient_with_billing(){
+    $this->db->select('*');
+    $this->db->from('billing b');
+    $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
+    $this->db->where('b.bill_status', 0);
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+
   function get_patient_detail($id){
     $this->db->select('*');
     $this->db->from('patient');
@@ -134,14 +143,14 @@ class Model_billing extends CI_Model{
       $data_remove_in_admission = array("status"=>1);
       $data_discharge_status = array("patient_status"=>0);
       if($status == 1){
-          $this->db->where("bed_patient", $id);
-          $this->db->update("beds_emergency", $data_remove_in_bed);
+        $this->db->where("bed_patient", $id);
+        $this->db->update("beds", $data_remove_in_bed);
 
-          $this->db->where("patient_id", $id);
-          $this->db->update("admission_emergency_room", $data_remove_in_admission);
+        $this->db->where("patient_id", $id);
+        $this->db->update("admission_schedule", $data_remove_in_admission);
 
-          $this->db->where("patient_id", $id);
-          $this->db->update("patient", $data_discharge_status);
+        $this->db->where("patient_id", $id);
+        $this->db->update("patient", $data_discharge_status);
       }else if($status == 2){
           $this->db->where("bed_patient", $id);
           $this->db->update("beds", $data_remove_in_bed);
@@ -152,24 +161,33 @@ class Model_billing extends CI_Model{
           $this->db->where("patient_id", $id);
           $this->db->update("patient", $data_discharge_status);
       }else if($status == 3){
-          $this->db->where("bed_patient", $id);
-          $this->db->update("beds_or", $data_remove_in_bed);
+        $this->db->where("bed_patient", $id);
+        $this->db->update("beds", $data_remove_in_bed);
 
-          $this->db->where("patient_id", $id);
-          $this->db->update("admission_operating_room", $data_remove_in_admission);
+        $this->db->where("patient_id", $id);
+        $this->db->update("admission_schedule", $data_remove_in_admission);
 
-          $this->db->where("patient_id", $id);
-          $this->db->update("patient", $data_discharge_status);
+        $this->db->where("patient_id", $id);
+        $this->db->update("patient", $data_discharge_status);
       }else if($status == 4){
-          $this->db->where("bed_patient", $id);
-          $this->db->update("beds_intensive", $data_remove_in_bed);
+        $this->db->where("bed_patient", $id);
+        $this->db->update("beds", $data_remove_in_bed);
 
-          $this->db->where("patient_id", $id);
-          $this->db->update("admission_intensive_room", $data_remove_in_admission);
+        $this->db->where("patient_id", $id);
+        $this->db->update("admission_schedule", $data_remove_in_admission);
 
-          $this->db->where("patient_id", $id);
-          $this->db->update("patient", $data_discharge_status);
+        $this->db->where("patient_id", $id);
+        $this->db->update("patient", $data_discharge_status);
       }
+  }
+
+  function get_billing_detail($id){
+    $this->db->select('*');
+    $this->db->from('billing b');
+    $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
+    $this->db->where('b.transaction_id', $id);
+    $query = $this->db->get();
+    return $query->row();
   }
 }
 ?>
