@@ -26,13 +26,18 @@
     }
 
     public function PatientBilling(){
-      $header['title'] = "HIS: Patient Vital signs";
+      $header['title'] = "HIS: Patient Billing History";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $data['patient'] = $this->Model_patient->get_single_patient($this->uri->segment(3));
-      $data['patient_billing_rad'] = $this->Model_patient->get_radiology_billing($this->uri->segment(3));
+      $data['patient_detail'] = $this->Model_patient->get_single_patient($this->uri->segment(3));
       $this->load->view('users/includes/header.php',$header);
-      $this->load->view('patient/patient_billinginfo.php', $data);
+        if(!$this->uri->segment(4)){
+            $data['patient_billing_data'] = $this->Model_patient->get_patient_billing($this->uri->segment(3));
+            $this->load->view('patient/patient_billinginfo.php', $data);
+        }else{
+            $data['billing_data'] = $this->Model_patient->get_billing_data($this->uri->segment(4));
+            $this->load->view('patient/billing_details.php', $data);
+        }
     }
 
     public function VitalsHistory(){
@@ -66,6 +71,7 @@
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
       $data['admitting_data'] = $this->Model_patient->get_admitting_data($this->uri->segment(3));
+      $data['patient_detail'] = $this->Model_patient->get_single_patient($this->uri->segment(3));
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('patient/admittinghistory.php', $data);
     }
@@ -96,7 +102,7 @@
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('patient/pharmacyhistory.php', $data);
     }
-
+    
     public function Pushforbilling(){
       $billing_breakdown_id = $this->input->post('billing_breakdown_id[]');
       $length = count($billing_breakdown_id);

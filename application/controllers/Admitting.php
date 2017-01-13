@@ -290,7 +290,7 @@ class Admitting extends CI_Controller{
       $room = $this->uri->segment(5);
       $bed = $this->uri->segment(6);
       /*Removing previous admission*/
-      $this->Model_admitting->remove_patient_from_previous_admit($patient);
+      $this->Model_admitting->remove_patient_from_previous_admit($patient, $bed);
 
       if($room_type_transfer == "EmergencyRoomTransfer"){
           $data_patient_status = array("patient_status"=>1);

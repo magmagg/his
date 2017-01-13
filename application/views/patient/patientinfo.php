@@ -6,32 +6,7 @@ table tr td {border:0}
 <section id="main-content">
   <section class="wrapper">
       <div class="row">
-          <div class="col-sm-3">
-            <section class="panel">
-                <div class="panel-body">
-                <div class="adv-table">
-                <table class="table">
-                    <tr>
-                    </tr>
-                    <tr>
-                      <td>Overall Patients: </td>
-                      <td><?=$total_patients_count?></td>
-                    </tr>
-                    <tr>
-                      <td>Patients Admitted: </td>
-                      <td><?=$total_admitted_patients_count?></td>
-                    </tr>
-                    <tr>
-                      <td>Patients in ER: </td>
-                      <td><?=$total_admitted_in_er_count?></td>
-                    </tr>
-                </table>
-              </div>
-            </div>
-            </section>
-          </div>
-
-          <div class="col-sm-9">
+          <div class="col-sm-12">
             <section class="panel" style="height: 100%;">
               <header class="panel-heading">
                   Patient Information

@@ -14,9 +14,7 @@
                                    <th>ID</th>
                                    <th>Date of Request</th>
                                    <th>Laboratory Exam</th>
-                                   <th>Specimen</th>
                                    <th>Status</th>
-                                   <th>Results</th>
                                  </tr>
                                  </thead>
                                  <tbody>
@@ -26,9 +24,15 @@
                                         echo "<td>".$data['lab_id']."</td>";
                                         echo "<td>".date('F d, Y', strtotime($data['lab_date_req']))."</td>";
                                         echo "<td>".$data['lab_exam_type_name']."</td>";
-                                        echo "<td>DUMMY</td>";
-                                        echo "<td>".$data['lab_status']."</td>";
-                                        echo "<td><a href='#' class='btn btn-info btn-xs'><i class='fa fa-eye'></i> VIEW</a></td>";
+                                        echo "<td>";
+                                        if($data['lab_status']==1){
+                                            echo "<span class='label label-info'>PENDING</span>";
+                                        } elseif ($data['lab_status']==2) {
+                                            echo "<span class='label label-success'>APPROVED</span>";
+                                        } else {
+                                            echo "<span class='label label-danger'>CANCELLED</span>";
+                                        }
+                                        echo "</td>";
                                       echo "</tr>";
                                     }
                                   ?>

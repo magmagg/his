@@ -76,15 +76,6 @@ class Model_pharmacy extends CI_Model
     return $query->result();
   }
 
-  function get_pharmacy_requests_specific($id)
-  {
-    $this->db->select('*');
-    $this->db->from('pharmacy_audit');
-    $this->db->where('phar_user_id',$id);
-    $query = $this->db->get();
-    return $query->result();
-  }
-
   function process_pharmacy_request_model($id,$data)
   {
       $this->db->where('unique_id',$id);

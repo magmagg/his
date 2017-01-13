@@ -1,65 +1,41 @@
 <section id="main-content">
-  <section class="wrapper">
-      <div class="row">
-          <div class="col-sm-12">
-            <section class="panel" style="height: 100%;">
-              <t able class="table" style="text-align: center;">
-                <tr id="tblheader">
-                  <td>
-                  <?php
-                      echo "<h4>";
-                      if($patient->gender == 'M'){
-                        echo "Mr. ";
-                      }else{
-                        echo "Ms. ";
-                      }
-                      echo $patient->first_name." ".$patient->middle_name." ".$patient->last_name;
-                      echo "</h4>";
-                    ?>
-                </td>
-                </tr>
-              </table>
-              <center>
-              <table id="patient-info" class="table" style="width: 55%; text-align: left; ">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Price</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                    echo form_open(base_url()."Patient/Pushforbilling/");
-                    $total_price = 0;
-                    foreach($patient_billing_rad as $data){
-                      $total_price += $data['radiology_exam_price'];
-                      echo "<tr>";
-                        echo "<td>".$data['exam_name']."</td>";
-                        echo "<td>".$data['radiology_exam_price']."</td>";
-                        echo "<td>".$data['status']."</td>";
-                      echo "</tr>";
-                      echo "<input type='hidden' name='billing_breakdown_id[]' value='".$data['billing_breakdown_id']."' />";
-                    }
-                    echo "<tr>";
-                      echo "<td></td>";
-                      echo "<td><b>Total:</b></td>";
-                      echo "<td>".$total_price."</td>";
-                    echo "</tr>";
-                    echo "<tr>";
-                    echo "<td></td>";
-                      echo "<td></td>";
-                      echo "<td><button type='submit' class='btn btn-info btn-xs'>For Billing</button></td>";
-                    echo "</tr>";
-                    echo form_close();
-                  ?>
-                </tbody>
-              </table>
-            </section>
+    <section class="wrapper">
+                <div class="row">
+             <div class="col-lg-12">
+                 <section class="panel">
+                     <header class="panel-heading">
+                        <center><?php echo $this->uri->segment(3);?> Radiology History</center>
+                     </header>
+                     <div class="panel-body">
+                         <section id="flip-scroll">
+                             <table class="table table-bordered table-striped table-condensed cf">
+                                 <thead class="cf">
+                                 <tr>
+                                   <th>ID</th>
+                                   <th>Action</th>
+                                 </tr>
+                                 </thead>
+                                 <tbody>
+                                  <?php
+                                    foreach($patient_billing_data as $data){
+                                      echo "<tr>";
+                                        echo "<td>".$data['transaction_id']."</td>";
+                                        echo "<td><a href='".base_url()."Patient/PatientBilling/".$this->uri->segment(3)."/".$data['transaction_id']."' class='btn btn-info btn-xs'>VIEW</a></td>";
+                                      echo "</tr>";
+                                    }
+                                  ?>
+                                 </tbody>
+                             </table>
+                         </section>
+                     </div>
+                 </section>
+             </div>
           </div>
-      </div>
+
   </section>
 </section>
+<!--main content end-->
+
 
 <section>
 <!--footer start-->
@@ -100,7 +76,6 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
-
 
 </body>
 </html>

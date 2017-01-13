@@ -16,7 +16,6 @@
                                    <th>Radiology Exam</th>
                                    <th>Request Note</th>
                                    <th>Status</th>
-                                   <th>Result</th>
                                  </tr>
                                  </thead>
                                  <tbody>
@@ -27,8 +26,17 @@
                                         echo "<td>".$data['request_date']."</td>";
                                         echo "<td>".$data['exam_name']."</td>";
                                         echo "<td>".$data['req_notes']."</td>";
-                                        echo "<td>".$data['request_status']."</td>";
-                                        echo "<td><a href='#' class='btn btn-info btn-xs'><i class='fa fa-eye'></i> VIEW</a></td>";
+                                        echo "<td>";
+                                        if($data['request_status'] == 0){
+                                            echo "<span class='label label-info'>PENDING</span>";
+                                        }elseif($data['request_status'] == 1){
+                                            echo "<span class='label label-success'>APPROVED</span>";
+                                        }elseif($data['request_status'] == 2){
+                                            echo "<span class='label label-danger'>DECLINED</span>";
+                                        }else{
+                                            echo "<span class='label label-success'>DONE</span>";
+                                        }
+                                        echo "</td>";
                                       echo "</tr>";
                                     }
                                   ?>
