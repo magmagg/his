@@ -4,7 +4,7 @@
              <div class="col-lg-12">
                  <section class="panel">
                      <header class="panel-heading">
-                        <center><?php echo $this->uri->segment(3);?> Admitting History</center>
+                        <center><b><?=$patient_detail->first_name." ".$patient_detail->middle_name." ".$patient_detail->last_name?> - Admitting History</b></center>
                      </header>
                      <div class="panel-body">
                          <section id="flip-scroll">
@@ -14,7 +14,6 @@
                                    <th>ID</th>
                                    <th>Admitting Date</th>
                                    <th>Discharge Data</th>
-                                   <th>Admitting Resident</th>
                                  </tr>
                                  </thead>
                                  <tbody>

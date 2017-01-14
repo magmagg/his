@@ -112,6 +112,13 @@ class Model_billing extends CI_Model{
       $data = array("bed_bill_status"=>2);
       $this->db->where("bed_bill_id", $id);
       $this->db->update("bed_billing", $data);
+      
+      $this->db->select('*');
+      $this->db->from('bed_billing');
+      $this->db->where('bed_bill_id', $id);
+      $query = $this->db->get();
+      
+      return $query->row()->admission_id;
   }
 
   function mark_pharm_bill_as_paid($id){
@@ -138,47 +145,21 @@ class Model_billing extends CI_Model{
       $this->db->update("csr_billing", $data);
   }
 
-  function discharge_patient($id, $status){
-      $data_remove_in_bed = array("bed_patient"=>NULL);
+  function discharge_patient($id, $admission_id){
+      $data_remove_in_bed = array("bed_patient"=>NULL, "bed_maintenance"=>1);
       $data_remove_in_admission = array("status"=>1);
       $data_discharge_status = array("patient_status"=>0);
-      if($status == 1){
-        $this->db->where("bed_patient", $id);
-        $this->db->update("beds", $data_remove_in_bed);
+      $this->db->where("bed_patient", $id);
+      $this->db->update("beds", $data_remove_in_bed);
 
-        $this->db->where("patient_id", $id);
-        $this->db->update("admission_schedule", $data_remove_in_admission);
+      $this->db->where("admission_id", $admission_id);
+      $this->db->update("admission_schedule", $data_remove_in_admission);
 
-        $this->db->where("patient_id", $id);
-        $this->db->update("patient", $data_discharge_status);
-      }else if($status == 2){
-          $this->db->where("bed_patient", $id);
-          $this->db->update("beds", $data_remove_in_bed);
-
-          $this->db->where("patient_id", $id);
-          $this->db->update("admission_schedule", $data_remove_in_admission);
-
-          $this->db->where("patient_id", $id);
-          $this->db->update("patient", $data_discharge_status);
-      }else if($status == 3){
-        $this->db->where("bed_patient", $id);
-        $this->db->update("beds", $data_remove_in_bed);
-
-        $this->db->where("patient_id", $id);
-        $this->db->update("admission_schedule", $data_remove_in_admission);
-
-        $this->db->where("patient_id", $id);
-        $this->db->update("patient", $data_discharge_status);
-      }else if($status == 4){
-        $this->db->where("bed_patient", $id);
-        $this->db->update("beds", $data_remove_in_bed);
-
-        $this->db->where("patient_id", $id);
-        $this->db->update("admission_schedule", $data_remove_in_admission);
-
-        $this->db->where("patient_id", $id);
-        $this->db->update("patient", $data_discharge_status);
-      }
+      $this->db->where("patient_id", $id);
+      $this->db->update("patient", $data_discharge_status);
+      
+      $data_discharge = array("admission_id"=>$admission_id, "patient_id"=>$id);
+      $this->db->insert('discharge_schedule', $data_discharge);
   }
 
   function get_billing_detail($id){

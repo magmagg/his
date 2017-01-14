@@ -8,7 +8,12 @@
         $this->db->update('beds', $data_beds);
 
         $this->db->insert('admission_schedule', $data_admission);
-
+        $this->db->select('*');
+        $this->db->from('admission_schedule');
+        $this->db->order_by('admission_id', 'desc');
+        $this->db->limit(1);
+        $query_admission = $this->db->get()->row();
+            
         $this->db->where('patient_id', $patient);
         $this->db->update('patient', $data_patient_status);
 
@@ -17,19 +22,20 @@
         $this->db->join('rooms r', 'b.bed_roomid = r.room_id', 'left');
         $this->db->join('room_type rt', 'r.room_type = rt.room_type_id', 'left');
         $this->db->where('b.bed_id', $bed);
-        $query = $this->db->get()->row();
+        $query_beds = $this->db->get()->row();
 
         $data_bed_billing = array(
-                                "description"=>$query->room_name." Bill",
-                                "bill_name"=>$query->room_name." Bill",
-                                "price"=>$query->room_price,
+                                "description"=>$query_beds->room_name." Bill",
+                                "bill_name"=>$query_beds->room_name." Bill",
+                                "price"=>$query_beds->room_price,
+                                "admission_id"=>$query_admission->admission_id,
                                 "patient_id"=>$patient
                               );
         $this->db->insert('bed_billing', $data_bed_billing);
     }
 
     function remove_patient_from_previous_admit($patient){
-        $data = array("bed_patient"=>NULL);
+        $data = array("bed_patient"=>NULL, "bed_maintenance"=>1);
         $this->db->where('bed_patient', $patient);
         $this->db->update('beds', $data);
 

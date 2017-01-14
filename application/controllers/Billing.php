@@ -49,12 +49,19 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
       $data = array(
         "patient_id"=>$this->input->post('patient_id'),
         "room_billing_ids"=>$this->input->post('room_data'),
+        "room_price"=>$this->input->post('total_room_price'),
         "lab_billing_ids"=>$this->input->post('lab_data'),
+        "lab_price"=>$this->input->post('total_lab_price'),
         "er_billing_ids"=>$this->input->post('er_data'),
+        "er_price"=>$this->input->post('total_er_price'),
         "rad_billing_ids"=>$this->input->post('rad_data'),
+        "rad_price"=>$this->input->post('total_rad_price'),
         "or_billing_ids"=>$this->input->post('or_data'),
+        "or_price"=>$this->input->post('total_or_price'),
         "csr_billing_ids"=>$this->input->post('csr_data'),
+        "csr_price"=>$this->input->post('total_csr_price'),
         "icu_billing_ids"=>$this->input->post('icu_data'),
+        "icu_price"=>$this->input->post('total_icu_price'),
         "professional_fee"=>$this->input->post('prof_fee'),
         "total_bill"=>$this->input->post('overall_amount')
       );
@@ -71,12 +78,13 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $room_bill_ids = explode(",", $transaction_data->room_billing_ids);
         foreach($room_bill_ids as $room_bill){
-            $this->Model_billing->mark_room_bill_as_paid($room_bill);
+            $admission_id = $this->Model_billing->mark_room_bill_as_paid($room_bill);
+            $this->Model_billing->discharge_patient($transaction_data->patient_id, $admission_id);
         }
 
         $pharm_bill_ids = explode(",", $transaction_data->pharm_billing_ids);
         foreach($pharm_bill_ids as $pharm_bill){
-            //$this->Model_billing->mark_pharm_bill_as_paid($pharm_bill);
+            
         }
 
         $lab_bill_ids = explode(",", $transaction_data->lab_billing_ids);
@@ -86,7 +94,8 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $er_bill_ids = explode(",", $transaction_data->er_billing_ids);
         foreach($er_bill_ids as $er_bill){
-            $this->Model_billing->mark_room_bill_as_paid($er_bill);
+            $admission_id = $this->Model_billing->mark_room_bill_as_paid($room_bill);
+            $this->Model_billing->discharge_patient($transaction_data->patient_id, $admission_id);
         }
 
         $rad_bill_ids = explode(",", $transaction_data->rad_billing_ids);
@@ -96,7 +105,8 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $or_bill_ids = explode(",", $transaction_data->or_billing_ids);
         foreach($or_bill_ids as $or_bill){
-            $this->Model_billing->mark_room_bill_as_paid($or_bill);
+            $admission_id = $this->Model_billing->mark_room_bill_as_paid($room_bill);
+            $this->Model_billing->discharge_patient($transaction_data->patient_id, $admission_id);
         }
 
         $csr_bill_ids = explode(",", $transaction_data->csr_billing_ids);
@@ -106,11 +116,11 @@ if (!defined('BASEPATH'))exit('No direct script access allowed');
 
         $icu_bill_ids = explode(",", $transaction_data->icu_billing_ids);
         foreach($icu_bill_ids as $icu_bill){
-            $this->Model_billing->mark_room_bill_as_paid($icu_bill);
+            $admission_id = $this->Model_billing->mark_room_bill_as_paid($room_bill);
+            $this->Model_billing->discharge_patient($transaction_data->patient_id, $admission_id);
         }
 
         $this->Model_billing->mark_as_paid($transaction_id);
-        $this->Model_billing->discharge_patient($transaction_data->patient_id, $transaction_data->patient_status);
         $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                   <input type="hidden" id="msg" value=" Bill '.$transaction_id.' has been mark as paid.">
                                   <input type="hidden" id="type" value="success">' );

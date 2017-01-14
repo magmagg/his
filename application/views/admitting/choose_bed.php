@@ -25,8 +25,17 @@
                       echo "<td>".$data['bed_id']."</td>";
                       if($data['bed_patient'] == NULL){
                         echo "<td></td>";
-                        echo "<td><span class='label label-success'>AVAILABLE</span></td>";
+                          if($data['bed_maintenance'] == 0){
+                            echo "<td><span class='label label-success'>AVAILABLE</span></td>";
                         echo "<td><a href='".base_url()."Admitting/ChoosePatient/".$this->uri->segment(2)."/".$this->uri->segment(3)."/".$data['bed_id']."' role='button' class='btn btn-success btn-xs'>CONFIRM</a></td>";
+                          }else{
+                              if($data['bed_maintenance'] == 1){
+                                echo "<td><span class='label label-info'>FOR CLEANING</span></td>";
+                              }else if($data['bed_maintenance'] == 2){
+                                echo "<td><span class='label label-danger'>FOR MAINTENANCE</span></td>";
+                              }
+                            echo "<td></td>";
+                          }
                       }else{
                         echo "<td>".$data['first_name']." ".$data['middle_name']." ".$data['last_name']."</td>";
                         echo "<td><span class='label label-danger'>OCCUPIED</span>'</td>";

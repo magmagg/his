@@ -63,6 +63,7 @@
       $this->db->select('*');
       $this->db->from('admission_schedule as');
       $this->db->join('discharge_schedule ds','as.admission_id=ds.admission_id','left');
+      $this->db->join('patient p', 'as.patient_id = p.patient_id', 'left');
       $this->db->where('as.patient_id', $id);
       $query = $this->db->get();
       return $query->result_array();
@@ -72,7 +73,6 @@
       $this->db->select('*');
       $this->db->from('laboratory_request lr');
       $this->db->join('laboratory_examination_type let','lr.exam_type_fk = let.lab_exam_type_id','left');
-      //$this->db->join('laboratory_examination_type let','lr.exam_type_fk = let.lab_exam_type_id','left');
       $this->db->where('lr.lab_patient', $id);
       $query = $this->db->get();
       return $query->result_array();
@@ -88,13 +88,20 @@
       return $query->result_array();
     }
 
-    public function get_radiology_billing($id){
+    public function get_patient_billing($id){
       $this->db->select('*');
-      $this->db->from('billing_rad_breakdown brb');
-      $this->db->join('radiology_exam re', 'brb.radiology_exam_id = re.exam_id', 'left');
-      $this->db->where(array('brb.patient_id'=>$id, 'brb.status'=>0));
+      $this->db->from('billing');
+      $this->db->where('patient_id', $id);
       $query = $this->db->get();
       return $query->result_array();
+    }
+    
+    function get_billing_data($id){
+        $this->db->select('*');
+        $this->db->from('billing');
+        $this->db->where('transaction_id', $id);
+        $query = $this->db->get();
+        return $query->row();
     }
 
     public function get_pharmacy_data($id){
