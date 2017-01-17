@@ -5,10 +5,10 @@
                 <section class="panel">
                     <header class="panel-heading" style="background-color: #000;"></header>
                     <header class="panel-heading">
-                        Pharmacy requests
-                        <?php if($released == 1): ?>
-                            <a href="<?php echo base_url();?>Pharmacy/nurse_return_medicine/<?=$id?>"><button class="btn btn-success pull-right btn">Return Medicine</button></a>
-                        <?php endif; ?>
+                        Return medicine
+                        <form role="form" id="formfield" action="<?php echo base_url();?>Pharmacy/submit_nurse_return_medicine" method="post">
+                            <input type="button" name="btn" value="Submit request" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn pull-right btn-success" />
+
                     </header>
 
                     <table class="table table-striped table-advance table-hover">
@@ -43,6 +43,11 @@
                                 echo '<td>'.$d->quant_requested.' Medicines'.'</td>';
                                 echo '<td>'.$price.'</td>';
                                 echo '<td>'.$d->total_price.'</td>';
+                                echo '<td>';
+                                ?>
+                                <input type="number" name="quantity[]" style="width:100%" class="form-control" value="0">
+                                <?php
+                                echo '</td>';
 
                                 echo '</tr>';
 
@@ -52,7 +57,7 @@
 
                         </tbody>
                     </table>
-
+                </form>
 
             </div>
             </section>
@@ -81,6 +86,19 @@
 <script src="<?=base_url()?>js/slidebars.min.js"></script>
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
+
+
+<script>
+
+window.onload = function(){
+document.getElementById("submitme").onclick = function() {myFunction()};
+};
+
+function myFunction()
+{
+    document.getElementById("formfield").submit();
+}
+</script>
 
 
 </body>

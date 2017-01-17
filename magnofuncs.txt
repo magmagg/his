@@ -1,0 +1,23 @@
+Pharmacy:
+Pharmacy/restock_medicine
+Pharmacy/drug_restock_medicine
+Pharmacy/request_medicine
+Pharmacy/drug_process_pharmacy_request
+
+Purchasing:
+Purchasing/pharmacy_inventory
+Purchasing/drug_inventory
+Purchasing/all_drug_inventory
+Purchasing/restock_medicine_view_all
+Purchasing/restock_medicine_view_all_drug
+Purchasing/request_medicine_view1_all
+
+Nurse:
+Pharmacy/drug_pharmacy_request
+Pharmacy/pharmacy_request
+Pharmacy/View_submitted_pharmacy_request
+Pharmacy/nurse_return_medicine (NOT WORKING)
+
+Remaining
+View submitted request medicine(Pharmacy)
+NOtif

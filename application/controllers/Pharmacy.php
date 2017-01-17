@@ -103,7 +103,7 @@ class Pharmacy extends CI_Controller{
                                                     'unique_id'=>$d->unique_id);
     }
 
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/release_request_modal');
     $this->load->view('pharmacy/process_pharmacy_request',$data);
   }
@@ -166,7 +166,7 @@ class Pharmacy extends CI_Controller{
     $data['details'] = $this->Model_pharmacy->get_specific_request($id);
     $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
     $data['id'] = $id;
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/accept_pharmacy_request_modal');
     $this->load->view('pharmacy/reject_pharmacy_request_modal');
     $this->load->view('pharmacy/view_one_request',$data);
@@ -287,7 +287,7 @@ class Pharmacy extends CI_Controller{
                                                     'unique_id'=>$d->unique_id);
     }
 
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/release_request_modal');
     $this->load->view('pharmacy/drugs_process_pharmacy_request',$data);
   }
@@ -299,7 +299,7 @@ class Pharmacy extends CI_Controller{
     $data['details'] = $this->Model_pharmacy->get_specific_request($id);
     $data['items'] = $this->Model_pharmacy->get_drug_inventory();
     $data['id'] = $id;
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/accept_pharmacy_request_modal');
     $this->load->view('pharmacy/reject_pharmacy_request_modal');
     $this->load->view('pharmacy/drugs_view_one_request',$data);
@@ -328,7 +328,7 @@ class Pharmacy extends CI_Controller{
     $data['details'] = $this->Model_pharmacy->get_specific_request($id);
     $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
     $data['id'] = $id;
-    $this->load->view('pharmacy/header');
+    $this->load->view('users/includes/header.php',$header);
     $this->load->view('pharmacy/accept_pharmacy_request_modal');
     $this->load->view('pharmacy/reject_pharmacy_request_modal');
     $this->load->view('pharmacy/view_one_request',$data);
@@ -542,7 +542,33 @@ class Pharmacy extends CI_Controller{
     $data['details'] = $this->Model_pharmacy->get_specific_request($id);
     $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
     $data['id'] = $id;
+    foreach($data['details'] as $d)
+    {
+      if($d->phar_stat == 2)
+      {
+        $data['released'] = 1;
+      }
+      else
+      {
+        $data['released'] = 0;
+      }
+    }
     $this->load->view('users/includes/header',$header);
     $this->load->view('pharmacy/View_one_submitted_pharmacy_request',$data);
+  }
+
+  function nurse_return_medicine()
+  {
+    $header['title'] = "HIS: Request";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $id = $this->uri->segment('3');
+
+    $data['details'] = $this->Model_pharmacy->get_specific_request($id);
+    $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+    $data['id'] = $id;
+    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('pharmacy/pharmacy_request_modal');
+    $this->load->view('pharmacy/nurse_return_medicine',$data);
   }
 }
