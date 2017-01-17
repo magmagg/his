@@ -48,10 +48,18 @@
 
                         </tbody>
                     </table>
+                    <?php $ctr = 1; ?>
+                    <?php foreach($details as $d): ?>
+                    <?php if($d->phar_stat == 0):?>
+                        <?php if($ctr == 1): ?>
                     <center>
                         <button class="btn btn-success btn" data-href="<?php echo base_url();?>Pharmacy/accept_pharmacy_request/<?php echo $id?>" data-toggle="modal" data-target="#confirm-accept"><i class="fa fa-check"></i></button>
                         <button class="btn btn-danger btn" data-href="<?php echo base_url();?>Pharmacy/reject_pharmacy_request/<?php echo $id?>" data-toggle="modal" data-target="#confirm-reject"><i class="fa fa-ban"></i></button>
                     </center>
+                    <?php $ctr++; ?>
+                <?php endif; ?>
+                        <?php endif;?>
+                    <?php endforeach; ?>
 
             </div>
             </section>
