@@ -29,6 +29,7 @@
                       $overall_amount = 0;
                     ?>
                     <input type="hidden" name="patient_id" value="<?=$patient_detail->patient_id?>">
+                    <input type="hidden" name="transaction_id" value="<?=$transaction_id?>">
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
@@ -43,24 +44,10 @@
                               <td class="hidden-phone">Room Fee</td>
                               <td>
                                 <?php
-                                    $total_room_price = 0;
-                                    $room_data_1 = array();
-                                    $room_data_2 = "";
-                                    if(!empty($directroom_bill)){
-                                      foreach($directroom_bill as $bill){
-                                        $total_room_price += $bill['price'];
-                                        array_push($room_data_1, $bill['bed_bill_id']);
-                                        $room_data_2 = implode(',', $room_data_1);
-                                      }
-                                      $overall_amount += $total_room_price;
-                                    }
-
-                                    if($total_room_price != 0){
-                                      echo $total_room_price;
-                                    }
+                                    echo $room_price;
+                                    $overall_amount += $room_price
                                 ?>
-                                <input type='hidden' name='total_room_price' value='<?=$total_room_price?>'>
-                                <input type="hidden" name="room_data" value="<?=$room_data_2?>">
+                                <input type='hidden' name='total_room_price' value='<?=$room_price?>'>
                               </td>
                           </tr>
                           <tr>
@@ -68,24 +55,10 @@
                               <td class="hidden-phone">Emergency Room Fee</td>
                               <td>
                                 <?php
-                                    $total_er_price = 0;
-                                    $er_data_1 = array();
-                                    $er_data_2 = "";
-                                    if(!empty($emergencyroom_bill)){
-                                      foreach($emergencyroom_bill as $bill){
-                                        $total_er_price += $bill['price'];
-                                        array_push($er_data_1, $bill['bed_bill_id']);
-                                        $er_data_2 = implode(',', $er_data_1);
-                                      }
-                                      $overall_amount += $total_er_price;
-                                    }
-
-                                    if($total_er_price != 0){
-                                      echo $total_er_price;
-                                    }
-                                ?>                                
-                                <input type='hidden' name='total_er_price' value='<?=$total_er_price?>'>
-                                <input type="hidden" name="er_data" value="<?=$er_data_2?>">
+                                    echo $er_price;
+                                    $overall_amount += $er_price
+                                ?>
+                                <input type='hidden' name='total_er_price' value='<?=$er_price?>'>
                               </td>
                           </tr>
                           <tr>
@@ -93,23 +66,10 @@
                               <td class="hidden-phone">Operating Room Fee</td>
                               <td>
                                 <?php
-                                    $total_or_price = 0;
-                                    $or_data_1 = array();
-                                    $or_data_2 = "";
-                                    if(!empty($operatingroom_bill)){
-                                      foreach($operatingroom_bill as $bill){
-                                        $total_or_price += $bill['price'];
-                                        array_push($or_data_1, $bill['bed_bill_id']);
-                                        $or_data_2 = implode(',', $or_data_1);
-                                      }
-                                      $overall_amount += $total_or_price;
-                                    }
-                                    if($total_or_price != 0){
-                                        echo $total_or_price;
-                                    }
+                                    echo $or_price;
+                                    $overall_amount += $or_price
                                 ?>
-                                <input type='hidden' name='total_or_price' value='<?=$total_or_price?>'>
-                                <input type="hidden" name="or_data" value="<?=$or_data_2?>">
+                                <input type='hidden' name='total_or_price' value='<?=$or_price?>'>
                               </td>
                           </tr>
                           <tr>
@@ -117,23 +77,10 @@
                               <td class="hidden-phone">ICU Fee</td>
                               <td>
                                 <?php
-                                    $total_icu_price = 0;
-                                    $icu_data_1 = array();
-                                    $icu_data_2 = "";
-                                    if(!empty($icu_bill)){
-                                      foreach($icu_bill as $bill){
-                                        $total_icu_price += $bill['price'];
-                                        array_push($icu_data_1, $bill['bed_bill_id']);
-                                        $icu_data_2 = implode(',', $icu_data_1);
-                                      }
-                                      $overall_amount += $total_icu_price;
-                                    }
-                                    if($total_icu_price != 0){
-                                        echo $total_icu_price;
-                                    }
+                                    echo $icu_price;
+                                    $overall_amount += $icu_price
                                 ?>
-                                <input type='hidden' name='total_icu_price' value='<?=$total_icu_price?>'>
-                                <input type="hidden" name="icu_data" value="<?=$icu_data_2?>">
+                                <input type='hidden' name='total_icu_price' value='<?=$icu_price?>'>
                               </td>
                           </tr>
                           <tr>
@@ -141,47 +88,21 @@
                               <td class="hidden-phone">Laboratory Fee</td>
                               <td>
                                 <?php
-                                $total_lab_price = 0;
-                                $lab_data_1 = array();
-                                $lab_data_2 = "";
-                                  if(!empty($laboratory_bill)){
-                                    foreach($laboratory_bill as $bill){
-                                      $total_lab_price += $bill['price'];
-                                      array_push($lab_data_1, $bill['lab_bill_id']);
-                                      $lab_data_2 = implode(',', $lab_data_1);
-                                    }
-                                    $overall_amount += $total_lab_price;
-                                  }
-                                  if($total_lab_price != 0){
-                                      echo $total_lab_price;
-                                  }
+                                    echo $lab_price;
+                                    $overall_amount += $lab_price
                                 ?>
-                                <input type='hidden' name='total_lab_price' value='<?=$total_lab_price?>'>
-                                <input type="hidden" name="lab_data" value="<?=$lab_data_2?>">
+                                <input type='hidden' name='total_lab_price' value='<?=$lab_price?>'>
                               </td>
                           </tr>
                           <tr>
                               <td>Radiology</td>
                               <td class="hidden-phone">Radiology Fee</td>
                               <td>
-                              <?php
-                                $total_rad_price = 0;
-                                $rad_data_1 = array();
-                                $rad_data_2 = "";
-                                if(!empty($radiology_bill)){
-                                  foreach($radiology_bill as $bill){
-                                    $total_rad_price += $bill['price'];
-                                    array_push($rad_data_1, $bill['rad_bill_id']);
-                                    $rad_data_2 = implode(',', $rad_data_1);
-                                  }
-                                  $overall_amount += $total_rad_price;
-                                }
-                                if($total_rad_price != 0){
-                                    echo $total_rad_price;
-                                }
-                              ?>
-                              <input type='hidden' name='total_rad_price' value='<?=$total_rad_price?>'>
-                              <input type="hidden" name="rad_data" value="<?=$rad_data_2?>">
+                                <?php
+                                    echo $rad_price;
+                                    $overall_amount += $rad_price
+                                ?>
+                              <input type='hidden' name='total_rad_price' value='<?=$rad_price?>'>
                               </td>
                           </tr>
                           <tr>
@@ -189,23 +110,10 @@
                               <td class="hidden-phone">CSR Fee</td>
                               <td>
                                 <?php
-                                    $total_csr_price = 0;
-                                    $csr_data_1 = array();
-                                    $csr_data_2 = "";
-                                    if(!empty($csr_bill)){
-                                      foreach($csr_bill as $bill){
-                                        $total_csr_price += $bill['price'];
-                                        array_push($csr_data_1, $bill['csr_bill_id']);
-                                        $csr_data_2 = implode(',', $csr_data_1);
-                                      }
-                                      $overall_amount += $total_csr_price;
-                                    }
-                                    if($total_csr_price != 0){
-                                        echo $total_csr_price;
-                                    }
+                                    echo $csr_price;
+                                    $overall_amount += $csr_price
                                 ?>
-                            <input type='hidden' name='total_csr_price' value='<?=$total_csr_price?>'>
-                            <input type="hidden" name="csr_data" value="<?=$csr_data_2?>">
+                            <input type='hidden' name='total_csr_price' value='<?=$csr_price?>'>
                               </td>
                           </tr>
                           <tr>

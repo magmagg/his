@@ -110,8 +110,27 @@
       return $query->row();
     }
 
-    function insert_bill($data){
-      $this->db->insert('rad_billing', $data);
+    function insert_bill($data, $existing_bill, $patient){
+        $this->db->insert('rad_billing', $data);
+        $this->db->select('*');
+        $this->db->from('rad_billing');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('rad_bill_id', 'desc');
+        $this->db->limit(1);
+        $query_rad_bill = $this->db->get()->row();
+        
+        if(empty($existing_bill)){
+            $data_insert_bill = array("patient_id"=>$patient, "rad_billing_ids"=>$query_rad_bill->rad_bill_id);
+            $this->db->insert('billing', $data_insert_bill);
+        }else{
+            if($existing_bill->rad_billing_ids == ""){
+             $data_update_rad_bill = array("rad_billing_ids"=>$query_rad_bill->rad_bill_id);   
+            }else{
+             $data_update_rad_bill = array("rad_billing_ids"=>$existing_bill->rad_billing_ids.",".$query_rad_bill->rad_bill_id);
+            }
+            $this->db->where('transaction_id', $existing_bill->transaction_id);
+            $this->db->update('billing', $data_update_rad_bill);
+        }
     }
 
     function mark_done_request($id, $data){
@@ -142,6 +161,14 @@
     function activate($id, $data){
       $this->db->where('exam_id', $id);
       $this->db->update('radiology_exam', $data);
+    }
+    
+    function get_existing_rad_bill($patient){
+        $this->db->select('*');
+        $this->db->from('billing');
+        $this->db->where("bill_status = 0 AND patient_id ='".$patient."'");
+        $query = $this->db->get()->row();
+        return $query;
     }
   }
 ?>

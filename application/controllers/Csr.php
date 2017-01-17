@@ -187,7 +187,8 @@
         "price"=>$request_details->item_price,
         "patient_id"=>$request_details->patient_id
       );
-      $this->Model_Csr->insert_bill($data);
+      $existing_bill = $this->Model_Csr->get_existing_csr_bill($request_details->patient_id);
+      $this->Model_Csr->insert_bill($data, $existing_bill, $request_details->patient_id);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Approved CSR request">
                                 <input type="hidden" id="type" value="success">' );

@@ -3,7 +3,7 @@
   class Model_admitting extends CI_Model{
     /*Admitting*/
 
-    function admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status){
+    function admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status, $existing_bill){
         $this->db->where('bed_id' ,$bed);
         $this->db->update('beds', $data_beds);
 
@@ -32,6 +32,35 @@
                                 "patient_id"=>$patient
                               );
         $this->db->insert('bed_billing', $data_bed_billing);
+        $this->db->select('*');
+        $this->db->from('bed_billing');
+        $this->db->where('patient_id', $patient);
+        $this->db->order_by('bed_bill_id', 'desc');
+        $this->db->limit(1);
+        $query_bed_bill = $this->db->get()->row();
+        if(empty($existing_bill)){
+            $data_insert_bill = array(
+                "patient_id"=>$patient,
+                "room_billing_ids"=>$query_bed_bill->bed_bill_id
+            );
+            $this->db->insert("billing", $data_insert_bill);
+        }else{
+            if($existing_bill->room_billing_ids == ""){
+                $data_update_room_bill = array("room_billing_ids"=>$query_bed_bill->bed_bill_id);
+            }else{
+                $data_update_room_bill = array("room_billing_ids"=>$existing_bill->room_billing_ids.",".$query_bed_bill->bed_bill_id);
+            }
+            $this->db->where('transaction_id', $existing_bill->transaction_id);
+            $this->db->update('billing', $data_update_room_bill);
+        }
+    }
+      
+    function get_existing_room_bill($patient_id){
+        $this->db->select('*');
+        $this->db->from('billing');
+        $this->db->where("bill_status=0 AND patient_id='".$patient_id."'");
+        $query = $this->db->get()->row();
+        return $query;
     }
 
     function remove_patient_from_previous_admit($patient){
@@ -192,7 +221,7 @@
        $this->db->select('*');
        $this->db->from('rooms a');
        $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
-       $this->db->where('b.room_name = "ICU"');
+       $this->db->where('b.room_name = "Intensive Care Unit"');
        $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
        $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
        $this->db->order_by('a.room_id','asc');

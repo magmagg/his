@@ -266,7 +266,7 @@ class Admitting extends CI_Controller{
       "patient_id"=>$patient,
       "bed"=>$bed
     );
-    echo $room_type." ".$room." ".$bed." ".$patient;
+      
     if($room_type == "EmergencyRoom"){
         $data_patient_status = array("patient_status"=>1, "date_admitted"=>date('Y-m-d H:i:s'));
     }else if($room_type == "DirectRoom"){
@@ -276,8 +276,8 @@ class Admitting extends CI_Controller{
     }else if($room_type == "ICU"){
         $data_patient_status = array("patient_status"=>4, "date_admitted"=>date('Y-m-d H:i:s'));
     }
-
-    $this->Model_admitting->admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
+    $existing_bill = $this->Model_admitting->get_existing_room_bill($patient);
+    $this->Model_admitting->admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status, $existing_bill);
     $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been admitted to room.">
                                 <input type="hidden" id="type" value="success">' );
@@ -311,7 +311,8 @@ class Admitting extends CI_Controller{
           "bed"=>$bed
        );
 
-      $this->Model_admitting->admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status);
+      $existing_bill = $this->Model_admitting->get_existing_room_bill($patient);
+      $this->Model_admitting->admitpatient($room, $bed, $patient, $data_beds, $data_admission, $data_patient_status, $existing_bill);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                 <input type="hidden" id="msg" value="Patient has been transferred to another room.">
                                 <input type="hidden" id="type" value="success">' );

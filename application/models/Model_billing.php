@@ -2,12 +2,13 @@
 if (!defined('BASEPATH'))exit('No direct script access allowed');
 class Model_billing extends CI_Model{
 
-  function get_admitted_patients(){
-      $this->db->select('*');
-      $this->db->from('patient');
-      $this->db->Where('patient_status !=', 0);
-      $query = $this->db->get();
-      return $query->result_array();
+
+  function get_billing_details($id){
+    $this->db->select('*');
+    $this->db->from('billing');
+    $this->db->where("bill_status = 0 AND patient_id='".$id."'");
+    $query = $this->db->get()->row();
+    return $query;
   }
 
   function get_patient_with_billing(){
@@ -30,67 +31,38 @@ class Model_billing extends CI_Model{
   function get_radiology_bill($id){
     $this->db->select('*');
     $this->db->from('rad_billing');
-    $this->db->where(array('patient_id'=>$id, 'rad_bill_status'=>0));
+    $this->db->where('rad_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
   function get_laboratory_bill($id){
     $this->db->select('*');
     $this->db->from('lab_billing');
-    $this->db->where(array('patient_id'=>$id, 'lab_bill_status'=>0));
+    $this->db->where('lab_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
-  function get_directroom_billing($id){
+  function get_room_billing($id){
     $this->db->select('*');
     $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name != "Emergency Room Bill" AND bill_name != "Operating Room Bill" AND bill_name != "ICU Bill"');
+    $this->db->where('bed_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function get_emergencyroom_billing($id){
-    $this->db->select('*');
-    $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name = "Emergency Room Bill"');
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function get_icu_billing($id){
-    $this->db->select('*');
-    $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name = "ICU Bill"');
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function get_or_billing($id){
-    $this->db->select('*');
-    $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name = "Operating Room Bill"');
-    $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
   function get_csr_billing($id){
     $this->db->select('*');
     $this->db->from('csr_billing');
-    $this->db->where(array('patient_id'=>$id, 'csr_bill_status'=>0));
+    $this->db->where('csr_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
-  function submit_to_cashier($data){
-    $this->db->insert('billing', $data);
-    $this->db->select('transaction_id');
-    $this->db->from('billing');
-    $this->db->order_by('date_submitted', 'desc');
-    $this->db->limit(1);
-    $query = $this->db->get();
-    return $query->row('transaction_id');
+  function submit_to_cashier($data, $transaction_id){
+    $this->db->where('transaction_id', $transaction_id);
+    $this->db->update('billing', $data);
   }
 
   function get_transaction_details($id){
@@ -112,12 +84,12 @@ class Model_billing extends CI_Model{
       $data = array("bed_bill_status"=>2);
       $this->db->where("bed_bill_id", $id);
       $this->db->update("bed_billing", $data);
-      
+
       $this->db->select('*');
       $this->db->from('bed_billing');
       $this->db->where('bed_bill_id', $id);
       $query = $this->db->get();
-      
+
       return $query->row()->admission_id;
   }
 
@@ -157,7 +129,7 @@ class Model_billing extends CI_Model{
 
       $this->db->where("patient_id", $id);
       $this->db->update("patient", $data_discharge_status);
-      
+
       $data_discharge = array("admission_id"=>$admission_id, "patient_id"=>$id);
       $this->db->insert('discharge_schedule', $data_discharge);
   }

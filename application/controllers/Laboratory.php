@@ -51,33 +51,6 @@
         }
     }
 
-      /*function MakeLaboratoryRequests(){
-          $header['title'] = "HIS: Laboratory: Create Laboratory Request";
-          $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-          $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-          $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
-          $this->load->view('users/includes/header.php',$header);
-          $this->load->view('laboratory/makelaboratoryrequest.php',$data);
-      }
-
-    function MakeLaboratoryRequests2(){
-      $header['title'] = "HIS: Laboratory: Create Laboratory Request";
-      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
-      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $patient = $this->input->post('patient');
-      if($patient==""){
-        redirect(base_url()."Laboratory/MakeLaboratoryRequests");
-      }else{
-        $data['labexamtype'] = $this->Model_Laboratory->get_all_examtype();
-        $data['urgencycat'] = $this->Model_Laboratory->get_all_urgencycategory();
-        $data['fastingcat'] = $this->Model_Laboratory->get_all_fastingcategory();
-        $data['patient'] = $this->Model_Laboratory->get_single_patient($patient);
-        $data['specimen'] = $this->Model_Laboratory->get_all_labspec();
-        $this->load->view('users/includes/header.php',$header);
-        $this->load->view('laboratory/makelaboratoryrequest2.php',$data);
-      }
-    }*/
-
     function AppofReq(){
       $header['title'] = "HIS: Laboratory: Approval of Requests";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
@@ -97,8 +70,8 @@
             "price"=>$laboratory_details->lab_exam_type_price,
             "patient_id"=>$laboratory_details->lab_patient
         );
-        
-      $this->Model_Laboratory->insert_bill($bill_data);
+      $existing_bill = $this->Model_Laboratory->get_existing_lab_bill($laboratory_details->lab_patient);
+      $this->Model_Laboratory->insert_bill($bill_data, $existing_bill, $laboratory_details->lab_patient);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                                     <input type="hidden" id="msg" value="Approved laboratory exam request">
                                     <input type="hidden" id="type" value="success">' );
