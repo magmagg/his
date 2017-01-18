@@ -25,6 +25,8 @@ date_default_timezone_set('Asia/Manila');
 |
 */
 $config['base_url'] = 'http://localhost/his/';
+#$config['base_url'] = 'http://172.16.30.219/his/';
+
 
 /*
 |--------------------------------------------------------------------------
