@@ -3,7 +3,7 @@
       <div class="col-sm-12">
         <section class="panel">
           <header style="font-weight:300" class="panel-heading">
-             Radiology Exam List
+             Billing List
           <span class="tools pull-right">
           </span>
           </header>

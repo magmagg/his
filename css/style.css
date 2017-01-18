@@ -4736,9 +4736,9 @@ tr.odd.gradeX td.sorting_1, tr.even.gradeX td.sorting_1, table.display tr.even.g
 /*footer*/
 
 .site-footer {
-  background: #5b6e84;
-  color: #fff;
-  padding: 10px 0;
+    background: #5b6e84;
+    color: #fff;
+    padding: 10px 0;
 }
 
 .go-top {
@@ -6212,27 +6212,3 @@ header.blue-bg .search:focus {
     background: #fff;
     border-radius:4px;
 }
-
-.adv-table table tr td{
-	border: 0
-}
-
-.adv-table table tr td:first-child{
-	font-weight: 600;
-	color: #444
-}
-
-.adv-table table tbody{
-	text-align:left;
-}
-
-.adv-table table tbody td:last-child{
-	text-align:center;
-
-}
-
-@media only screen and (max-width : 1200px) {
-      #calendarmargin {
-        margin-top: 20%;
-      }
-   }

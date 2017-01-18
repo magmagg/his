@@ -1,30 +1,7 @@
 <section id="main-content">
   <section class="wrapper">
     <div class="row">
-      <div class="col-sm-3">
-
-          <section class="panel">
-              <header class="panel-heading">
-				New Product
-				<span class="tools pull-right">
-
-				</span>
-			  </header>
-			  <div class="panel-body">
-               <div class="adv-table">
-				  <table class="table">
-					<tr>
-
-					</tr>
-				  </table>
-			  <center>
-				<a href="#requestproduct" data-toggle="modal" role="button" class="btn btn-sm btn-round btn-success"><i class="fa fa-plus-circle"></i> Request Product</a>
-				</center>
-				</div>
-				</div>
-          </section>
-      </div>
-      <div class="col-sm-9">
+      <div class="col-sm-12">
           <section class="panel">
 
               <header class="panel-heading">
@@ -59,7 +36,7 @@
                       echo "<td>Out of Stock</td>";
                     }
                       echo "<td>";
-                        echo "<a href='".base_url()."CSR/RequestRestock/".$item['csr_id']."' role='button' class='btn btn-info btn-xs'>Request stock</a>";
+                        echo "<a data-id='".$item['csr_id']."' data-name='".$item['item_name']."' role='button' class='btn btn-info btn-xs' onclick='requestrestock(this)'>Request stock</a>";
                       echo"</td>";
                     echo "</tr>";
                 }
@@ -72,31 +49,32 @@
       </div>
     </div>
 
-    <div class="modal fade modal-dialog-center" id="requestproduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade modal-dialog-center" id="requestrestock" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content-wrap">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" align="center">New Product Request Form</h4>
+                        <h4 class="modal-title" align="center" id="modal-title"></h4>
                     </div>
                     <div class="modal-body">
                       <?php
                         $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-                        echo form_open('Csr/add_newproduct', $attributes);
+                        echo form_open('Csr/request_restock', $attributes);
                       ?>
 
                       <div class="form-group">
                           <label  class="col-lg-3 col-sm-3 control-label">Item: </label>
                           <div class="col-lg-9">
-                            <input type="text" name="itemreq" class="form-control" placeholder="Item Name">
+                            <input type="hidden" name="item_id" id="item_id">
+                            <input type="text" name="item_name" id="item_name" class="form-control" readonly>
                           </div>
                       </div>
 
                       <div class="form-group">
                         <label  class="col-lg-3 col-sm-3 control-label">Quantity: </label>
                         <div class="col-lg-9">
-                            <select class="form-control" name="itemquant">
+                            <select class="form-control" name="item_quantity">
                               <?php
                                 for($i = 1; $i<=300; $i++){
                                   echo "<option value=".$i.">".$i."</option>";
@@ -123,7 +101,14 @@
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
-
+<script>
+    function requestrestock(e){
+        $("#modal-title").html(e.getAttribute("data-name")+" Request Restock");
+        document.getElementById("item_id").value = e.getAttribute("data-id");
+        document.getElementById("item_name").value = e.getAttribute("data-name");
+        $("#requestrestock").modal();
+    }
+</script>
 <script class="include" type="text/javascript" src="<?=base_url()?>js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?=base_url()?>js/jquery.scrollTo.min.js"></script>
 <script src="<?=base_url()?>js/jquery.nicescroll.js" type="text/javascript"></script>

@@ -16,7 +16,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $query = $this->db->get();
       return $query->result_array();
     }
@@ -25,7 +24,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('a.pur_stat', 0);
       $query = $this->db->get();
       return $query->result_array();
@@ -35,7 +33,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('a.pur_stat', 3);
       $query = $this->db->get();
       return $query->result_array();
@@ -84,7 +81,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('pur_stat',1);
       $query = $this->db->get();
       return $query->result_array();
@@ -94,7 +90,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('pur_stat',2);
       $query = $this->db->get();
       return $query->result_array();

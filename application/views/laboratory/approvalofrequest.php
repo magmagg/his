@@ -38,7 +38,6 @@
                 <tr id="tblheader">
                     <th>Request #</th>
                     <th>Date Added</th>
-                    <th>Check-In #</th>
                     <th>Patient</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -51,7 +50,6 @@
                 echo "<tr>";
                 echo"<td>".$labreq['lab_id']."</td>";
                 echo"<td>".$labreq['lab_date_req']."</td>";
-                echo"<td>".$labreq['lab_patient_checkin']."</td>";
                 echo"<td>".$labreq['first_name']." ".$labreq['last_name']."</td>";
                 echo "<td>For Approval</td>";
                 echo "<td>";

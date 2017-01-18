@@ -160,31 +160,8 @@
         <!-- invoice end-->
     </section>
 </section>
-
-<script>
-  function input_pf_modal(){
-    $("#input_pf").modal();
-  }
-
-  function submit_by_id() {
-    var pf_amount = document.getElementById("inputted_pf").value;
-    var overall_amount = <?=$overall_amount?>;
-    document.getElementById("prof_fee_input").value = pf_amount;
-    $("#prof_fee").html(pf_amount);
-    var new_grand_total = +overall_amount + +pf_amount;
-    document.getElementById("overall_amount").value = new_grand_total;
-    $("#grand_total").html("<strong>Grand Total: </strong>"+new_grand_total+" php</li>");
-    $("#input_pf").modal('hide');
-  }
-</script>
 <!-- js placed at the end of the document so the pages load faster -->
 <script src="<?=base_url()?>js/jquery.js"></script>
-<script>
-  $(document).ready(function(){
-    document.getElementById("overall_amount").value = <?=$overall_amount?>;
-    //alert(document.getElementById("overall_amount").value);
-  });
-</script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
 <script class="include" type="text/javascript" src="<?=base_url()?>js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?=base_url()?>js/jquery.scrollTo.min.js"></script>

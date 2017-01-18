@@ -1,101 +1,54 @@
 <section id="main-content">
   <section class="wrapper">
-    <div class="row">
-      <center><h4><a href="<?=base_url()?>Csr/ListofProducts" role='button' class='btn btn-default btn-xs'><</a> Request History<h4></center>
-      <div class="col-sm-12">
+    <div class="col-sm-12">
           <section class="panel">
-              <header class="panel-heading" style="background-color: #000;"></header>
               <header class="panel-heading">
-                  <center><h4>Accepted Requests<h4></center>
+                  CSR Product Request History
+				  <span class="tools pull-right">
+				  </span>
               </header>
-              <table class="table table-hovered" style="text-align: center;">
+			  <div class="panel-body">
+              <div class="adv-table">
+
+              <table id="dynamic-table" class="table table-striped" style="text-align: center;">
+			    <thead>
                 <tr id="tblheader">
-                    <td>#</td>
-                    <td>Requester</td>
-                    <td>Item Name</td>
-                    <td>Quantity</td>
-                    <td>Request Type</td>
-                    <td>Date Accepted</td>
+                    <th>#</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Date Requested</th>
+                    <th>Status</th>
                 </tr>
+				</thead>
+				<tbody align="center">
                 <?php
-                  foreach($accepted as $item)
-                  {
+                foreach($requests as $request)
+                {
                     echo "<tr>";
-                    echo "<td>".$item['purchase_id']."</td>";
-                    echo "<td>".$item['first_name']." ".$item['middle_name']." ".$item['last_name']."</td>";
-                    echo "<td>".$item['item_name']."</td>";
-                    echo "<td>".$item['quantity']."</td>";
-                    echo "<td>".$item['pur_name']."</td>";
-                    echo "<td>".$item['date_altered_status']."</td>";
+                      echo "<td>".$request['purchase_id']."</td>";
+                      echo "<td>".$request['item_name']."</td>";
+                      echo "<td>".$request['quantity']."</td>";
+                      echo "<td>".date('M d, Y', strtotime($request['date_created']))."</td>";
+                      echo "<td>";
+                      if($request['pur_stat'] == 0){
+                        echo "<span class='label label-default'>Pending</span>";
+                      }else if($request['pur_stat'] == 1){
+                          echo "<span class='label label-success'>Accepted</span>";
+                      }else if($request['pur_stat'] == 2){
+                          echo "<span class='label label-danger'>Rejected</span>";
+                      }else if($request['pur_stat'] == 3){
+                          echo "<span class='label label-info'>On Hold</span>";
+                      }
+                      echo "</td>";
                     echo "</tr>";
-                  }
-                ?>
+                }
+                 ?>
+			  </tbody>
               </table>
+			  </div>
+			  </div>
           </section>
       </div>
-      <div class="col-sm-12">
-          <section class="panel">
-              <header class="panel-heading" style="background-color: #000;"></header>
-              <header class="panel-heading">
-                  <center><h4>Rejected Requests<h4></center>
-              </header>
-              <table class="table table-hovered" style="text-align: center;">
-                <tr id="tblheader">
-                    <td>#</td>
-                    <td>Requester</td>
-                    <td>Item Name</td>
-                    <td>Quantity</td>
-                    <td>Request Type</td>
-                    <td>Date Rejected</td>
-                </tr>
-                <?php
-                  foreach($rejected as $item)
-                  {
-                    echo "<tr>";
-                    echo "<td>".$item['purchase_id']."</td>";
-                    echo "<td>".$item['first_name']." ".$item['middle_name']." ".$item['last_name']."</td>";
-                    echo "<td>".$item['item_name']."</td>";
-                    echo "<td>".$item['quantity']."</td>";
-                    echo "<td>".$item['pur_name']."</td>";
-                    echo "<td>".$item['date_altered_status']."</td>";
-                    echo "</tr>";
-                  }
-                ?>
-              </table>
-          </section>
-      </div>
-      <div class="col-sm-12">
-          <section class="panel">
-              <header class="panel-heading" style="background-color: #000;"></header>
-              <header class="panel-heading">
-                  <center><h4>On-Hold Requests<h4></center>
-              </header>
-              <table class="table table-hovered" style="text-align: center;">
-                <tr id="tblheader">
-                    <td>#</td>
-                    <td>Requester</td>
-                    <td>Item Name</td>
-                    <td>Quantity</td>
-                    <td>Request Type</td>
-                    <td>Date On-Hold</td>
-                </tr>
-                <?php
-                  foreach($hold as $item)
-                  {
-                    echo "<tr>";
-                    echo "<td>".$item['purchase_id']."</td>";
-                    echo "<td>".$item['first_name']." ".$item['middle_name']." ".$item['last_name']."</td>";
-                    echo "<td>".$item['item_name']."</td>";
-                    echo "<td>".$item['quantity']."</td>";
-                    echo "<td>".$item['pur_name']."</td>";
-                    echo "<td>".$item['date_altered_status']."</td>";
-                    echo "</tr>";
-                  }
-                ?>
-              </table>
-          </section>
-      </div>
-    </div>
   </section>
 </section>
 

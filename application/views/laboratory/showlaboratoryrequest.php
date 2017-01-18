@@ -136,24 +136,6 @@
             </section>
         </div>
 		</div>
-        <div class="col-sm-12">
-            <section class="panel">
-
-                <header class="panel-heading">
-					Additional Remarks
-                </header>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                      <td style="text-align: center;"><?php echo $laboratorytoremarks->remark; ?></td>
-                    </tr>
-                    </thead>
-                    <tbody align="center">
-
-                    </tbody>
-                </table>
-            </section>
-        </div>
 
     </div>
   </section>
