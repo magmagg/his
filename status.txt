@@ -4,3 +4,68 @@ Patient
 2 - Ward or Direct Room
 3 - ICU
 4 - Operating Room
+
+/NOTES/
+-patient table -> date_admitted
+-csr_request table -> patient_id
+-trg_billing (trigger)
+-billing table -> date_paid
+-discharge_schedule table -> remove patient_id unique index
+-purchasing_csr -> remove request_type
+-laboratory_request -> remove lab_patient_checkin
+
+/Tasks and Permission/
+Admitting
+    -EmergencyRoom
+    -DirectRoom
+    -ICU
+    -OperatingRoom
+    -AdmittedPatients (Nurse and Admitting)
+    -TransferPatient
+
+Billing
+    -PatientBilling
+    -TransactionHistory
+    -Payment
+
+CSR
+    -RequestItem (Nurse)
+    -ViewRequest (Nurse)
+    -PendingRequests
+    -AcceptedRequests
+    -RejectedRequests
+    -ListOfProducts
+    -RequestRestock
+    -RequestHistory
+
+Purchasing
+    -CSRInventory
+    -CSRRequests
+
+Housekeeping
+    -ReportedBeds
+
+Patient
+    -PatientList
+
+Radiology
+    -MakeRadiologyRequest(Nurse)
+    -ViewRequest(Nurse)
+    -Maintenance
+
+Rooms
+    -ReportBed(Nurse)
+    -OperationRoom
+    -EmergencyRoom
+    -ICU
+    -Rooms
+    -RoomType
+
+Laboratory
+    -MakeLaboratoryRequests(Nurse)
+    -LaboratoryRequests(Nurse)
+    -AppofReq
+    -LabExamCateg
+    -LabExamType
+
+=========================================================================================================================

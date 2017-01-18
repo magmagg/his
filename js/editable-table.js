@@ -3,23 +3,19 @@ var EditableTable = function () {
     return {
 
         //main function to initiate the module
-        init: function ()
-        {
-            function restoreRow(oTable, nRow)
-            {
+        init: function () {
+            function restoreRow(oTable, nRow) {
                 var aData = oTable.fnGetData(nRow);
                 var jqTds = $('>td', nRow);
 
-                for (var i = 0, iLen = jqTds.length; i < iLen; i++)
-                {
+                for (var i = 0, iLen = jqTds.length; i < iLen; i++) {
                     oTable.fnUpdate(aData[i], nRow, i, false);
                 }
 
                 oTable.fnDraw();
             }
 
-            function editRow(oTable, nRow)
-            {
+            function editRow(oTable, nRow) {
                 var aData = oTable.fnGetData(nRow);
                 var jqTds = $('>td', nRow);
                 jqTds[0].innerHTML = '<input type="text" class="form-control small" value="' + aData[0] + '">';
@@ -30,8 +26,7 @@ var EditableTable = function () {
                 jqTds[5].innerHTML = '<a class="cancel" href="">Cancel</a>';
             }
 
-            function saveRow(oTable, nRow)
-            {
+            function saveRow(oTable, nRow) {
                 var jqInputs = $('input', nRow);
                 oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
                 oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);

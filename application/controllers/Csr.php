@@ -75,9 +75,7 @@
       $header['title'] = "HIS: CSR Request History";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $data['accepted'] = $this->Model_Csr->get_accepted_request();
-      $data['rejected'] = $this->Model_Csr->get_rejected_request();
-      $data['hold']     = $this->Model_Csr->get_hold_request();
+      $data['requests'] = $this->Model_Csr->get_product_request();
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('csr/requesthistory.php',$data);
     }
@@ -94,13 +92,6 @@
     }
 
     function insert_csr_item_request(){
-      $this->form_validation->set_rules('quantity', 'Quantity', 'callback_check_quantity');
-      if($this->form_validation->run() == FALSE){
-        $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Error">
-                                  <input type="hidden" id="msg" value="'.validation_errors().'">
-                                  <input type="hidden" id="type" value="error">');
-        redirect(base_url().'Csr/RequestItem');
-      }else{
         $data = array(
                     "nurse_id"=>$this->session->userdata('user_id'),
                     "csr_item_id"=>$this->input->post('item'),
@@ -112,19 +103,6 @@
                                   <input type="hidden" id="msg" value="Successfully requested item">
                                   <input type="hidden" id="type" value="success">');
         redirect(base_url().'Csr/RequestItem');
-      }
-    }
-
-    function check_quantity(){
-      $item_id = $this->input->post('item');
-      $request_quantity = $this->input->post('quantity');
-      $remaining_quantity = $this->Model_Csr->check_quantity($item_id);
-      if($request_quantity < $remaining_quantity){
-        return true;
-      }else{
-        $this->form_validation->set_message('check_quantity', 'Insuficcient stock. The remaining stock is '.$remaining_quantity);
-        return false;
-      }
     }
 
     function ViewRequest(){
@@ -157,20 +135,19 @@
       }
     }
 
-    function request_restock($id)
+    function request_restock()
     {
-      $itemname = $this->input->post('productname');
-      $itemquant = $this->input->post('productquant');
-
-      $restock = $this->Model_Csr->reqtyperestock();
+      $itemname = $this->input->post('item_name');
+      $itemquant = $this->input->post('item_quantity');
+      $item_id = $this->input->post('item_id');
+        
       $data = array('requester_id'=>$_SESSION['user_id'],
-                    'item_id'=>$id,
+                    'item_id'=>$item_id,
                     'quantity'=>$itemquant,
-                    'request_type'=>$restock,
                     'item_name'=>$itemname);
       $this->Model_Csr->restockproduct($data);
       $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
-                                <input type="hidden" id="msg" value="Requested for CSR item restock">
+                                <input type="hidden" id="msg" value="Requested for '.$itemname.' restock">
                                 <input type="hidden" id="type" value="success">' );
       redirect("Csr/ListofProducts");
     }
@@ -236,6 +213,11 @@
       $this->Model_Csr->hold_request($id,$datareq);
       redirect("Csr/PendingRequests");
     }
+      
+   function get_item_quantity(){
+      $quantity = $this->Model_Csr->get_item_quantity($this->uri->segment(3));
+      echo $quantity;
+   }
 
 
   }

@@ -101,13 +101,19 @@
     }
 
     //PRODUCTS REQUESTS
-
+    function get_product_request(){
+      $this->db->select('*');
+      $this->db->from('purchasing_csr a');
+      $this->db->join('users u','a.requester_id=u.user_id','left');
+      $query = $this->db->get();
+      return $query->result_array(); 
+    }
+      
     function get_accepted_request()
     {
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('pur_stat',1);
       $query = $this->db->get();
       return $query->result_array();
@@ -118,7 +124,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('pur_stat',2);
       $query = $this->db->get();
       return $query->result_array();
@@ -129,7 +134,6 @@
       $this->db->select('*');
       $this->db->from('purchasing_csr a');
       $this->db->join('users u','a.requester_id=u.user_id','left');
-      $this->db->join('purchase_req_type p', 'a.request_type=p.pur_req_id', 'left');
       $this->db->where('pur_stat',3);
       $query = $this->db->get();
       return $query->result_array();
@@ -228,7 +232,7 @@
     function get_request_by_user($id){
       $this->db->select('*');
       $this->db->from('csr_request a');
-      $this->db->join('users b', 'a.nurse_id=b.user_id','left');
+      $this->db->join('patient b', 'a.patient_id=b.patient_id','left');
       $this->db->join('csr_inventory c', 'a.csr_item_id=c.csr_id', 'left');
       $this->db->where('a.nurse_id', $id);
       $query = $this->db->get();
@@ -256,6 +260,14 @@
         $this->db->where("bill_status = 0 AND patient_id ='".$patient."'");
         $query = $this->db->get()->row();
         return $query;
+    }
+      
+    function get_item_quantity($id){
+      $this->db->select('*');
+      $this->db->from('csr_inventory');
+      $this->db->where('csr_id', $id);
+      $query = $this->db->get();
+      return $query->row('item_stock');
     }
   }
 ?>

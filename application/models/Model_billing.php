@@ -2,11 +2,18 @@
 if (!defined('BASEPATH'))exit('No direct script access allowed');
 class Model_billing extends CI_Model{
 
-
-  function get_billing_details($id){
+  function get_all_billings(){
+    $this->db->select('*');
+    $this->db->from('billing b');
+    $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  
+  function get_billing_details($transaction_id){
     $this->db->select('*');
     $this->db->from('billing');
-    $this->db->where("bill_status = 0 AND patient_id='".$id."'");
+    $this->db->where("transaction_id", $transaction_id);
     $query = $this->db->get()->row();
     return $query;
   }
@@ -15,7 +22,16 @@ class Model_billing extends CI_Model{
     $this->db->select('*');
     $this->db->from('billing b');
     $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
-    $this->db->where('b.bill_status', 0);
+    $this->db->where('b.bill_status !=', 2);
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+    
+  function get_patient_for_payment(){
+    $this->db->select('*');
+    $this->db->from('billing b');
+    $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
+    $this->db->where('b.bill_status', 1);
     $query = $this->db->get();
     return $query->result_array();
   }
@@ -75,7 +91,7 @@ class Model_billing extends CI_Model{
   }
 
   function mark_as_paid($id){
-    $data = array("bill_status"=>1, "date_paid"=>date('Y-m-d H:i:s'));
+    $data = array("bill_status"=>2, "date_paid"=>date('Y-m-d H:i:s'));
     $this->db->where('transaction_id', $id);
     $this->db->update('billing', $data);
   }

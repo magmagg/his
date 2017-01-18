@@ -29,19 +29,6 @@
                     echo "<td><a data-id='".$patient['patient_id']."' role='button' class='btn btn-success btn-xs' onclick='requestitem(this)' >Request Item</td>";
                   echo "</tr>";
                 }
-                /*foreach($csrinventory as $item)
-                {
-                  echo "<tr>";
-                  echo "<td>".$item['csr_id']."</td>";
-                  echo "<td>".$item['item_name']."</td>";
-                  echo "<td>".$item['item_desc']."</td>";
-                  if($item['item_stock']!=0){
-                    echo "<td>".$item['item_stock']."</td>";
-                  } else {
-                    echo "<td>Out of Stock</td>";
-                  }
-                  echo "</tr>";
-                }*/
                  ?>
 			  </tbody>
               </table>
@@ -70,7 +57,7 @@
               <div id="items">
                 <div class="form-group">
                   <div class="col-lg-9">
-                    <select class="form-control" name="item">
+                    <select class="form-control" name="item" id="item" onchange="changequantity()">
                       <?php
                         foreach($csrinventory as $item){
                           echo "<option value='".$item['csr_id']."' data-foo='".$item['item_stock']."'>".$item['item_name']."</option>";
@@ -81,12 +68,8 @@
 
                   <div class="col-lg-3">
                     <div id="select_quantity">
-                      <select class="form-control" name="quantity">
-                        <?php
-                           for($i = 20; $i > 0; $i--){
-                             echo "<option value='".$i."'>".$i."</option>";
-                           }
-                         ?>
+                      <select class="form-control" id="quantity" name="quantity">
+                        
                       </select>
                     </div>
                   </div>
@@ -112,11 +95,30 @@
     document.getElementById("patient_id").value = d.getAttribute("data-id");
     $("#requestcsritem").modal();
   }
+    
+  function changequantity(){
+    var select = document.getElementById("item");
+    var selected_id = select.options[select.selectedIndex].value;
+    $.ajax({
+        url: "<?=base_url()?>Csr/get_item_quantity/"+selected_id, 
+        success: function(result){
+            var option = "";
+            for(i=result; i>0; i--){
+                option += "<option value='"+i+"'>"+i+"</option>"
+            }
+            $("#quantity").html(option);
+        }
+    });
+  }
 </script>
 
 <script src="<?=base_url()?>js/jquery.js"></script>
 <script src="<?=base_url()?>js/bootstrap.min.js"></script>
-
+<script>
+    $(document).ready(function(){
+        changequantity();
+    });
+</script>
 <script class="include" type="text/javascript" src="<?=base_url()?>js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?=base_url()?>js/jquery.scrollTo.min.js"></script>
 <script src="<?=base_url()?>js/jquery.nicescroll.js" type="text/javascript"></script>

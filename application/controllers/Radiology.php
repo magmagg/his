@@ -17,8 +17,7 @@
       $this->load->view('radiology/radiology_request_by_user.php', $data);
       $this->load->view('includes/toastr.php');
     }
-
-
+      
   function MakeRadiologyRequest()
   {
     $header['title'] = "HIS: Make Radiology Request";

@@ -1,26 +1,21 @@
 <section id="main-content">
     <section class="wrapper">
-        <?php
-        $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-        echo form_open(base_url().'Radiology/insert_request/');
-        ?>
-
-        <?php
-            $attributes = array('class'=>'form-horizontal', 'role'=>'form');
-            echo form_open(base_url().'Radiology/insert_request/');
-        ?>
         <section class="panel">
             <header style="font-weight:300" class="panel-heading text-center">
                 Radiology Exam List
             </header>
+             <?php
+                $attributes = array('class'=>'form-horizontal', 'role'=>'form');
+                echo form_open(base_url().'Radiology/insert_request/');
+            ?>
             <div class="panel-body">
                     <section class="panel">
-                        <table class="table">
                             <center>
                                 <div class="form-group">
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <div class="col-lg-12">
+                                                <div class="checkboxes">
                                                 <?php
                                                     foreach($radiology_exams as $radiology_exam){
                                                         echo "<div class='col-lg-3'>";
@@ -31,11 +26,12 @@
                                                     }
                                                 ?>
                                             </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <br>
+                                </div>
                             </center>
-                        </table>
                     </section>
 
                 <div class="row">
@@ -65,7 +61,7 @@
                 </div>
             </div>
         </section>
-        <?//=form_close()?>
+        <?=form_close()?>
     </section>
 </section>
 
@@ -86,3 +82,8 @@
 <script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
 <script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+    
+<!--custom checkbox & radio-->
+<script type="text/javascript" src="<?=base_url()?>js/ga.js"></script>
+<!--script for this page-->
+<script src="<?=base_url()?>js/form-component.js"></script>

@@ -27,7 +27,6 @@
                     <th>Item Name</th>
                     <th>Quantity</th>
                     <th>Date Requested</th>
-                    <th>Type</th>
                     <th>Status</th>
                     <th style="text-align:center;">Action</th>
                   </tr>
@@ -41,7 +40,6 @@
                       echo "<td>".$item['item_name']."</td>";
                       echo "<td>".$item['quantity']."</td>";
                       echo "<td>".$item['date_created']."</td>";
-                      echo "<td>".$item['pur_name']."</td>";
                       if($item['pur_stat'] == 0){
                         echo "<td><span class='label label-default'>PENDING</span></td>";
                         echo "<td>";

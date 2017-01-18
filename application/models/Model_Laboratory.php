@@ -17,29 +17,6 @@
       $query = $this->db->get();
       return $query->row();
     }
-    
-    /*TESTING S*/
-    function get_tasks($type_id)
-    {
-      $this->db->select('*');
-      $this->db->from('task_usertype tu');
-      $this->db->join('task t','tu.task_id=t.task_id','left');
-      $this->db->where('user_type_id',$type_id);
-      $query = $this->db->get();
-      return $query->result_array();
-    }
-
-    function get_permissions($type_id)
-    {
-      $where = "user_type_id ='$type_id' and access='1'";
-      $this->db->select('*');
-      $this->db->from('permission_usertype pu');
-      $this->db->join('permission p','pu.permission_id=p.permission_id','left');
-      $this->db->where($where);
-      $query = $this->db->get();
-      return $query->result_array();
-    }
-
 
     /* Laboratory Request*/
     function get_laboratoryrequest_list()
@@ -47,6 +24,15 @@
       $this->db->select('*');
       $this->db->from('laboratory_request');
       $this->db->join('patient','laboratory_request.lab_patient=patient.patient_id','left');
+      $query = $this->db->get();
+      return $query->result_array();
+    }
+
+    function get_laboratoryrequest_of_nurse($id){
+      $this->db->select('*');
+      $this->db->from('laboratory_request lr');
+      $this->db->join('patient p', 'lr.lab_patient=p.patient_id', 'left');
+      $this->db->where('user_id_fk', $id);
       $query = $this->db->get();
       return $query->result_array();
     }
@@ -121,13 +107,13 @@
         $this->db->order_by('lab_bill_id', 'desc');
         $this->db->limit(1);
         $query_lab_bill = $this->db->get()->row();
-        
+
         if(empty($existing_bill)){
             $data_insert_bill = array("patient_id"=>$patient, "lab_billing_ids"=>$query_lab_bill->lab_bill_id);
             $this->db->insert('billing', $data_insert_bill);
         }else{
             if($existing_bill->lab_billing_ids == ""){
-             $data_update_lab_bill = array("lab_billing_ids"=>$query_lab_bill->lab_bill_id);   
+             $data_update_lab_bill = array("lab_billing_ids"=>$query_lab_bill->lab_bill_id);
             }else{
              $data_update_lab_bill = array("lab_billing_ids"=>$existing_bill->lab_billing_ids.",".$query_lab_bill->lab_bill_id);
             }
@@ -274,7 +260,7 @@
     function insertrequestremark($data3){
       $this->db->insert('lab_request_remarks',$data3);
     }
-    
+
     function get_existing_lab_bill($patient){
         $this->db->select('*');
         $this->db->from('billing');
@@ -282,6 +268,6 @@
         $query = $this->db->get()->row();
         return $query;
     }
-    
+
 }
 ?>

@@ -12,7 +12,7 @@
       $header['title'] = "HIS: Laboratory Requests";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
-      $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_list();
+      $data['laboratoryreq'] = $this->Model_Laboratory->get_laboratoryrequest_of_nurse($this->session->userdata('user_id'));
       $this->load->view('users/includes/header.php',$header);
       $this->load->view('laboratory/laboratoryrequest.php',$data);
       $this->load->view('includes/toastr.php');
@@ -39,10 +39,7 @@
         $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
         $data['patientlist'] = $this->Model_Laboratory->get_patient_list();
         $data['labexamtype'] = $this->Model_Laboratory->get_all_examtype();
-        $data['urgencycat'] = $this->Model_Laboratory->get_all_urgencycategory();
-        $data['fastingcat'] = $this->Model_Laboratory->get_all_fastingcategory();
-        $data['specimen'] = $this->Model_Laboratory->get_all_labspec();
-      $this->load->view('users/includes/header.php',$header);
+        $this->load->view('users/includes/header.php',$header);
         if(!$this->uri->segment(3)){
             $this->load->view('laboratory/makelaboratoryrequest.php',$data);
         }else{
@@ -366,34 +363,21 @@
 
      function insert_laboratoryrequest()
      {
+       $this->form_validation->set_rules('laboratoryexams[]', 'Laboratory Exams', 'required|trim');
        $this->form_validation->set_rules('labremark', 'Remark', 'trim|xss_clean|strip_tags');
        if($this->form_validation->run()==FALSE)
        {
          echo validation_errors();
        }
        else {
-         $specimens = $this->input->post('specimens');
-         $data1 = array('user_id_fk'=>$_SESSION['user_id'],
-                       'lab_patient'=>$this->input->post('patientid'),
+         $exams = $this->input->post('laboratoryexams[]');
+         for($i = 0; $i<count($exams); $i++){
+            $data1 = array('user_id_fk'=>$_SESSION['user_id'],
+                       'lab_patient'=>$this->input->post('patient_id'),
                        'lab_date_req'=>date('Y-m-d H:i:s'),
-                       'lab_patient_checkin'=>$this->input->post('patientchckin'),
-                       'urgency_cat_fk'=>$this->input->post('urgency'),
-                       'fasting_cat_fk'=>$this->input->post('fasting'),
-                       'exam_type_fk'=>$this->input->post('laboratoryexam'));
-            $id = $this->Model_Laboratory->insertlaboratoryrequest($data1);
-
-         foreach($specimens as $spec){
-           $data2 = array('lab_req_id'=>$id,
-                          'specimen_id'=>$spec);
-            $this->Model_Laboratory->insertrequestspecimen($data2);
-
+                       'exam_type_fk'=>$exams[$i]);
+            $this->Model_Laboratory->insertlaboratoryrequest($data1);
          }
-
-         $data3 = array('remark'=>$this->input->post('labremark'),
-                        'rem_date'=>date('Y-m-d'),
-                      'lab_id_fk'=>$id,
-                      'user_id_fk'=>$_SESSION['user_id']);
-            $this->Model_Laboratory->insertrequestremark($data3);
             $this->session->set_flashdata('msg', '<input type="hidden" id="title" value="Success">
                         						  <input type="hidden" id="msg" value="Successfully requested laboratory exam">
                         						  <input type="hidden" id="type" value="success">' );

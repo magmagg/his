@@ -14,7 +14,6 @@
                 <tr id="tblheader">
                     <th>Request #</th>
                     <th>Date Added</th>
-                    <th>Check-In #</th>
                     <th>Patient</th>
                     <th>Action</th>
                 </tr>
@@ -26,7 +25,6 @@
                   echo "<tr>";
                   echo "<td>".$req['lab_id']."</td>";
                   echo "<td>".$req['lab_date_req']."</td>";
-                  echo "<td>".$req['lab_patient_checkin']."</td>";
                   echo "<td>".$req['first_name']." ".$req['middle_name']." ".$req['last_name']."</td>";
                   echo "<td>";
                     echo "<a href='".base_url()."Laboratory/ShowLabReq/".$req['lab_id']."' role='button' class='btn btn-info btn-xs'>View</a>";
