@@ -14,6 +14,8 @@ Patient
 -purchasing_csr -> remove request_type
 -laboratory_request -> remove lab_patient_checkin
 
+//all user types dashboard must have content *dynamic data*
+
 /Tasks and Permission/
 Admitting
     -EmergencyRoom
@@ -67,5 +69,14 @@ Laboratory
     -AppofReq
     -LabExamCateg
     -LabExamType
+
+Management
+   -Doctor Schedules
+   -Management Doctors Schedule
+
+Doctor
+   -View Schedules
+
+
 
 =========================================================================================================================
