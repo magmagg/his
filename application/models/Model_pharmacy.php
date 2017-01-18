@@ -166,5 +166,61 @@ class Model_pharmacy extends CI_Model
     $this->db->insert('medicine_request',$data);
   }
 
+  //=======RETURN MEDICINE=====//
+
+  function submit_nurse_return_medicine($data)
+  {
+    $this->db->insert('pharmacy_audit_return',$data);
+  }
+
+  function get_nurse_id($userid)
+  {
+    $this->db->select('nurse_id');
+    $this->db->from('nurses');
+    $this->db->where('user_nurse_fk',$userid);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+    function get_nurse_return_requests()
+    {
+      $this->db->select('*');
+      $this->db->from('pharmacy_audit_return');
+      $query = $this->db->get();
+      return $query->result();
+    }
+
+    function get_nurse_return_requests_specific($id)
+    {
+      $this->db->select('*');
+      $this->db->from('pharmacy_audit_return');
+      $this->db->where('unique_id',$id);
+      $query = $this->db->get();
+      return $query->result();
+    }
+
+    function get_unique_ids_return()
+    {
+      $this->db->select('unique_id');
+      $this->db->from('pharmacy_audit_return');
+      $this->db->distinct();
+      $query = $this->db->get();
+      return $query->result();
+    }
+
+    function process_nurse_return_model($id,$data)
+    {
+        $this->db->where('unique_id',$id);
+        $this->db->update('pharmacy_audit_return',$data);
+    }
+
+    function update_pharmacy_audit_return($id,$data)
+    {
+      $this->db->where('phar_ret_id',$id);
+      $this->db->update('pharmacy_audit_return',$data);
+    }
+
+
+
 
 }

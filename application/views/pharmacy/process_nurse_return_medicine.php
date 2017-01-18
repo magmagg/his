@@ -7,15 +7,15 @@
               <header class="panel-heading">
                               Pharmacy requests
                           </header>
-                          <table class="table table-striped table-advance table-hover">
+                          <table class="table table-striped" style="text-align: center;"><!-- id="dynamic-table">-->
                               <thead>
                               <tr>
                                   <th></i>#</th>
-                                  <th><i class="fa fa-bookmark"></i>Total Price</th>
-                                  <th><i class="fa fa-bookmark"></i>Total Quantity</th>
-                                  <th><i class=" fa fa-edit"></i> Date</th>
                                   <th><i class=" fa fa-edit"></i> Requested by</th>
                                   <th><i class=" fa fa-edit"></i> For patient</th>
+                                  <th><i class="fa fa-bookmark"></i>Total Quantity</th>
+                                  <th><i class="fa fa-bookmark"></i>Total Price</th>
+                                  <th><i class=" fa fa-edit"></i> Date</th>
                                   <th><i class=" fa fa-edit"></i> Status</th>
                                   <th><i class=" fa fa-edit"></i> View</th>
                               </tr>
@@ -27,26 +27,26 @@
 
                               <tr>
                                 <td><?=$count?></td>
-                                <td><?=$t['price']?></td>
-                                <td><?=$t['quantity']?></td>
-                                <td><?=$t['date']?></td>
                                 <td><?=$t['requestedby']?></td>
                                 <td><?=$t['patient']?></td>
+                                <td><?=$t['quantity']?></td>
+                                <td><?=$t['price']?></td>
+                                <td><?=$t['date']?></td>
 
                               <?php if($t['status'] == 0):?>
                               <td><span class="label label-info label-mini">Due</span></td>
                               <?php elseif($t['status'] == 1):?>
                               <td><span class="label label-danger label-mini">For releasing</span></td>
                               <?php elseif($t['status'] == 2):?>
-                              <td><span class="label label-success label-mini">Released</span></td>
+                              <td><span class="label label-success label-mini">Returned</span></td>
                               <?php else: ?>
                               <td><span class="label label-danger label-mini">Rejected</span></td>
                               <?php endif;?>
 
                               <?php if($t['status'] == 1):?>
-                              <td><a href="<?php echo base_url();?>pharmacy/view_one_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a> &nbsp;<button class="btn btn-success btn" data-href="<?php echo base_url();?>pharmacy/release_pharmacy_request/<?php echo $t['unique_id']?>" data-toggle="modal" data-target="#confirm-release">Release</button></td>
+                              <td><a href="<?php echo base_url();?>pharmacy/view_one_nurse_return_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a> &nbsp;<button class="btn btn-success btn" data-href="<?php echo base_url();?>pharmacy/release_nurse_return_request/<?php echo $t['unique_id']?>" data-toggle="modal" data-target="#confirm-release">Release</button></td>
                               <?php else: ?>
-                              <td><a href="<?php echo base_url();?>pharmacy/view_one_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a></td>
+                              <td><a href="<?php echo base_url();?>pharmacy/view_one_nurse_return_request/<?php echo $t['unique_id']?>" class="btn btn-danger">View</a></td>
                               <?php endif;?>
 
                               <?php $count++; ?>
@@ -90,7 +90,10 @@
     });
 </script>
 
-
+<!--dynamic table initialization -->
+<script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
+<script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
 
 </body>
 

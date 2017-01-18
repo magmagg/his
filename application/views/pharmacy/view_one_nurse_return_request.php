@@ -5,13 +5,9 @@
                 <section class="panel">
                     <header class="panel-heading" style="background-color: #000;"></header>
                     <header class="panel-heading">
-                        Return medicine
-                        <form role="form" id="formfield" action="<?php echo base_url();?>Pharmacy/submit_nurse_return_medicine" method="post">
-                            <input type="button" name="btn" value="Submit request" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn pull-right btn-success" />
-
+                        Pharmacy requests
                     </header>
-
-                    <table class="table table-striped table-advance table-hover" id="dynamic-table">
+                    <table class="table table-striped table-advance table-hover">
                         <thead>
                             <tr>
                                 <th>
@@ -19,51 +15,51 @@
                                 <th><i class="fa fa-bookmark"></i>Medicine</th>
                                 <th><i class="fa fa-bookmark"></i>Quantity</th>
                                 <th><i class=" fa fa-edit"></i> Price</th>
+                                <th><i class=" fa fa-edit"></i> Total price</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
 
                             <?php
-
                               $count = 1;
                               foreach($details as $d)
                               {
-                              $phar_patient = $d->phar_patient;
-                              $unique_id = $d->unique_id;
                                 foreach($items as $i)
                                 {
                                   if($d->phar_item == $i->item_id)
                                   {
                                     $medicine = $i->item_name;
                                     $price = $i->item_price;
-                                    $itemid = $i->item_id;
                                   }
                                 }
-                                echo '<input type="hidden" name="uniqueid" value="'.$unique_id.'">';
-                                echo '<input type="hidden" name="patientid" value="'.$phar_patient.'">';
-                                echo '<input type="hidden" name="itemid[]" value="'.$itemid.'">';
-                                echo '<input type="hidden" name="price[]" value="'.$price.'">';
                                 echo '<tr>';
                                 echo '<td>'.$count.'</td>';
                                 echo '<td>'.$medicine.'</td>';
                                 echo '<td>'.$d->quant_requested.' Medicines'.'</td>';
                                 echo '<td>'.$price.'</td>';
                                 echo '<td>'.$d->total_price.'</td>';
-                                echo '<td>';
-                                ?>
-                                <input type="number" name="quantity[]" style="width:100%" class="form-control" value="0">
-                                <?php
-                                echo '</td>';
 
                                 echo '</tr>';
-                                $count++;
+
                               }
                               ?>
 
 
                         </tbody>
                     </table>
-                </form>
+                    <?php $ctr = 1; ?>
+                    <?php foreach($details as $d): ?>
+                    <?php if($d->phar_stat == 0):?>
+                        <?php if($ctr == 1): ?>
+                    <center>
+                        <button class="btn btn-success btn" data-href="<?php echo base_url();?>Pharmacy/accept_nurse_return_request/<?php echo $id?>" data-toggle="modal" data-target="#confirm-accept"><i class="fa fa-check"></i></button>
+                        <button class="btn btn-danger btn" data-href="<?php echo base_url();?>Pharmacy/reject_nurse_return_request/<?php echo $id?>" data-toggle="modal" data-target="#confirm-reject"><i class="fa fa-ban"></i></button>
+                    </center>
+                    <?php $ctr++; ?>
+                <?php endif; ?>
+                        <?php endif;?>
+                    <?php endforeach; ?>
 
             </div>
             </section>
@@ -87,28 +83,24 @@
 
 <script class="include" type="text/javascript" src="<?=base_url()?>js/jquery.dcjqaccordion.2.7.js"></script>
 <script src="<?=base_url()?>js/jquery.scrollTo.min.js"></script>
-<script src="<?=base_url()?>js/jquery.nicescroll.js" type="text/javascript"></script>
+<script src="<?=base_url()?>js/jquery.nicescrdfoll.js" type="text/javascript"></script>
 <!--right slidebar-->
 <script src="<?=base_url()?>js/slidebars.min.js"></script>
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
 
-
-<script>
-
-window.onload = function(){
-document.getElementById("submitme").onclick = function() {myFunction()};
-};
-
-function myFunction()
-{
-    document.getElementById("formfield").submit();
-}
+<script type="text/javascript">
+    $('#confirm-accept').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
 </script>
 
-<script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
-<script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
+<script type="text/javascript">
+    $('#confirm-reject').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    });
+</script>
+
 
 </body>
 
