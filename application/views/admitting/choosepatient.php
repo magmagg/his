@@ -2,10 +2,9 @@
     <section class="wrapper">
       <section class="panel">
           <header class="panel-heading">
-
           </header>
           <div class="adv-table">
-            <table class="table table-striped" style="text-align: center;" id="dynamic-table">
+            <table  class="display table table-bordered table-striped" id="dynamic-table">
               <thead>
                 <tr id="tblheader">
                   <td>Patient ID</td>

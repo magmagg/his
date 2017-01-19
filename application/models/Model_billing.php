@@ -2,19 +2,36 @@
 if (!defined('BASEPATH'))exit('No direct script access allowed');
 class Model_billing extends CI_Model{
 
-  function get_admitted_patients(){
-      $this->db->select('*');
-      $this->db->from('patient');
-      $this->db->Where('patient_status !=', 0);
-      $query = $this->db->get();
-      return $query->result_array();
+  function get_all_billings(){
+    $this->db->select('*');
+    $this->db->from('billing b');
+    $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+  
+  function get_billing_details($transaction_id){
+    $this->db->select('*');
+    $this->db->from('billing');
+    $this->db->where("transaction_id", $transaction_id);
+    $query = $this->db->get()->row();
+    return $query;
   }
 
   function get_patient_with_billing(){
     $this->db->select('*');
     $this->db->from('billing b');
     $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
-    $this->db->where('b.bill_status', 0);
+    $this->db->where('b.bill_status !=', 2);
+    $query = $this->db->get();
+    return $query->result_array();
+  }
+    
+  function get_patient_for_payment(){
+    $this->db->select('*');
+    $this->db->from('billing b');
+    $this->db->join('patient p', 'p.patient_id = b.patient_id', 'left');
+    $this->db->where('b.bill_status', 1);
     $query = $this->db->get();
     return $query->result_array();
   }
@@ -30,67 +47,38 @@ class Model_billing extends CI_Model{
   function get_radiology_bill($id){
     $this->db->select('*');
     $this->db->from('rad_billing');
-    $this->db->where(array('patient_id'=>$id, 'rad_bill_status'=>0));
+    $this->db->where('rad_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
   function get_laboratory_bill($id){
     $this->db->select('*');
     $this->db->from('lab_billing');
-    $this->db->where(array('patient_id'=>$id, 'lab_bill_status'=>0));
+    $this->db->where('lab_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
-  function get_directroom_billing($id){
+  function get_room_billing($id){
     $this->db->select('*');
     $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name != "Emergency Room Bill" AND bill_name != "Operating Room Bill" AND bill_name != "ICU Bill"');
+    $this->db->where('bed_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function get_emergencyroom_billing($id){
-    $this->db->select('*');
-    $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name = "Emergency Room Bill"');
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function get_icu_billing($id){
-    $this->db->select('*');
-    $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name = "ICU Bill"');
-    $query = $this->db->get();
-    return $query->result_array();
-  }
-
-  function get_or_billing($id){
-    $this->db->select('*');
-    $this->db->from('bed_billing');
-    $this->db->where('patient_id ="'.$id.'" AND bed_bill_status != 2 AND bill_name = "Operating Room Bill"');
-    $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
   function get_csr_billing($id){
     $this->db->select('*');
     $this->db->from('csr_billing');
-    $this->db->where(array('patient_id'=>$id, 'csr_bill_status'=>0));
+    $this->db->where('csr_bill_id', $id);
     $query = $this->db->get();
-    return $query->result_array();
+    return $query->row();
   }
 
-  function submit_to_cashier($data){
-    $this->db->insert('billing', $data);
-    $this->db->select('transaction_id');
-    $this->db->from('billing');
-    $this->db->order_by('date_submitted', 'desc');
-    $this->db->limit(1);
-    $query = $this->db->get();
-    return $query->row('transaction_id');
+  function submit_to_cashier($data, $transaction_id){
+    $this->db->where('transaction_id', $transaction_id);
+    $this->db->update('billing', $data);
   }
 
   function get_transaction_details($id){
@@ -103,7 +91,7 @@ class Model_billing extends CI_Model{
   }
 
   function mark_as_paid($id){
-    $data = array("bill_status"=>1, "date_paid"=>date('Y-m-d H:i:s'));
+    $data = array("bill_status"=>2, "date_paid"=>date('Y-m-d H:i:s'));
     $this->db->where('transaction_id', $id);
     $this->db->update('billing', $data);
   }
@@ -112,12 +100,12 @@ class Model_billing extends CI_Model{
       $data = array("bed_bill_status"=>2);
       $this->db->where("bed_bill_id", $id);
       $this->db->update("bed_billing", $data);
-      
+
       $this->db->select('*');
       $this->db->from('bed_billing');
       $this->db->where('bed_bill_id', $id);
       $query = $this->db->get();
-      
+
       return $query->row()->admission_id;
   }
 
@@ -157,7 +145,7 @@ class Model_billing extends CI_Model{
 
       $this->db->where("patient_id", $id);
       $this->db->update("patient", $data_discharge_status);
-      
+
       $data_discharge = array("admission_id"=>$admission_id, "patient_id"=>$id);
       $this->db->insert('discharge_schedule', $data_discharge);
   }

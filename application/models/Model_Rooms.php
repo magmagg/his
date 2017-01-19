@@ -37,7 +37,7 @@ class Model_Rooms extends CI_Model{
     $this->db->select('*');
     $this->db->from('rooms a');
     $this->db->join('room_type b', 'a.room_type=b.room_type_id', 'left');
-    $this->db->where('b.room_name != "Emergency Room" AND b.room_name != "Operating Room" AND b.room_name != "ICU"');
+    $this->db->where('b.room_name != "Emergency Room" AND b.room_name != "Operating Room" AND b.room_name != "Intensive Care Unit"');
     $this->db->join('occupancy c', 'a.occupancy_status=c.occupancy_status_id', 'left');
     $this->db->join('maintenance d', 'a.maintenance_status=d.maintenance_status_id', 'left');
     $this->db->order_by('a.room_id','asc');

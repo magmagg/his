@@ -23,6 +23,10 @@
 
     <!--right slidebar-->
     <link href="<?=base_url()?>css/slidebars.css" rel="stylesheet">
+
+    <!--Form Wizard-->
+    <link rel="stylesheet" type="text/css" href="<?=base_url()?>css/jquery.steps.css" />
+
     <!-- Custom styles for this template -->
     <link href="<?=base_url()?>css/style.css" rel="stylesheet">
     <link href="<?=base_url()?>css/style-responsive.css" rel="stylesheet" />

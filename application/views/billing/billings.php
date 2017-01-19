@@ -3,7 +3,7 @@
       <div class="col-sm-12">
         <section class="panel">
           <header style="font-weight:300" class="panel-heading">
-             Radiology Exam List
+             Billings History
           <span class="tools pull-right">
           </span>
           </header>
@@ -13,7 +13,7 @@
             <table class="table table-striped" style="text-align: center;" id="dynamic-table">
               <thead>
                 <tr id="tblheader">
-                  <td>ID</td>
+                  <td>Bill ID</td>
                   <td>Name</td>
                   <td>Status</td>
                   <td>Action</td>
@@ -21,18 +21,20 @@
               </thead>
               <tbody>
                 <?php
-                  foreach($patients as $patient){
+                  foreach($billings_data as $billing){
                     echo "<tr>";
-                      echo "<td>".$patient['patient_id']."</td>";
-                      echo "<td>".$patient['first_name']." ".$patient['last_name']." ".$patient['middle_name']."</td>";
+                      echo "<td>".$billing['transaction_id']."</td>";
+                      echo "<td>".$billing['first_name']." ".$billing['last_name']." ".$billing['middle_name']."</td>";
                       echo "<td>";
-                          if($patient['bill_status'] == 0){
-                               echo "<td><span class='label label-info'>FOR CASHIER SUBMISSION</span></td>";
+                          if($billing['bill_status'] == 0){
+                               echo "<span class='label label-info'>FOR CASHIER SUBMISSION</span>";
+                          }else if($billing['bill_status'] == 1){
+                              echo "<span class='label label-danger'>PENDING ON CASHIER</span>";
                           }else{
-                              echo "<td><span class='label label-info'>PENDING ON CASHIER</span></td>";
+                              echo "<span class='label label-success'>PAID</span>";
                           }
                       echo "</td>";
-                      echo "<td><a href='".base_url()."Billing/PatientBilling/".$patient['transaction_id']."' role='button' class='btn btn-success btn-xs'>View</a>'</td>";
+                      echo "<td><a href='".base_url()."Billing/TransactionHistory/".$billing['transaction_id']."' role='button' class='btn btn-success btn-xs'>View</a></td>";
                     echo "</tr>";
                   }
                 ?>
