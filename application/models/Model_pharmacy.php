@@ -214,10 +214,54 @@ class Model_pharmacy extends CI_Model
         $this->db->update('pharmacy_audit_return',$data);
     }
 
-    function update_pharmacy_audit_return($id,$data)
+    function update_pharmacy_audit($id,$data)
     {
-      $this->db->where('phar_ret_id',$id);
-      $this->db->update('pharmacy_audit_return',$data);
+      $this->db->where('phar_aud_id',$id);
+      $this->db->update('pharmacy_audit',$data);
+    }
+
+    function insert_pharmacy_billing($data)
+    {
+      $this->db->insert('pharm_billing',$data);
+    }
+
+    function get_last_pharmacy_id($id)
+    {
+      $this->db->select('pharm_bill_id');
+      $this->db->from('pharm_billing');
+      $this->db->order_by('pharm_bill_id', 'DESC');
+      $this->db->limit(1);
+      $query = $this->db->get();
+      return $query->result();
+    }
+
+    function check_if_with_pharm_billing($id)
+    {
+      $this->db->select('patient_id');
+      $this->db->from('pharm_billing');
+      $this->db->where('patient_id',$id);
+      $query = $this->db->get();
+      return $query->result();
+    }
+
+    function check_if_with_billing($id)
+    {
+      $this->db->select('transaction_id');
+      $this->db->from('billing');
+      $this->db->where('patient_id',$id);
+      $query = $this->db->get();
+      return $query->result();
+    }
+
+    function update_billing_from_pharma($transaction_id,$data)
+    {
+      $this->db->where('transaction_id', $transaction_id);
+      $this->db->update('billing', $data);
+    }
+
+    function insert_new_billing($data)
+    {
+      $this->db->insert('billing',$data);
     }
 
 

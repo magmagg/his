@@ -122,10 +122,13 @@ class Pharmacy extends CI_Controller{
     $data['details'] = $this->Model_pharmacy->get_specific_request($auditid);
     $itemid = array();
     $quantity = array();
+    $price;
     foreach($data['details'] as $d)
     {
       $itemid[] = $d->phar_item;
       $quantity[] = $d->quant_requested;
+      $patientid = $d->phar_patient;
+      $price += $d->total_price;
     }
 
       $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
@@ -143,7 +146,46 @@ class Pharmacy extends CI_Controller{
         }
       }
 
+      $data['checkpharmbilling'] = $this->Model_pharmacy->check_if_with_pharm_billing($patientid);
+
+      if($data['checkpharmbilling'])
+      {
+
+      }
+      else
+      {
+        $data = array('price'=>$price,
+                      'patient_id'=>$patientid);
+        $this->Model_pharmacy->insert_pharmacy_billing($data);
+        $data['id'] = $this->Model_pharmacy->get_last_pharmacy_id();
+        foreach($data['id'] as $i)
+        {
+          $billing_id = $i->pharm_bill_id;
+        }
+
+        $data['checkbilling'] = $this->Model_pharmacy->check_if_with_billing($patientid);
+
+        if($data['checkbilling'])
+        {
+          foreach($data['checkbilling'] as $b)
+          {
+            $transaction_id = $b->transaction_id;
+            $data = array('pharm_billing_ids'=>$billing_id);
+            $this->Model_pharmacy->update_billing_from_pharma($transaction_id,$data);
+          }
+        }
+        else
+        {
+          $data = array('pharm_billing_ids'=>$billing_id);
+          $this->Model_pharmacy->insert_new_billing($data);
+        }
+      }
+
+
+
     $data = array('phar_stat'=>2);
+
+
     $this->Model_pharmacy->process_pharmacy_request_model($auditid,$data);
     redirect('Pharmacy/process_pharmacy_request');
   }
@@ -496,7 +538,7 @@ class Pharmacy extends CI_Controller{
 
   function View_submitted_pharmacy_request()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: View pharmacy request";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['requests'] = $this->Model_pharmacy->get_pharmacy_requests_specific($this->session->userdata('user_id'));
@@ -534,7 +576,7 @@ class Pharmacy extends CI_Controller{
 
   function View_one_submitted_pharmacy_request()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: View pharmacy request";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $id = $this->uri->segment('3');
@@ -559,7 +601,7 @@ class Pharmacy extends CI_Controller{
 
   function nurse_return_medicine()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: Return medicine";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $id = $this->uri->segment('3');
@@ -622,7 +664,7 @@ class Pharmacy extends CI_Controller{
   //=========process return medicine nurse================//
   function process_nurse_return_medicine()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: Process nurse requests";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['requests'] = $this->Model_pharmacy->get_nurse_return_requests();
@@ -664,7 +706,7 @@ class Pharmacy extends CI_Controller{
 
     function view_one_nurse_return_request()
     {
-      $header['title'] = "HIS: Request";
+      $header['title'] = "HIS: View return requests";
       $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
       $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
       $id = $this->uri->segment('3');
@@ -707,17 +749,18 @@ class Pharmacy extends CI_Controller{
         {
           if($d->phar_item == $i)
           {
-            $pricetosubtract = $i->item_price * $quantity[$key];
-
+            $priceper = $d->total_price / $d->quant_requested;
+            $pricetosubtract = $priceper * $quantity[$key];
             $newprice = $d->total_price - $pricetosubtract;
             $newquantity = $d->quant_requested - $quantity[$key];
             $data = array('quant_requested'=>$newquantity,
                           'total_price'=>$newprice);
-            $this->Model_pharmacy->update_pharmacy_audit_return($d->phar_aud_id,$data);
+            $this->Model_pharmacy->update_pharmacy_audit($d->phar_aud_id,$data);
           }
         }
       }
 
+      $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
       foreach($data['items'] as $d)
       {
         foreach($itemid as $key => $i)
@@ -734,7 +777,6 @@ class Pharmacy extends CI_Controller{
       $data = array('phar_stat'=>2);
       $this->Model_pharmacy->process_nurse_return_model($auditid,$data);
       redirect('Pharmacy/process_nurse_return_medicine');
-
     }
 
     function reject_nurse_return_request()

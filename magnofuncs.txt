@@ -20,9 +20,8 @@ Pharmacy/drug_pharmacy_request
 Pharmacy/pharmacy_request
 Pharmacy/View_submitted_pharmacy_request
 
-
 Pharmacy/nurse_return_medicine
 
 Remaining
-View submitted request medicine(Pharmacy)
 NOtif
+Returned medicine
