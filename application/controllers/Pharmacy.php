@@ -122,10 +122,13 @@ class Pharmacy extends CI_Controller{
     $data['details'] = $this->Model_pharmacy->get_specific_request($auditid);
     $itemid = array();
     $quantity = array();
+    $price;
     foreach($data['details'] as $d)
     {
       $itemid[] = $d->phar_item;
       $quantity[] = $d->quant_requested;
+      $patientid = $d->phar_patient;
+      $price += $d->total_price;
     }
 
       $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
@@ -143,7 +146,46 @@ class Pharmacy extends CI_Controller{
         }
       }
 
+      $data['checkpharmbilling'] = $this->Model_pharmacy->check_if_with_pharm_billing($patientid);
+
+      if($data['checkpharmbilling'])
+      {
+
+      }
+      else
+      {
+        $data = array('price'=>$price,
+                      'patient_id'=>$patientid);
+        $this->Model_pharmacy->insert_pharmacy_billing($data);
+        $data['id'] = $this->Model_pharmacy->get_last_pharmacy_id();
+        foreach($data['id'] as $i)
+        {
+          $billing_id = $i->pharm_bill_id;
+        }
+
+        $data['checkbilling'] = $this->Model_pharmacy->check_if_with_billing($patientid);
+
+        if($data['checkbilling'])
+        {
+          foreach($data['checkbilling'] as $b)
+          {
+            $transaction_id = $b->transaction_id;
+            $data = array('pharm_billing_ids'=>$billing_id);
+            $this->Model_pharmacy->update_billing_from_pharma($transaction_id,$data);
+          }
+        }
+        else
+        {
+          $data = array('pharm_billing_ids'=>$billing_id);
+          $this->Model_pharmacy->insert_new_billing($data);
+        }
+      }
+
+
+
     $data = array('phar_stat'=>2);
+
+
     $this->Model_pharmacy->process_pharmacy_request_model($auditid,$data);
     redirect('Pharmacy/process_pharmacy_request');
   }
@@ -496,7 +538,7 @@ class Pharmacy extends CI_Controller{
 
   function View_submitted_pharmacy_request()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: View pharmacy request";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['requests'] = $this->Model_pharmacy->get_pharmacy_requests_specific($this->session->userdata('user_id'));
@@ -534,7 +576,7 @@ class Pharmacy extends CI_Controller{
 
   function View_one_submitted_pharmacy_request()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: View pharmacy request";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $id = $this->uri->segment('3');
@@ -559,7 +601,7 @@ class Pharmacy extends CI_Controller{
 
   function nurse_return_medicine()
   {
-    $header['title'] = "HIS: Request";
+    $header['title'] = "HIS: Return medicine";
     $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
     $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $id = $this->uri->segment('3');
@@ -571,4 +613,177 @@ class Pharmacy extends CI_Controller{
     $this->load->view('pharmacy/pharmacy_request_modal');
     $this->load->view('pharmacy/nurse_return_medicine',$data);
   }
+
+  function submit_nurse_return_medicine()
+  {
+    $quantity = $this->input->post('quantity');
+    $itemid = $this->input->post('itemid');
+    $price = $this->input->post('price');
+    $patientid = $this->input->post('patientid');
+    $userid = $this->session->userdata('user_id');
+    $unique_id = $this->input->post('uniqueid');
+
+    $data['nurse_id'] = $this->Model_pharmacy->get_nurse_id($userid);
+    foreach($data['nurse_id'] as $d)
+    {
+      $userid = $d->nurse_id;
+    }
+    foreach($quantity as $key => $q)
+    {
+      if($q == 0)
+      {
+        unset($quantity[$key]);
+        unset($itemid[$key]);
+        unset($price[$key]);
+      }
+    }
+    $quantity = array_values($quantity);
+    $itemid = array_values($itemid);
+    $price = array_values($price);
+
+    foreach($price as $key => $p)
+    {
+      $price[$key] = $p * $quantity[$key];
+    }
+
+    foreach($itemid as $key => $i)
+    {
+      $data = array('phar_item'=>$i,
+                    'phar_nurse_id'=>$userid,
+                    'phar_patient'=>$patientid,
+                    'quant_requested'=>$quantity[$key],
+                    'total_price'=>$price[$key],
+                    'phar_stat'=>0,
+                    'unique_id'=>$unique_id);
+      $this->Model_pharmacy->submit_nurse_return_medicine($data);
+    }
+
+    redirect('Pharmacy/View_submitted_pharmacy_request');
+  }
+
+  //=========process return medicine nurse================//
+  function process_nurse_return_medicine()
+  {
+    $header['title'] = "HIS: Process nurse requests";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+    $data['requests'] = $this->Model_pharmacy->get_nurse_return_requests();
+
+    $data['unique_ids'] = $this->Model_pharmacy->get_unique_ids_return();
+    $data['table_details'] = array();
+    foreach($data['unique_ids'] as $d)
+    {
+      $data['new_details'] = $this->Model_pharmacy->get_nurse_return_requests_specific($d->unique_id);
+      $totalprice = 0;
+      $quantity = 0;
+      $patient;
+      $requestedby;
+      $date;
+      $status;
+      foreach($data['new_details'] as $nd)
+      {
+        $totalprice += $nd->total_price;
+        $quantity   += $nd->quant_requested;
+        $patient     = $nd->phar_patient;
+        $requestedby = $nd->phar_nurse_id;
+        $date        = $nd->date_req;
+        $status    = $nd->phar_stat;
+
+      }
+      $data['table_details'][$d->unique_id] = array('price'=>$totalprice,
+                                                    'date'=>$date,
+                                                    'quantity'=>$quantity,
+                                                    'requestedby'=>$requestedby,
+                                                    'patient'=>$patient,
+                                                    'status'=>$status,
+                                                    'unique_id'=>$d->unique_id);
+    }
+
+    $this->load->view('users/includes/header.php',$header);
+    $this->load->view('pharmacy/release_request_modal');
+    $this->load->view('pharmacy/process_nurse_return_medicine',$data);
+  }
+
+    function view_one_nurse_return_request()
+    {
+      $header['title'] = "HIS: View return requests";
+      $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+      $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
+      $id = $this->uri->segment('3');
+
+      $data['details'] = $this->Model_pharmacy->get_nurse_return_requests_specific($id);
+      $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+      $data['id'] = $id;
+      $this->load->view('users/includes/header.php',$header);
+      $this->load->view('pharmacy/accept_pharmacy_request_modal');
+      $this->load->view('pharmacy/reject_pharmacy_request_modal');
+      $this->load->view('pharmacy/view_one_nurse_return_request',$data);
+    }
+
+    function accept_nurse_return_request()
+    {
+      $postid = $this->uri->segment(3);
+      $data = array('phar_stat'=>1);
+      $this->Model_pharmacy->process_nurse_return_model($postid,$data);
+      redirect('Pharmacy/process_nurse_return_medicine');
+    }
+
+    function release_nurse_return_request()
+    {
+      $auditid = $this->uri->segment(3);
+      $data['details'] = $this->Model_pharmacy->get_nurse_return_requests_specific($auditid);
+      $data['details1'] = $this->Model_pharmacy->get_specific_request($auditid);
+      $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+
+      $itemid = array();
+      $quantity = array();
+      foreach($data['details'] as $d)
+      {
+        $itemid[] = $d->phar_item;
+        $quantity[] = $d->quant_requested;
+      }
+
+      foreach($data['details1'] as $d)
+      {
+        foreach($itemid as $key => $i)
+        {
+          if($d->phar_item == $i)
+          {
+            $priceper = $d->total_price / $d->quant_requested;
+            $pricetosubtract = $priceper * $quantity[$key];
+            $newprice = $d->total_price - $pricetosubtract;
+            $newquantity = $d->quant_requested - $quantity[$key];
+            $data = array('quant_requested'=>$newquantity,
+                          'total_price'=>$newprice);
+            $this->Model_pharmacy->update_pharmacy_audit($d->phar_aud_id,$data);
+          }
+        }
+      }
+
+      $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+      foreach($data['items'] as $d)
+      {
+        foreach($itemid as $key => $i)
+        {
+          if($d->item_id == $i)
+          {
+            $newquantity = $d->item_quantity + $quantity[$key];
+            $data = array('item_quantity'=>$newquantity);
+            $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
+          }
+        }
+      }
+
+      $data = array('phar_stat'=>2);
+      $this->Model_pharmacy->process_nurse_return_model($auditid,$data);
+      redirect('Pharmacy/process_nurse_return_medicine');
+    }
+
+    function reject_nurse_return_request()
+    {
+      $postid = $this->uri->segment(3);
+      $data = array('phar_stat'=>3);
+      $this->Model_pharmacy->process_nurse_return_model($postid,$data);
+      redirect('Pharmacy/process_nurse_return_medicine');
+    }
 }

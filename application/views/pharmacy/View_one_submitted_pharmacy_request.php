@@ -7,11 +7,11 @@
                     <header class="panel-heading">
                         Pharmacy requests
                         <?php if($released == 1): ?>
-                            <a href="<?php echo base_url();?>Pharmacy/nurse_return_medicine/<?=$id?>"><button class="btn btn-success pull-right btn">Return Medicine</button></a>
+                            <a href="<?php echo base_url();?>Pharmacy/nurse_return_medicine/<?=$id?>"><button class="btn btn-danger pull-right btn">Return Medicine</button></a>
                         <?php endif; ?>
                     </header>
 
-                    <table class="table table-striped table-advance table-hover">
+                    <table class="table table-striped table-advance table-hover" id="dynamic-table">
                         <thead>
                             <tr>
                                 <th>
@@ -20,7 +20,6 @@
                                 <th><i class="fa fa-bookmark"></i>Quantity</th>
                                 <th><i class=" fa fa-edit"></i> Price</th>
                                 <th><i class=" fa fa-edit"></i> Total price</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,9 +42,8 @@
                                 echo '<td>'.$d->quant_requested.' Medicines'.'</td>';
                                 echo '<td>'.$price.'</td>';
                                 echo '<td>'.$d->total_price.'</td>';
-
                                 echo '</tr>';
-
+$count++;
                               }
                               ?>
 
@@ -81,7 +79,9 @@
 <script src="<?=base_url()?>js/slidebars.min.js"></script>
 <!--common script for all pages-->
 <script src="<?=base_url()?>js/common-scripts.js"></script>
-
+<script type="text/javascript" language="javascript" src="<?php echo base_url()?>assets/advanced-datatable/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>assets/data-tables/DT_bootstrap.js"></script>
+<script src="<?php echo base_url()?>js/dynamic_table_init.js"></script>
 
 </body>
 

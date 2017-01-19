@@ -4,6 +4,8 @@ Pharmacy/drug_restock_medicine
 Pharmacy/request_medicine
 Pharmacy/drug_process_pharmacy_request
 
+Pharmacy/process_nurse_return_medicine
+
 Purchasing:
 Purchasing/pharmacy_inventory
 Purchasing/drug_inventory
@@ -14,10 +16,12 @@ Purchasing/request_medicine_view1_all
 
 Nurse:
 Pharmacy/drug_pharmacy_request
+
 Pharmacy/pharmacy_request
 Pharmacy/View_submitted_pharmacy_request
-Pharmacy/nurse_return_medicine (NOT WORKING)
+
+Pharmacy/nurse_return_medicine
 
 Remaining
-View submitted request medicine(Pharmacy)
 NOtif
+Returned medicine

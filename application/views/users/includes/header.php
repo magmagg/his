@@ -20,13 +20,13 @@
     <!--<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/bootstrap-datepicker/css/datepicker.css" />-->
     <!--<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/bootstrap-datetimepicker/css/datetimepicker.css" />-->
   	<link rel="stylesheet" href="<?=base_url()?>assets/data-tables/DT_bootstrap.css" />
-    
+
     <!--right slidebar-->
     <link href="<?=base_url()?>css/slidebars.css" rel="stylesheet">
-    
+
     <!--Form Wizard-->
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>css/jquery.steps.css" />
-    
+
     <!-- Custom styles for this template -->
     <link href="<?=base_url()?>css/style.css" rel="stylesheet">
     <link href="<?=base_url()?>css/style-responsive.css" rel="stylesheet" />
