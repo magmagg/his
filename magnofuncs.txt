@@ -17,7 +17,6 @@ Purchasing/request_medicine_view1_all
 Nurse:
 Pharmacy/drug_pharmacy_request
 
-
 Pharmacy/pharmacy_request
 Pharmacy/View_submitted_pharmacy_request
 

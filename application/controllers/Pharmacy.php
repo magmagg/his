@@ -690,6 +690,9 @@ class Pharmacy extends CI_Controller{
     {
       $auditid = $this->uri->segment(3);
       $data['details'] = $this->Model_pharmacy->get_nurse_return_requests_specific($auditid);
+      $data['details1'] = $this->Model_pharmacy->get_specific_request($auditid);
+      $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
+
       $itemid = array();
       $quantity = array();
       foreach($data['details'] as $d)
@@ -698,36 +701,35 @@ class Pharmacy extends CI_Controller{
         $quantity[] = $d->quant_requested;
       }
 
-
-      $data['details1'] = $this->Model_pharmacy->get_specific_request($auditid);
       foreach($data['details1'] as $d)
       {
         foreach($itemid as $key => $i)
         {
           if($d->phar_item == $i)
           {
+            $pricetosubtract = $i->item_price * $quantity[$key];
+
+            $newprice = $d->total_price - $pricetosubtract;
             $newquantity = $d->quant_requested - $quantity[$key];
-            $data = array('quant_requested'=>$newquantity);
+            $data = array('quant_requested'=>$newquantity,
+                          'total_price'=>$newprice);
             $this->Model_pharmacy->update_pharmacy_audit_return($d->phar_aud_id,$data);
           }
         }
       }
 
-
-        $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
-
-        foreach($data['items'] as $d)
+      foreach($data['items'] as $d)
+      {
+        foreach($itemid as $key => $i)
         {
-          foreach($itemid as $key => $i)
+          if($d->item_id == $i)
           {
-            if($d->item_id == $i)
-            {
-              $newquantity = $d->item_quantity + $quantity[$key];
-              $data = array('item_quantity'=>$newquantity);
-              $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
-            }
+            $newquantity = $d->item_quantity + $quantity[$key];
+            $data = array('item_quantity'=>$newquantity);
+            $this->Model_pharmacy->update_pharmacy_quantity($d->item_id,$data);
           }
         }
+      }
 
       $data = array('phar_stat'=>2);
       $this->Model_pharmacy->process_nurse_return_model($auditid,$data);
