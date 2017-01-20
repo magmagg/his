@@ -201,7 +201,7 @@ class Model_pharmacy extends CI_Model
 
     function get_unique_ids_return()
     {
-      $this->db->select('unique_id');
+      $this->db->select('unique_id,unique_audit_id');
       $this->db->from('pharmacy_audit_return');
       $this->db->distinct();
       $query = $this->db->get();
@@ -223,6 +223,12 @@ class Model_pharmacy extends CI_Model
     function insert_pharmacy_billing($data)
     {
       $this->db->insert('pharm_billing',$data);
+    }
+
+    function update_pharm_billing($id,$data)
+    {
+      $this->db->where('patient_id',$id);
+      $this->db->update('pharm_billing',$data);
     }
 
     function get_last_pharmacy_id($id)

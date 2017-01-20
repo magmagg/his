@@ -296,9 +296,9 @@ class Pharmacy extends CI_Controller{
   function drug_process_pharmacy_request()
   {
     $data['requests'] = $this->Model_pharmacy->get_pharmacy_requests();
-    //$data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
-    //$data['patient'] = $this->Model_pharmacy->get_all_patients();
-
+    $header['title'] = "HIS: Pharmacy Inventory";
+    $header['tasks'] = $this->Model_user->get_tasks($this->session->userdata('type_id'));
+    $header['permissions'] = $this->Model_user->get_permissions($this->session->userdata('type_id'));
     $data['unique_ids'] = $this->Model_pharmacy->get_unique_ids();
     $data['table_details'] = array();
     foreach($data['unique_ids'] as $d)
@@ -621,7 +621,8 @@ class Pharmacy extends CI_Controller{
     $price = $this->input->post('price');
     $patientid = $this->input->post('patientid');
     $userid = $this->session->userdata('user_id');
-    $unique_id = $this->input->post('uniqueid');
+    $unique_audit_id = $this->input->post('uniqueid');
+    $unique_id = bin2hex(mcrypt_create_iv(5, MCRYPT_DEV_URANDOM));
 
     $data['nurse_id'] = $this->Model_pharmacy->get_nurse_id($userid);
     foreach($data['nurse_id'] as $d)
@@ -654,7 +655,8 @@ class Pharmacy extends CI_Controller{
                     'quant_requested'=>$quantity[$key],
                     'total_price'=>$price[$key],
                     'phar_stat'=>0,
-                    'unique_id'=>$unique_id);
+                    'unique_id'=>$unique_id,
+                    'unique_audit_id'=>$unique_audit_id);
       $this->Model_pharmacy->submit_nurse_return_medicine($data);
     }
 
@@ -696,7 +698,8 @@ class Pharmacy extends CI_Controller{
                                                     'requestedby'=>$requestedby,
                                                     'patient'=>$patient,
                                                     'status'=>$status,
-                                                    'unique_id'=>$d->unique_id);
+                                                    'unique_id'=>$d->unique_id,
+                                                    'unique_audit_id'=>$nd->unique_audit_id);
     }
 
     $this->load->view('users/includes/header.php',$header);
@@ -759,6 +762,16 @@ class Pharmacy extends CI_Controller{
           }
         }
       }
+
+      $data['details1'] = $this->Model_pharmacy->get_specific_request($auditid);
+      $totalprice;
+      foreach($data['details1'] as $d)
+      {
+        $totalprice += $d->total_price;
+        $patientid = $d->phar_patient;
+      }
+      $data = array('price'=>$totalprice);
+      $this->Model_pharmacy->update_pharm_billing($patientid,$data);
 
       $data['items'] = $this->Model_pharmacy->get_pharmacy_inventory();
       foreach($data['items'] as $d)
